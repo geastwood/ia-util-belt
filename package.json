@@ -1,0 +1,17 @@
+{
+  "name": "ia",
+  "version": "0.0.1",
+  "description": "ia utility belt",
+  "main": "ia.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fei Liu <liu.feiwood@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "commander": "^2.5.0"
+  },
+  "dependencies": {
+    "commander": "^2.5.0"
+  }
+}
