@@ -42,7 +42,7 @@ program.command('diff').
         var sys = require('sys'),
             exec = require('child_process').exec,
             path;
-        exec("svn diff " + (options.path ? options.path : "") + "| colordiff", function(err, stdout, stdin) {
+        exec("svn diff " + (options.path ? options.path : ".") + "| colordiff", function(err, stdout, stdin) {
             sys.puts(stdout);
         });
     });
@@ -52,11 +52,33 @@ program.command('jira')
     .option('-t --ticket [number]', 'ticket number')
     .action(function(option) {
         var url = 'http://jira.muc.intelliad.de/',
-            exec = require('child_process').exec;
+            exec = require('child_process').exec,
+            child;
         if (option.ticket) {
             url = url + 'browse/' + option.ticket;
         }
-        exec("open " + url, function() {});
+
+        child = exec("open " + url, function(err, stdout, stdin) {
+            if (err) {
+                throw err;
+            }
+        });
+        child.stdout.on('end', function() {
+            console.log('New tab is opened');
+        });
+    });
+program.command('buildconfig [cmd]')
+    .description('build config')
+    .action(function(cmd) {
+        var path = '/Volumes/intelliAd/Frontend/trunk/buildconfig/build.jsb2';
+        var fs = require('fs');
+        fs.readFile(path, 'utf8', function(err, data) {
+            if (err) {
+                throw err;
+            }
+            var d = JSON.parse(data);
+            console.log(d);
+        });
     });
 
 program.parse(process.argv);
