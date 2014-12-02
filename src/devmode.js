@@ -58,8 +58,8 @@ var devmode = function(path) {
         },
         log: function(status) {
                 console.log('\n\n' +
-                            chalk.white[(status ? 'bgGreen' : 'bgRed')]
-                                 .bold('development mode is ', status ?  'ON' : 'OFF') +
+                            chalk[(status ? 'green' : 'red')]
+                                 .bold('development mode is ', status ? 'ON' : 'OFF') +
                             '\n\n');
         }
     };
