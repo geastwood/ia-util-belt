@@ -54,7 +54,6 @@ var devmode = function(path) {
                 fs.writeFile(path, data.content, function(err) {
                     fn(err, {isOn: mode && debug});
                 });
-
             });
         },
         log: function(status) {

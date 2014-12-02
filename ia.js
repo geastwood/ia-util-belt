@@ -67,18 +67,21 @@ program.command('jira')
             console.log('New tab is opened');
         });
     });
-program.command('buildconfig [cmd]')
+
+program.command('buildconfig')
     .description('build config')
-    .action(function(cmd) {
-        var path = '/Volumes/intelliAd/Frontend/trunk/buildconfig/build.jsb2';
-        var fs = require('fs');
-        fs.readFile(path, 'utf8', function(err, data) {
-            if (err) {
-                throw err;
-            }
-            var d = JSON.parse(data);
-            console.log(d);
-        });
+    .option('-s --search <string>', 'Search a file')
+    .option('-r --remove', 'To remove')
+    .option('-m --module', 'Do action on module build config file')
+    .action(function(options) {
+        var path = {
+            component: '/Volumes/intelliAd/Frontend/trunk/buildconfig/build.jsb2',
+            module: '/Volumes/intelliAd/Frontend/trunk/buildconfig/build_modules.jsb2'
+        };
+        var buildConfig = require(baseUrl + '/src/buildconfig')(path[(options.module ? 'module': 'component')]);
+        if (options.search) {
+            buildConfig.findFile(options.search, {toRemove: options.remove});
+        }
     });
 
 program.parse(process.argv);
