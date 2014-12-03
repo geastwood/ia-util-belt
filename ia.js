@@ -3,7 +3,9 @@
 var baseUrl = __dirname,
     currentFolder = process.cwd(),
     program = require('commander'),
-    pkg = require(__dirname + '/package.json');
+    chalk = require('chalk'),
+    pkg = require(__dirname + '/package.json'),
+    IA = require(__dirname + '/src/ia');
 
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
@@ -12,7 +14,7 @@ program
     .command('devmode <cmd>')
     .description('[on|off|toggle|is] switch dev mode')
     .action(function(cmd) {
-        var path = '/Volumes/intelliAd/Frontend/trunk/application/configs/application.ini';
+        var path = IA.frontend.getAppIni();
         var devmode = require(baseUrl + '/src/devmode')(path);
         if (cmd === 'is') {
             devmode.read(function(err, data) {
@@ -47,10 +49,10 @@ program.command('jira')
     .description('jira command')
     .option('-t --ticket <number>', 'ticket number')
     .action(function(option) {
-        var url = 'http://jira.muc.intelliad.de/', exec = require('child_process').exec, child;
+        var url = IA.jira.getTicketView(), exec = require('child_process').exec, child;
 
         if (option.ticket) {
-            url = url + 'browse/' + option.ticket;
+            url = url + option.ticket;
         }
 
         child = exec("open " + url, function(err, stdout, stdin) {
@@ -58,8 +60,7 @@ program.command('jira')
                 throw err;
             }
         });
-
-        child.stdout.on('end', function() {
+        child.on('exit', function() {
             console.log('New tab is opened');
         });
     });
@@ -71,8 +72,8 @@ program.command('buildconfig')
     .option('-m --module', 'Do action on module build config file')
     .action(function(options) {
         var path = {
-            component: '/Volumes/intelliAd/Frontend/trunk/buildconfig/build.jsb2',
-            module: '/Volumes/intelliAd/Frontend/trunk/buildconfig/build_modules.jsb2'
+            component: IA.frontend.getComponentBuildConfig(),
+            module: IA.frontend.getModuleBuildConfig()
         },
         buildConfig = require(baseUrl + '/src/buildconfig')(path[(options.module ? 'module': 'component')]);
 
@@ -87,14 +88,14 @@ program.command('find <pattern>')
     .action(function(pattern, options) {
         var sys = require('sys'),
             exec = require('child_process').exec,
-            chalk = require('chalk');
+            child;
 
         if (options['class']) {
             pattern = 'Ext\\d?\\.define\\(.*' + pattern;
         }
 
         // search recursively and case-insensitive
-        exec('egrep -iR "' + pattern + '" . ' +
+        child = exec('egrep -iR "' + pattern + '" . ' +
              '--exclude-dir library ' +
              '--exclude-dir legacy ' +
              '--exclude-dir node_modules ' +
@@ -109,6 +110,15 @@ program.command('find <pattern>')
 
             sys.puts(formated);
         });
+    });
+
+program.command('branch <cmd>')
+    .description('svn branch commands [ls|checkout]')
+    .action(function(cmd) {
+        var commands = require(__dirname + '/src/branch');
+
+        commands[cmd]();
+
     });
 
 program.parse(process.argv);

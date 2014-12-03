@@ -1,0 +1,27 @@
+{
+    "workingCopies": {
+        "trunk": {
+            "frontend": "/Volumes/intelliad/Frontend/trunk",
+            "backend": "/Volumes/intelliad/Service/Trunk"
+        },
+        "others": [
+            {
+                "name": "release",
+                "path": {
+                    "frontend": "/Volumes/intelliAd/Frontend/next",
+                    "backend": ""
+                }
+            }
+
+        ]
+    },
+    "jira": {
+        "baseUrl": "http://jira.muc.intelliad.de"
+    },
+    "cvs": {
+        "svn": {
+            "url": "svn://10.96.1.31/intelliad_frontend_2011",
+            "userUrl": "svn://{{username}}@10.96.1.31/intelliad_frontend_2011/"
+        }
+    }
+}
