@@ -81,12 +81,13 @@ Branches.prototype.format = function() {
     return this.lines.map(function(line) {
         var month = line.getByName('month'),
             day = line.getByName('day'),
-            year = line.getByName('time');
+            year = line.getByName('time'),
+            branchName = line.getByName('branch');
 
         year = year.indexOf(':') === -1 ? year : (new Date()).getFullYear();
 
         return {
-            branch: line.getByName('branch'),
+            branch: branchName.slice(0, branchName.length - 1), // trim the `/` at end
             date: [month, day, year].join(' ')
         };
     }).sort(function(a, b) { // sort them according to `date`
@@ -134,6 +135,34 @@ BranchLine.prototype.parse = function() {
         return this.parts;
     }
 };
+var LocalBranches = function(path, app) {
+    this.path = path || '/Volumes/intelliAd/Frontend/';
+    this.app = app || 'frontend';
+    this.branches = [];
+};
+LocalBranches.prototype.collect = function() {
+    var fs = require('fs');
+    var path = require('path');
+    var that = this, files;
+
+    if (this.branches.length === 0) {
+        files = fs.readdirSync(this.path);
+        this.branches = files.filter(function(file) {
+            var stat = fs.statSync(path.join(that.path, file));
+            return stat && stat.isDirectory();
+        });
+    }
+
+    return this.branches;
+};
+LocalBranches.prototype.format = function() {
+    var that = this;
+    return this.collect().map(function(file) {
+        return {path: that.path, filename: file};
+    });
+};
+// var t = new LocalBranches();
+// console.log(t.format());
 
 module.exports.Branches = Branches;
 module.exports.BranchInfo = BranchInfo;
