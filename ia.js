@@ -14,7 +14,7 @@ program
     .command('devmode <cmd>')
     .description('[on|off|toggle|is] switch dev mode')
     .action(function(cmd) {
-        var path = IA.frontend.getAppIni();
+        var path = IA.path.getAppIni();
         var devmode = require(baseUrl + '/src/devmode')(path);
         if (cmd === 'is') {
             devmode.read(function(err, data) {
@@ -72,8 +72,8 @@ program.command('buildconfig')
     .option('-m --module', 'Do action on module build config file')
     .action(function(options) {
         var path = {
-            component: IA.frontend.getComponentBuildConfig(),
-            module: IA.frontend.getModuleBuildConfig()
+            component: IA.path.getComponentBuildConfig(),
+            module: IA.path.getModuleBuildConfig()
         },
         buildConfig = require(baseUrl + '/src/buildconfig')(path[(options.module ? 'module': 'component')]);
 

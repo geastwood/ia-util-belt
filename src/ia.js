@@ -3,12 +3,21 @@ var configs = require(__dirname + '/../config/config.json'),
     homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
     userConfig = require(homeFolder + '/.ia/user.config.json');
 
-var resolver = function(data) {
+var resolver = function(data, opts) {
+
+    var app  = opts.app || 'frontend',
+        repo = opts.repo || 'trunk';
 
     return {
-        frontend: {
+        path: {
+            // app  = [frontend|backend]
+            // repo = [trunk|current|release]
             getBasePath: function() {
-                return data.path.frontend;
+                var folder = data.workingCopies.frontendFolder;
+                if (app === 'backend') {
+                    folder = data.workingCopies.backendFolder;
+                }
+                return path.join(data.workingCopies.baseUrl, folder, data.workingCopies[repo][app]);
             },
             getAppIni: function() {
                 return this.getBasePath() + '/application/configs/application.ini';
@@ -33,20 +42,20 @@ var resolver = function(data) {
                 return userConfig.user;
             },
             isTruckFolder: function(path) {
-                return (path.indexOf(data.workingCopies.trunk.frontend) >= 0 ||
-                       path.indexOf(data.workingCopies.trunk.backend) >= 0);
+                return path.indexOf(data.workingCopies.trunk.frontend) >= 0  ||
+                       data.workingCopies.trunk.backend === path;
             }
         },
         svn: {
             getBase: function() {
-                return data.cvs.svn.url;
+                return data.cvs.svn.url + data.cvs.svn[app];
             },
             getBranchFolder: function() {
                 return this.getBase() + '/branches';
             },
             getUserBranchFolder: function() {
                 var config = {username: userConfig.user};
-                return data.cvs.svn.userUrl.replace(/\{\{(\S+)}}/, function(a, match) {
+                return (data.cvs.svn.userUrl + data.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
                     return config[match];
                 });
             }
@@ -54,4 +63,4 @@ var resolver = function(data) {
     };
 };
 
-module.exports = resolver(configs);
+module.exports = resolver(configs, {app: 'frontend'});

@@ -1,27 +1,30 @@
 {
     "workingCopies": {
+        "baseUrl": "/Volumes/intelliAd",
+        "frontendFolder": "Frontend",
+        "backendFolder": "Backend",
         "trunk": {
-            "frontend": "/Volumes/intelliad/Frontend/trunk",
-            "backend": "/Volumes/intelliad/Service/Trunk"
+            "frontend": "trunk",
+            "backend": "Trunk"
         },
-        "others": [
-            {
-                "name": "release",
-                "path": {
-                    "frontend": "/Volumes/intelliAd/Frontend/next",
-                    "backend": ""
-                }
-            }
-
-        ]
+        "current": {
+            "frontend": "trunk",
+            "backend": "Trunk"
+        },
+        "release": {
+            "frontend": "trunk",
+            "backend": "Trunk"
+        }
     },
     "jira": {
         "baseUrl": "http://jira.muc.intelliad.de"
     },
     "cvs": {
         "svn": {
-            "url": "svn://10.96.1.31/intelliad_frontend_2011",
-            "userUrl": "svn://{{username}}@10.96.1.31/intelliad_frontend_2011/"
+            "url": "svn://10.96.1.31/",
+            "userUrl": "svn://{{username}}@10.96.1.31/",
+            "frontend": "intelliad_frontend_2011",
+            "backend": "intelliad_services"
         }
     }
 }
