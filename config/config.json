@@ -2,18 +2,18 @@
     "workingCopies": {
         "baseUrl": "/Volumes/intelliAd",
         "frontendFolder": "Frontend",
-        "backendFolder": "Backend",
+        "serviceFolder": "Service",
         "trunk": {
             "frontend": "trunk",
-            "backend": "Trunk"
+            "service": "Trunk"
         },
         "current": {
             "frontend": "trunk",
-            "backend": "Trunk"
+            "service": "Trunk"
         },
         "release": {
             "frontend": "trunk",
-            "backend": "Trunk"
+            "service": "Trunk"
         }
     },
     "jira": {
@@ -24,7 +24,7 @@
             "url": "svn://10.96.1.31/",
             "userUrl": "svn://{{username}}@10.96.1.31/",
             "frontend": "intelliad_frontend_2011",
-            "backend": "intelliad_services"
+            "service": "intelliad_services"
         }
     }
 }

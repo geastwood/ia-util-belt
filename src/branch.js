@@ -1,31 +1,31 @@
 var sys = require('sys'),
     exec = require('child_process').exec,
+    path = require('path'),
     chalk = require('chalk'),
     prompt = require('prompt'),
     svnBranch = require(__dirname + '/./svnBranch'),
     IA = require(__dirname + '/./ia');
 
 var commands = {
-    ls: function() {
-        var repo = IA.svn.getBranchFolder();
-        console.log(repo);
+    ls: function(globals) {
+        var localBranches = new svnBranch.LocalBranches(IA(globals).path.getAppPath(), globals.app);
 
-        svnGetBranches(repo, function(stdout, stdin) {
-            sys.puts(chalk.green('===================FRONTEND BRANCHES================'));
-            sys.puts(stdout);
-            sys.puts(chalk.green('===================================================='));
+        localBranches.format().forEach(function(file, i) {
+            // small trick on color
+            console.log(chalk.green('%s #%d\u0009') + file.filename,
+                        globals.app.charAt(0).toUpperCase() + globals.app.slice(1),
+                        (i + 1));
         });
-
     },
-    'switch': function() {
-        var branches, that = this;
+    'switch': function(globals) {
+        var branches;
 
-        if (IA.util.isTruckFolder(process.cwd())) {
+        if (IA(globals).util.isTruckFolder(process.cwd())) {
             console.log(chalk.red('ATTENSTION: It\'s not cool to switch the ' + chalk.underline('"trunk"') + '.'));
             return;
         }
 
-        svnGetBranches(IA.svn.getBranchFolder(), function(stdout, stdin) {
+        svnGetBranches(IA(globals).svn.getBranchFolder(), function(stdout, stdin) {
             var data;
             branches = new svnBranch.Branches(stdout);
             (data = branches.format()).forEach(function(branch) {
@@ -51,7 +51,7 @@ var commands = {
                 }], function(err, prompts) {
                     var child;
                     if (prompts.yesno === 'yes') {
-                        child = exec('svn switch ' + IA.svn.getUserBranchFolder() + 'branches/' + branch.branch, function() {});
+                        child = exec('svn switch ' + IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch, function() {});
                         child.stdout.on('data', function(data) {
                             sys.puts(data);
                         });
@@ -69,7 +69,7 @@ var commands = {
         });
 
     },
-    current: function() {
+    current: function(globals) {
         exec('svn info', function(err, stdout) {
             var branchInfo;
             if (err) {
@@ -84,6 +84,60 @@ var commands = {
             console.log('\n');
             console.log(stdout);
             sys.puts(chalk.green('===================================================='));
+        });
+    },
+    checkout: function(globals) {
+        prompt.get([{
+            name: 'app',
+            description: 'frontend or backend?',
+            default: 'frontend',
+            pattern: /(frontend|backend)/
+        }],
+        function(err, inputs) {
+            var branches, data;
+            svnGetBranches(IA(globals).svn.getBranchFolder(), function(stdout) {
+                branches = new svnBranch.Branches(stdout);
+                (data = branches.format()).forEach(function(branch) {
+                    console.log('%s\u0009%s\u0009%s', chalk.green(branch.prefix), branch.date, branch.branch);
+                });
+                prompt.get([{
+                    name: 'branchId',
+                    description: 'Which to checkout?',
+                    default: 1,
+                    pattern: /\d{1,2}/
+                }, {
+                    name: 'name',
+                    description: 'folder name?',
+                    pattern: /\w{1,50}/
+                }],
+                function(err, inputs) {
+                    var id = parseInt(inputs.branchId, 10), branch = data[id - 1], child;
+                    if (id > data.length || typeof branch === 'undefined') {
+                        console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
+                    }
+
+                    var spawn = require('child_process').spawn;
+
+                    child = spawn('svn', [
+                        'checkout',
+                        IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch,
+                        path.join(IA(globals).path.getAppPath(), inputs.name)
+                    ]);
+
+                    child.stdout.setEncoding('utf8');
+                    child.stdout.on('data', function(data) {
+                        console.log(data);
+                    });
+                    child.stderr.setEncoding('utf8');
+                    child.stderr.on('data', function(data) {
+                        console.log(chalk.red('ERROR: ' + data));
+                    });
+                    child.on('exit', function() {
+                        console.log('checkout finished');
+                    });
+                });
+            });
+
         });
     }
 };

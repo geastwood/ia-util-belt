@@ -3,21 +3,25 @@ var configs = require(__dirname + '/../config/config.json'),
     homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
     userConfig = require(homeFolder + '/.ia/user.config.json');
 
-var resolver = function(data, opts) {
+var resolver = function(opts) {
+    opts = opts || {};
 
     var app  = opts.app || 'frontend',
-        repo = opts.repo || 'trunk';
+        branch = opts.branch || 'trunk';
 
     return {
         path: {
             // app  = [frontend|backend]
-            // repo = [trunk|current|release]
+            // branch = [trunk|current|release]
             getBasePath: function() {
-                var folder = data.workingCopies.frontendFolder;
-                if (app === 'backend') {
-                    folder = data.workingCopies.backendFolder;
+                return path.join(this.getAppPath(), configs.workingCopies[branch][app]);
+            },
+            getAppPath: function() {
+                var folder = configs.workingCopies.frontendFolder;
+                if (app === 'service') {
+                    folder = configs.workingCopies.serviceFolder;
                 }
-                return path.join(data.workingCopies.baseUrl, folder, data.workingCopies[repo][app]);
+                return path.join(configs.workingCopies.baseUrl, folder);
             },
             getAppIni: function() {
                 return this.getBasePath() + '/application/configs/application.ini';
@@ -31,7 +35,7 @@ var resolver = function(data, opts) {
         },
         jira: {
             getBaseUrl: function() {
-                return data.jira.baseUrl;
+                return configs.jira.baseUrl;
             },
             getTicketView: function() {
                 return this.getBaseUrl() + '/browse/';
@@ -42,20 +46,20 @@ var resolver = function(data, opts) {
                 return userConfig.user;
             },
             isTruckFolder: function(path) {
-                return path.indexOf(data.workingCopies.trunk.frontend) >= 0  ||
-                       data.workingCopies.trunk.backend === path;
+                return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||
+                       configs.workingCopies.trunk.backend === path;
             }
         },
         svn: {
             getBase: function() {
-                return data.cvs.svn.url + data.cvs.svn[app];
+                return configs.cvs.svn.url + configs.cvs.svn[app];
             },
             getBranchFolder: function() {
                 return this.getBase() + '/branches';
             },
             getUserBranchFolder: function() {
                 var config = {username: userConfig.user};
-                return (data.cvs.svn.userUrl + data.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
+                return (configs.cvs.svn.userUrl + configs.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
                     return config[match];
                 });
             }
@@ -63,4 +67,6 @@ var resolver = function(data, opts) {
     };
 };
 
-module.exports = resolver(configs, {app: 'frontend'});
+module.exports = function(opts) {
+    return resolver(opts);
+};

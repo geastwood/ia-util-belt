@@ -136,33 +136,45 @@ BranchLine.prototype.parse = function() {
     }
 };
 var LocalBranches = function(path, app) {
-    this.path = path || '/Volumes/intelliAd/Frontend/';
-    this.app = app || 'frontend';
+    this.path = path;
+    this.app = app;
     this.branches = [];
 };
 LocalBranches.prototype.collect = function() {
     var fs = require('fs');
     var path = require('path');
-    var that = this, files;
+    var that = this, files, rst = [];
 
     if (this.branches.length === 0) {
         files = fs.readdirSync(this.path);
-        this.branches = files.filter(function(file) {
+        files.forEach(function(file) {
             var stat = fs.statSync(path.join(that.path, file));
-            return stat && stat.isDirectory();
+            if (stat && stat.isDirectory()) {
+                rst.push({filename: file, mtime: stat.mtime});
+            }
         });
+        this.branches = rst;
     }
 
-    return this.branches;
+    return rst;
 };
-LocalBranches.prototype.format = function() {
+LocalBranches.prototype.format = function(opts) {
     var that = this;
-    return this.collect().map(function(file) {
-        return {path: that.path, filename: file};
+    var sorter = opts && opts.sorter;
+    sorter = sorter || 'date';
+    return this.collect().sort(sorter === 'name' ? function() {} : function(a, b) {
+        return Date.parse(b.mtime) - Date.parse(a.mtime);
+    }).map(function(file) {
+        return {path: that.path, filename: file.filename, mtime: file.mtime};
     });
 };
+
+/**
+ * DEBUG
+ */
 // var t = new LocalBranches();
 // console.log(t.format());
 
 module.exports.Branches = Branches;
 module.exports.BranchInfo = BranchInfo;
+module.exports.LocalBranches = LocalBranches;

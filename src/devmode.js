@@ -1,18 +1,19 @@
 var fs = require('fs'),
     chalk = require('chalk');
-var devmode = function(path) {
+
+module.exports =function(path) {
+
     var modeRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.developerMode(?:\s*)=(?:\s)(\d)/gm,
-        debugRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.debug(?:\s*)=(?:\s)(\d)$/gm;
+    debugRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.debug(?:\s*)=(?:\s)(\d)$/gm;
 
     return {
         read: function(fn) {
-            var that = this;
             fs.readFile(path, 'utf8', function(err, data) {
                 if (err) {
                     fn(err);
                 }
                 var mode = modeRegex.exec(data),
-                    debug = debugRegex.exec(data), modeFlag, debugFlag;
+                debug = debugRegex.exec(data), modeFlag, debugFlag;
                 if (mode === null || debug === null) {
                     fn('error when parsing.');
                 }
@@ -29,7 +30,6 @@ var devmode = function(path) {
         },
         update: function(state, fn) {
             // on, off, toggle
-            var that = this;
             this.read(function(err, data) {
                 var mode, debug;
                 if (err) {
@@ -57,11 +57,10 @@ var devmode = function(path) {
             });
         },
         log: function(status) {
-                console.log('\n\n' +
-                            chalk[(status ? 'green' : 'red')]
-                                 .bold('development mode is ', status ? 'ON' : 'OFF') +
-                            '\n\n');
+            console.log('\n\n' +
+                        chalk[(status ? 'green' : 'red')]
+            .bold('development mode is ', status ? 'ON' : 'OFF') +
+                '\n\n');
         }
     };
 };
-module.exports = devmode;
