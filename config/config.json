@@ -1,19 +1,19 @@
 {
     "workingCopies": {
-        "baseUrl": "/Volumes/intelliAd",
+        "baseUrl": "/Users/feiliu/Projects/Volumes/intelliAd",
         "frontendFolder": "Frontend",
         "serviceFolder": "Service",
         "trunk": {
-            "frontend": "trunk",
+            "frontend": "Trunk",
             "service": "Trunk"
         },
         "current": {
-            "frontend": "trunk",
-            "service": "Trunk"
+            "frontend": "Current",
+            "service": "Current"
         },
         "release": {
-            "frontend": "trunk",
-            "service": "Trunk"
+            "frontend": "Release",
+            "service": "Release"
         }
     },
     "jira": {

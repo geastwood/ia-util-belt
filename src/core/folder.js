@@ -1,0 +1,39 @@
+var fs = require('fs'),
+    path = require('path'),
+    IA = require(__dirname + '/../ia'),
+    api,
+    chalk = require('chalk'),
+    folders = [
+        path.dirname(IA().path.getRootPath()),
+        IA().path.getRootPath(),
+        IA({app: 'frontend'}).path.getAppPath(),
+        IA({app: 'service'}).path.getAppPath(),
+        IA({app: 'frontend', branch: 'trunk'}).path.getBasePath(),
+        IA({app: 'frontend', branch: 'current'}).path.getBasePath(),
+        IA({app: 'frontend', branch: 'release'}).path.getBasePath(),
+        IA({app: 'service', branch: 'trunk'}).path.getBasePath(),
+        IA({app: 'service', branch: 'current'}).path.getBasePath(),
+        IA({app: 'service', branch: 'release'}).path.getBasePath()
+    ];
+
+api = module.exports = function() {
+    return {
+        createFolder: function(fn) {
+            fn = fn || function() {};
+            folders.forEach(function(folder) {
+                if (!fs.existsSync(folder)) {
+                    fs.mkdirSync(folder);
+                    console.log(chalk.green('SUCCESS\u0009(CREATED)') + '\u0009%s', folder);
+                } else {
+                    console.log(chalk.blue('INFO\u0009(SKIPPED)') + '\u0009%s', folder);
+                }
+            });
+            fn();
+        }
+    };
+};
+
+/* DEBUG */
+// api().createFolder(function() {
+//     console.log('custom folder creation callback');
+// });

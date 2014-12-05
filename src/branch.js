@@ -7,15 +7,25 @@ var sys = require('sys'),
     IA = require(__dirname + '/./ia');
 
 var commands = {
-    ls: function(globals) {
-        var localBranches = new svnBranch.LocalBranches(IA(globals).path.getAppPath(), globals.app);
+    ls: function(globals, opts) {
+        var frontendBranches = new svnBranch.LocalBranches(IA({app: 'frontend'}).path.getAppPath(), 'frontend');
+        var serviceBranches = new svnBranch.LocalBranches(IA({app: 'service'}).path.getAppPath(), 'service');
+        var count = 1, data = [];
 
-        localBranches.format().forEach(function(file, i) {
-            // small trick on color
-            console.log(chalk.green('%s #%d\u0009') + file.filename,
-                        globals.app.charAt(0).toUpperCase() + globals.app.slice(1),
-                        (i + 1));
+        console.log('\n========FRONTEND===============');
+        frontendBranches.format().forEach(function(file) {
+            file.app = 'frontend';
+            data.push(file);
+            console.log(chalk.green('#%d\u0009%s\u0009') + file.filename + '\u0009\u0009' + file.path, count++, 'FRONTEND');
         });
+        console.log('===============================');
+        console.log('\n========SERVICE================');
+        serviceBranches.format().forEach(function(file) {
+            file.app = 'service';
+            data.push(file);
+            console.log(chalk.green('#%d\u0009%s\u0009') + file.filename + '\u0009\u0009' + file.path, count++, 'SERVICE ');
+        });
+        console.log('===============================');
     },
     'switch': function(globals) {
         var branches;

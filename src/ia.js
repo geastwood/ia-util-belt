@@ -1,7 +1,7 @@
 var configs = require(__dirname + '/../config/config.json'),
     path = require('path'),
     homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
-    userConfig = require(homeFolder + '/.ia/user.config.json');
+    userConfig;// = require(homeFolder + '/.ia/user.config.json');
 
 var resolver = function(opts) {
     opts = opts || {};
@@ -13,6 +13,9 @@ var resolver = function(opts) {
         path: {
             // app  = [frontend|backend]
             // branch = [trunk|current|release]
+            getRootPath: function() {
+                return path.join(configs.workingCopies.baseUrl);
+            },
             getBasePath: function() {
                 return path.join(this.getAppPath(), configs.workingCopies[branch][app]);
             },
@@ -43,6 +46,7 @@ var resolver = function(opts) {
         },
         util: {
             getUser: function() {
+                userConfig = require(homeFolder + '/.ia/user.config.json');
                 return userConfig.user;
             },
             isTruckFolder: function(path) {
@@ -58,6 +62,7 @@ var resolver = function(opts) {
                 return this.getBase() + '/branches';
             },
             getUserBranchFolder: function() {
+                userConfig = require(homeFolder + '/.ia/user.config.json');
                 var config = {username: userConfig.user};
                 return (configs.cvs.svn.userUrl + configs.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
                     return config[match];

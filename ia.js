@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-// currentFolder = process.cwd()
-
 var baseUrl = __dirname,
     program = require('commander'),
     chalk = require('chalk'),
+    prompt = require('prompt'),
     pkg = require(__dirname + '/package.json'),
+    control = require(__dirname + '/src/core/control'),
+    folder = require(__dirname + '/src/core/folder'),
     IA = require(__dirname + '/src/ia');
 
 // provide the version from package.json
@@ -31,9 +32,105 @@ var parseGlobal = function(options) {
     };
 };
 
+                    /**********/
+                    /* HELPER */
+                    /**********/
+var yesno = function(fn, opts) {
+    var answer = 'no';
+    opts = opts || {};
+
+    prompt.get([{
+        name:   'yesno',
+        message: opts.message || 'continue?',
+        validator: /(yes|no)/,
+        'default': opts['default'] || 'yes'
+    }], function(err, inputs) {
+        answer = inputs.yesno;
+        fn(answer);
+    });
+};
+
                 /*****************/
                 /* CLI INTERFACE */
                 /*****************/
+program
+    .command('setup')
+    .action(function(options) {
+        console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
+        yesno(function(answer) {
+            if (answer === 'no') {
+                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                return;
+            }
+            control().username(function(username) {
+                console.log(chalk.blue('INFO\u0009(DISPLAY)') + '\u0009Username is "%s"', username);
+                yesno(function(toCreateFolder) {
+                    if (toCreateFolder === 'no') {
+                        console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                        return;
+                    }
+                    folder().createFolder();
+                    console.log(chalk.green('SUCCESS\u0009(PROCESS FINISHED)'));
+                }, {message: 'create folder structure?'});
+            });
+        });
+    });
+
+    // Branch
+program.command('branch [cmd]')
+    .description('svn branch commands [ls|checkout|switch]')
+    .option('-g --go', 'To go to specified branch')
+    .action(function(cmd, options) {
+        var globals = parseGlobal(options),
+            commands = require(__dirname + '/src/branch');
+
+        if (!cmd)
+            cmd = 'ls';
+        commands[cmd](globals, options);
+    });
+
+    // build
+program.command('build')
+    .option('-f --frontend', 'frontend flag')
+    .option('-s --service', 'service flag')
+    .option('-t --trunk', 'use trunk')
+    .option('-r --release', 'use release')
+    .option('-c --current', 'use current')
+    .action(function(options) {
+        console.log('fei');
+    }).on('--help', function() {
+        console.log(chalk.green.bold('  Details'));
+        console.log('\n');
+        console.log(chalk.green('    `-f` and `-s` stand for `frontend` and `service`'));
+        console.log(chalk.green('    `-t`, `-c` and `-r` stand for `trunk`, `current` and `release`'));
+        console.log(chalk.green('\n    Please free composite these options!'));
+        console.log('    -------------------------------------');
+        console.log('    %s    %s', '-ftd', 'frontend  trunk  development');
+        console.log('    %s    %s', '-ftp', 'frontend  trunk  part');
+        console.log('    %s    %s', '-ftl', 'frontend  trunk  legacy');
+        console.log('    %s    %s', '-fts', 'frontend  trunk  serviceclient');
+        console.log('    %s    %s', '-ftm', 'frontend  trunk  modules');
+        console.log('    -------------------------------------');
+        console.log('    %s    %s', '-fcd', 'frontend current development');
+        console.log('    %s    %s', '-fcp', 'frontend current part');
+        console.log('    %s    %s', '-fcl', 'frontend current legacy');
+        console.log('    %s    %s', '-fcs', 'frontend current serviceclient');
+        console.log('    %s    %s', '-fcm', 'frontend current modules');
+        console.log('    -------------------------------------');
+        console.log('    %s    %s', '-frd', 'frontend release development');
+        console.log('    %s    %s', '-frp', 'frontend release part');
+        console.log('    %s    %s', '-frl', 'frontend release legacy');
+        console.log('    %s    %s', '-frs', 'frontend release serviceclient');
+        console.log('    %s    %s', '-frm', 'frontend release modules');
+        console.log('    -------------------------------------');
+        console.log('    %s    %s', '-st',  'service  release');
+        console.log('    %s    %s', '-sc',  'service  release');
+        console.log('    %s    %s', '-sr',  'service  release');
+        console.log('    -------------------------------------');
+    });
+
+program.parse(process.argv);
+/*
 program
     .command('devmode <cmd>')
     .description('[on|off|toggle|is] switch dev mode')
@@ -143,13 +240,6 @@ program.command('find <pattern>')
         });
     });
 
-program.command('branch <cmd>')
-    .description('svn branch commands [ls|checkout]')
-    .action(function(cmd, options) {
-        var globals = parseGlobal(options),
-            commands = require(__dirname + '/src/branch');
-
-        commands[cmd](globals);
-    });
 
 program.parse(process.argv);
+*/
