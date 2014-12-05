@@ -20,12 +20,14 @@ program.version('Current version: ' + pkg.version);
  */
 program.option('-f --frontend', 'frontend flag');
 program.option('-s --service', 'service flag');
-program.option('-c --branch <branch>', 'specify branch name');
+program.option('-t --trunk', 'use trunk');
+program.option('-r --release', 'use release');
+program.option('-c --current', 'use current');
 
 var parseGlobal = function(options) {
     return {
         app: options.parent.service ? 'service' : 'frontend',
-        branch: options.parent.branch || 'trunk'
+        branch: options.parent.release ? 'release' : options.parent.current ? 'current' : 'trunk'
     };
 };
 
@@ -78,8 +80,8 @@ program.command('ticket')
             exec = require('child_process').exec,
             child;
 
-        if (options.ticket) {
-            url = url + options.ticket;
+        if (options.number) {
+            url = url + options.number;
         }
 
         child = exec("open " + url, function(err, stdout, stdin) {
@@ -95,7 +97,7 @@ program.command('ticket')
 program.command('buildconfig')
     .description('build config related commands')
     .option('-g --grep <string>', 'Search a file')
-    .option('-r --remove', 'To remove')
+    .option('-d --delete', 'To delete')
     .option('-m --module', 'Do action on module build config file')
     .action(function(options) {
         var globals = parseGlobal(options),

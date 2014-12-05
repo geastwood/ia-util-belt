@@ -133,7 +133,15 @@ var commands = {
                         console.log(chalk.red('ERROR: ' + data));
                     });
                     child.on('exit', function() {
-                        console.log('checkout finished');
+                        var fs = require('fs');
+                        var logFile = path.join(IA(globals).path.getAppPath(), inputs.name, 'log')
+                        fs.chmod(logFile, '0777', function(err) {
+                            if (err) {
+                                throw err;
+                            }
+                            console.log(chalk.green('SUCCESS: chmod 0777 of %s'), logFile);
+                        });
+                        console.log(chalk.green('\ncheckout finished'));
                     });
                 });
             });
