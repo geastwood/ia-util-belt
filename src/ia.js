@@ -26,6 +26,9 @@ var resolver = function(opts) {
                 }
                 return path.join(configs.workingCopies.baseUrl, folder);
             },
+            getBuildXml: function() {
+                return this.getBasePath() + '/build.xml';
+            },
             getAppIni: function() {
                 return this.getBasePath() + '/application/configs/application.ini';
             },

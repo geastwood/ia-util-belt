@@ -19,11 +19,11 @@ program.version('Current version: ' + pkg.version);
  * default to 'frontend' [frontend|service]
  * default to 'truck' [trunk|release|current|..]
  */
-program.option('-f --frontend', 'frontend flag');
-program.option('-s --service', 'service flag');
-program.option('-t --trunk', 'use trunk');
-program.option('-r --release', 'use release');
-program.option('-c --current', 'use current');
+// program.option('-f --frontend', 'frontend flag');
+// program.option('-s --service', 'service flag');
+// program.option('-t --trunk', 'use trunk');
+// program.option('-r --release', 'use release');
+// program.option('-c --current', 'use current');
 
 var parseGlobal = function(options) {
     return {
@@ -91,13 +91,47 @@ program.command('branch [cmd]')
 
     // build
 program.command('build')
-    .option('-f --frontend', 'frontend flag')
-    .option('-s --service', 'service flag')
-    .option('-t --trunk', 'use trunk')
-    .option('-r --release', 'use release')
-    .option('-c --current', 'use current')
+    .option('-f --frontend',        'frontend flag')
+    .option('-s --service',         'service flag')
+    .option('-t --trunk',           'use trunk')
+    .option('-r --release',         'use release')
+    .option('-c --current',         'use current')
+    .option('-p --part',            'part')
+    .option('-d --development',     'development')
+    .option('-l --legacy',          'legacy')
+    .option('-s --serviceclient',   'serviceclient')
+    .option('-m --module',          'module')
     .action(function(options) {
-        console.log('fei');
+        var build = require(__dirname + '/src/core/build'),
+            config = {app: null, branch: null, flag: null},
+            groups = {
+                app: {
+                    options: ['frontend', 'service'],
+                    'default': 'frontend'
+                },
+                branch: {
+                    options: ['trunk', 'release', 'current'],
+                    'default': 'trunk'
+                },
+                flag: {
+                    options: ['part', 'development', 'legacy', 'serviceclient', 'module'],
+                    'default': null
+                }
+            };
+        Object.keys(groups).forEach(function(key) {
+            var found = false;
+            groups[key].options.forEach(function(option) {
+                if (options[option]) {
+                    config[key] = option;
+                    found = true;
+                }
+            });
+            if (!found) {
+                config[key] = groups[key]['default'];
+            }
+        });
+
+        build.build(config);
     }).on('--help', function() {
         console.log(chalk.green.bold('  Details'));
         console.log('\n');
