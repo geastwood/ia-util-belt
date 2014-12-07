@@ -55,6 +55,7 @@ var yesno = function(fn, opts) {
                 /*****************/
 program
     .command('setup')
+    .description('walk thought some very basic setup steps')
     .action(function(options) {
         console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
         yesno(function(answer) {
@@ -91,6 +92,7 @@ program.command('branch [cmd]')
 
     // build
 program.command('build')
+    .description('Build process releated command')
     .option('-f --frontend',        'frontend flag')
     .option('-s --service',         'service flag')
     .option('-t --trunk',           'use trunk')
@@ -161,6 +163,15 @@ program.command('build')
         console.log('    %s    %s', '-sc',  'service  release');
         console.log('    %s    %s', '-sr',  'service  release');
         console.log('    -------------------------------------');
+    });
+program.command('watch')
+    .description('small watch function')
+    .option('-t --trunk',           'use trunk')
+    .option('-r --release',         'use release')
+    .option('-c --current',         'use current')
+    .action(function(options) {
+        var watch = require(__dirname + '/src/core/watch');
+        watch().watch();
     });
 
 program.parse(process.argv);

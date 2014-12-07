@@ -1,7 +1,7 @@
 var configs = require(__dirname + '/../config/config.json'),
     path = require('path'),
     homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
-    userConfig;// = require(homeFolder + '/.ia/user.config.json');
+    userConfig;
 
 var resolver = function(opts) {
     opts = opts || {};
@@ -17,7 +17,11 @@ var resolver = function(opts) {
                 return path.join(configs.workingCopies.baseUrl);
             },
             getBasePath: function() {
-                return path.join(this.getAppPath(), configs.workingCopies[branch][app]);
+                var parts = [this.getAppPath(), configs.workingCopies[branch][app]];
+                [].forEach.call(arguments, function(arg) {
+                    parts.push(arg);
+                });
+                return path.join.apply(null, parts);
             },
             getAppPath: function() {
                 var folder = configs.workingCopies.frontendFolder;
@@ -27,16 +31,19 @@ var resolver = function(opts) {
                 return path.join(configs.workingCopies.baseUrl, folder);
             },
             getBuildXml: function() {
-                return this.getBasePath() + '/build.xml';
+                return this.getBasePath('build.xml');
             },
             getAppIni: function() {
-                return this.getBasePath() + '/application/configs/application.ini';
+                return this.getBasePath('application', 'configs', 'application.ini');
             },
             getComponentBuildConfig: function() {
-                return this.getBasePath() + '/buildconfig/build.jsb2';
+                return this.getBasePath('buildconfig', 'build.jsb2');
             },
             getModuleBuildConfig: function() {
-                return this.getBasePath() + '/buildconfig/build_modules.jsb2';
+                return this.getBasePath('buildconfig', 'build_modules.jsb2');
+            },
+            getAppJsFolder: function() {
+                return this.getBasePath('application', 'javascripts', 'application');
             }
         },
         jira: {

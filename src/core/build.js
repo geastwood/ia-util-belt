@@ -1,8 +1,7 @@
 var api,
-    chalk = require('chalk'),
-    exec = require('child_process').exec,
-    spawn = require('child_process').spawn,
-    IA = require(__dirname + '/../ia');
+    chalk   = require('chalk'),
+    spawn   = require('child_process').spawn,
+    IA      = require(__dirname + '/../ia');
 
 var map = {
     development: 'build-development',
@@ -16,7 +15,7 @@ api = module.exports = {
     build: function(opts) {
         var child;
         child = spawn('ant', [
-            opts.flag || '',
+            map[opts.flag] || '',
             '-f',
             IA(opts).path.getBuildXml()
         ]);
@@ -28,6 +27,6 @@ api = module.exports = {
         child.stderr.on('data', function(data) {
             console.log(chalk.red('ERROR: ' + data));
         });
-        child.on('exit', function(data) {});
+        child.on('exit', function(err, sig) {});
     }
 };
