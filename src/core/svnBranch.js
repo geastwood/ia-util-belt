@@ -1,3 +1,7 @@
+                                        /*********************/
+                                        /* SVN BRANCH PARSER */
+                                        /*********************/
+
 var BranchInfo = function(raw) {
     this.raw = raw;
     this.lines = [];

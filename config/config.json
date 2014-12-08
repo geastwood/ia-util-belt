@@ -5,7 +5,7 @@
         "frontendFolder": "Frontend",
         "serviceFolder": "Service",
         "trunk": {
-            "frontend": "trunk",
+            "frontend": "Trunk",
             "frontendDebug": "trunk",
             "service": "Trunk"
         },

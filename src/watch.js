@@ -1,5 +1,5 @@
 var spawn   = require('child_process').spawn,
-    IA      = require(__dirname + '/../ia'),
+    IA      = require(__dirname + '/./ia'),
     chalk   = require('chalk'),
     api;
 

@@ -103,7 +103,7 @@ program.command('build')
     .option('-s --serviceclient',   'serviceclient')
     .option('-m --module',          'module')
     .action(function(options) {
-        var build = require(__dirname + '/src/core/build'),
+        var build = require(__dirname + '/src/build'),
             config = {app: null, branch: null, flag: null},
             groups = {
                 app: {
@@ -170,8 +170,8 @@ program.command('watch')
     .option('-r --release',         'use release')
     .option('-c --current',         'use current')
     .action(function(options) {
-        var watch = require(__dirname + '/src/core/watch');
-        watch().watch();
+        var watcher = require(__dirname + '/src/watch');
+        watcher().watch();
     });
 
 program.parse(process.argv);
