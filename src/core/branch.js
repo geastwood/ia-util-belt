@@ -1,9 +1,9 @@
-var exec = require('child_process').exec,
-    IA = require(__dirname + '/../ia'),
-    chalk = require('chalk'),
-    prompt = require('prompt'),
-    path = require('path'),
-    svnBranch = require(__dirname + '/./svnBranch');
+var exec        = require('child_process').exec,
+    IA          = require(__dirname + '/../ia'),
+    chalk       = require('chalk'),
+    prompt      = require('prompt'),
+    path        = require('path'),
+    svnBranch   = require(__dirname + '/./svnBranch');
 
 /**
  * Get branches from svn
@@ -60,7 +60,9 @@ var checkout = function(options) {
 var svnCheckoutCommand = function(options) {
     var spawn = require('child_process').spawn,
         child,
-        svnUrl;
+        svnUrl,
+        fs = require('fs'),
+        targetPath = IA().path.calculateAppPath(options.appDirectory, options.appConfig.app);
 
     if (options.branchName) {
         svnUrl = IA(options.appConfig).svn.getUserBranchFolder() + 'branches/' + options.branchName;
@@ -68,10 +70,14 @@ var svnCheckoutCommand = function(options) {
         svnUrl = IA(options.appConfig).svn.getUserBranchFolder() + 'trunk';
     }
 
+    if (!fs.existsSync(targetPath)) {
+        spawn('mkdir', ['-p', targetPath]);
+    }
+
     child = spawn('svn', [
         'checkout',
         svnUrl,
-        path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory)
+        targetPath
     ]);
 
     child.stdout.setEncoding('utf8');
@@ -83,10 +89,9 @@ var svnCheckoutCommand = function(options) {
         console.log(chalk.red('ERROR: ' + data));
     });
     child.on('exit', function() {
-        var fs = require('fs'),
-            userConfigCallback,
+        var userConfigCallback,
             importantConfigCallback,
-            logFile = path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory, 'log');
+            logFile = path.join(targetPath, 'log');
 
         if (options.appConfig.app === 'service') { // frontend of service
             fs.chmod(logFile, '0777', function(err) {
@@ -98,20 +103,14 @@ var svnCheckoutCommand = function(options) {
         } else {
             userConfigCallback = require(__dirname + '/../plugin/userConfigPHP');
             importantConfigCallback = require(__dirname + '/../plugin/importantConfigPhp');
-            importantConfigCallback.copy(path.join(IA(options.appConfig).path.getAppPath(),
-                                              options.appDirectory, 'legacy', 'config', 'user'
-                                             ));
-            userConfigCallback.copy(path.join(IA(options.appConfig).path.getAppPath(),
-                                              options.appDirectory, 'legacy', 'config', 'user'
-                                             ));
+            importantConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
+            userConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
         }
         console.log('\n');
-        console.log(chalk.green('SUCCESS\u0009(INFO)\u0009') + 'Checkout successfully to "%s"',
-                    path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory));
+        console.log(chalk.green('SUCCESS\u0009(INFO)\u0009') + 'Checkout successfully to "%s"', path.join(targetPath));
         console.log('\n');
     });
 };
 
 module.exports.checkout = checkout;
 module.exports.getBranches = svnGetBranches;
-

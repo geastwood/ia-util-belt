@@ -6,29 +6,30 @@ var configs = require(__dirname + '/../config/config.json'),
 var resolver = function(opts) {
     opts = opts || {};
 
+    // app  = [frontend|backend]
+    // branch = [trunk|current|release]
     var app  = opts.app || 'frontend',
         branch = opts.branch || 'trunk';
 
     return {
         path: {
-            // app  = [frontend|backend]
-            // branch = [trunk|current|release]
             getRootPath: function() {
                 return path.join(configs.workingCopies.baseUrl);
             },
             getBasePath: function() {
-                var parts = [this.getAppPath(), configs.workingCopies[branch][app]];
+                var parts = [
+                    this.getRootPath(),
+                    configs.workingCopies.repos[branch][app],
+                    configs.workingCopies[app + 'Folder']
+                ];
                 [].forEach.call(arguments, function(arg) {
                     parts.push(arg);
                 });
+
                 return path.join.apply(null, parts);
             },
-            getAppPath: function() {
-                var folder = configs.workingCopies.frontendFolder;
-                if (app === 'service') {
-                    folder = configs.workingCopies.serviceFolder;
-                }
-                return path.join(configs.workingCopies.baseUrl, folder);
+            calculateAppPath: function(folderName, app) {
+                return path.join(this.getRootPath(), folderName, configs.workingCopies[app + 'Folder']);
             },
             getBuildXml: function() {
                 return this.getBasePath('build.xml');

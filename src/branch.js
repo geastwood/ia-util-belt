@@ -6,26 +6,6 @@ var exec        = require('child_process').exec,
     IA          = require(__dirname + '/./ia');
 
 var commands = {
-    ls: function(globals, opts) {
-        var frontendBranches = new svnBranch.LocalBranches(IA({app: 'frontend'}).path.getAppPath(), 'frontend'),
-            serviceBranches = new svnBranch.LocalBranches(IA({app: 'service'}).path.getAppPath(), 'service'),
-            count = 1, data = [];
-
-        console.log('\n========FRONTEND===============');
-        frontendBranches.format().forEach(function(file) {
-            file.app = 'frontend';
-            data.push(file);
-            console.log(chalk.green('#%d\u0009%s\u0009') + file.filename + '\u0009\u0009' + file.path, count++, 'FRONTEND');
-        });
-        console.log('===============================');
-        console.log('\n========SERVICE================');
-        serviceBranches.format().forEach(function(file) {
-            file.app = 'service';
-            data.push(file);
-            console.log(chalk.green('#%d\u0009%s\u0009') + file.filename + '\u0009\u0009' + file.path, count++, 'SERVICE ');
-        });
-        console.log('===============================');
-    },
     'switch': function(globals) {
         var branches;
 
@@ -79,45 +59,24 @@ var commands = {
             });
         });
     },
-    current: function() {
-        exec('svn info', function(err, stdout) {
-            var branchInfo;
-            if (err) {
-                throw err;
-            }
-            branchInfo = new svnBranch.BranchInfo(stdout);
-            console.log(chalk.green('===================CURRENT BRANCH==================='));
-            console.log('\n');
-            console.log(chalk.green.bold("Current Branch is %s"), branchInfo.getByName('relativeUrl')[0].value);
-            console.log('\n');
-            console.log(chalk.green('===================DETAIL==========================='));
-            console.log('\n');
-            console.log(stdout);
-            console.log(chalk.green('===================================================='));
-        });
-    },
     checkout: function(options) {
         prompt.get([{
-            name: 'app',
-            description: 'frontend or service?',
-            'default': 'frontend',
-            pattern: /(frontend|service)/
+            name: 'folder',
+            description: 'Folder name under "' + IA().path.getRootPath() + '"',
+            required: true,
+            pattern: /\w{1,20}/
         }],
-        function(err, whichApp) {
-            var appConfig = {app: whichApp.app},
-                appDirectory = IA(appConfig).path.getAppPath();
-
+        function(err, whereApp) { // path of the app
             prompt.get([{
-                name: 'folder',
-                description: 'Folder name under "' + appDirectory +'"',
-                required: true,
-                pattern: /\w{1,20}/
+                name: 'app',
+                description: 'frontend or service?',
+                'default': 'frontend',
+                pattern: /(frontend|service)/
             }],
-            function(err, whereApp) { // path of the app
-
+            function(err, whichApp) {
                 coreBranch.checkout({
                     isTrunk: options.trunk === true,
-                    appConfig: appConfig,
+                    appConfig: {app: whichApp.app},
                     appDirectory: whereApp.folder
                 });
             });

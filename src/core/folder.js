@@ -6,14 +6,15 @@ var fs = require('fs'),
     folders = [
         path.dirname(IA().path.getRootPath()),
         IA().path.getRootPath(),
-        IA({app: 'frontend'}).path.getAppPath(),
-        IA({app: 'service'}).path.getAppPath(),
+        path.dirname(IA({branch: 'trunk'}).path.getBasePath()),
+        path.dirname(IA({branch: 'current'}).path.getBasePath()),
+        path.dirname(IA({branch: 'release'}).path.getBasePath()),
         IA({app: 'frontend', branch: 'trunk'}).path.getBasePath(),
         IA({app: 'frontend', branch: 'current'}).path.getBasePath(),
         IA({app: 'frontend', branch: 'release'}).path.getBasePath(),
         IA({app: 'service', branch: 'trunk'}).path.getBasePath(),
         IA({app: 'service', branch: 'current'}).path.getBasePath(),
-        IA({app: 'service', branch: 'release'}).path.getBasePath()
+        IA({app: 'service', branch: 'release'}).path.getBasePath(),
     ];
 
 api = module.exports = function() {

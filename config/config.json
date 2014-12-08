@@ -3,19 +3,21 @@
         "baseUrlDebug": "/Volumes/intelliad",
         "baseUrl": "/Users/feiliu/Projects/Volumes/intelliAd",
         "frontendFolder": "Frontend",
-        "serviceFolder": "Service",
-        "trunk": {
-            "frontend": "Trunk",
-            "frontendDebug": "trunk",
-            "service": "Trunk"
-        },
-        "current": {
-            "frontend": "Current",
-            "service": "Current"
-        },
-        "release": {
-            "frontend": "Release",
-            "service": "Release"
+        "serviceFolder": "services",
+        "repos": {
+            "trunk": {
+                "frontend": "Trunk",
+                "frontendDebug": "trunk",
+                "service": "Trunk"
+            },
+            "current": {
+                "frontend": "Current",
+                "service": "Current"
+            },
+            "release": {
+                "frontend": "Release",
+                "service": "Release"
+            }
         }
     },
     "jira": {
