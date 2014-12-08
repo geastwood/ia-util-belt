@@ -79,13 +79,14 @@ program
     // Branch
 program.command('branch [cmd]')
     .description('svn branch commands [ls|checkout|switch]')
+    .option('-t --trunk', 'Checkout trunk')
     .action(function(cmd, options) {
         var globals = parseGlobal(options),
             commands = require(__dirname + '/src/branch');
 
         if (!cmd)
             cmd = 'ls';
-        commands[cmd](globals, options);
+        commands[cmd](options);
     });
 
     // build

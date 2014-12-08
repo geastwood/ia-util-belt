@@ -80,7 +80,7 @@ var commands = {
             });
         });
     },
-    current: function(globals) {
+    current: function() {
         exec('svn info', function(err, stdout) {
             var branchInfo;
             if (err) {
@@ -97,70 +97,37 @@ var commands = {
             sys.puts(chalk.green('===================================================='));
         });
     },
-    checkout: function(globals) {
+    checkout: function(options) {
         prompt.get([{
             name: 'app',
-            description: 'frontend or backend?',
-            default: 'frontend',
-            pattern: /(frontend|backend)/
+            description: 'frontend or service?',
+            'default': 'frontend',
+            pattern: /(frontend|service)/
         }],
-        function(err, inputs) {
-            var branches, data;
-            svnGetBranches(IA(globals).svn.getBranchFolder(), function(stdout) {
-                branches = new svnBranch.Branches(stdout);
-                (data = branches.format()).forEach(function(branch) {
-                    console.log('%s\u0009%s\u0009%s', chalk.green(branch.prefix), branch.date, branch.branch);
-                });
-                prompt.get([{
-                    name: 'branchId',
-                    description: 'Which to checkout?',
-                    default: 1,
-                    pattern: /\d{1,2}/
-                }, {
-                    name: 'name',
-                    description: 'folder name?',
-                    pattern: /\w{1,50}/
-                }],
-                function(err, inputs) {
-                    var id = parseInt(inputs.branchId, 10), branch = data[id - 1], child;
-                    if (id > data.length || typeof branch === 'undefined') {
-                        console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
-                    }
+        function(err, whichApp) {
+            var appConfig = {app: whichApp.app},
+                appDirectory = IA(appConfig).path.getAppPath();
 
-                    var spawn = require('child_process').spawn;
-
-                    child = spawn('svn', [
-                        'checkout',
-                        IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch,
-                        path.join(IA(globals).path.getAppPath(), inputs.name)
-                    ]);
-
-                    child.stdout.setEncoding('utf8');
-                    child.stdout.on('data', function(data) {
-                        console.log(data);
-                    });
-                    child.stderr.setEncoding('utf8');
-                    child.stderr.on('data', function(data) {
-                        console.log(chalk.red('ERROR: ' + data));
-                    });
-                    child.on('exit', function() {
-                        var fs = require('fs');
-                        var logFile = path.join(IA(globals).path.getAppPath(), inputs.name, 'log')
-                        fs.chmod(logFile, '0777', function(err) {
-                            if (err) {
-                                throw err;
-                            }
-                            console.log(chalk.green('SUCCESS: chmod 0777 of %s'), logFile);
-                        });
-                        console.log(chalk.green('\ncheckout finished'));
-                    });
+            prompt.get([{
+                name: 'folder',
+                description: 'Folder name under "' + appDirectory +'"',
+                required: true,
+                pattern: /\w{1,20}/
+            }],
+            function(err, whereApp) { // path of the app
+                svnCheckoutBranch({
+                    isTrunk: options.trunk === true,
+                    appConfig: appConfig,
+                    appDirectory: whereApp.folder
                 });
             });
-
         });
     }
 };
 
+                                            /**********/
+                                            /* HELPER */
+                                            /**********/
 /**
  * Get branches from svn
  */
@@ -181,6 +148,91 @@ var svnGetBranches = function(repo, fn) {
     });
 
     return child;
+};
+
+var svnCheckoutBranch = function(options) {
+    var branches, data;
+
+    if (options.isTrunk) {
+        svnCheckoutCommand(options);
+    } else {
+        svnGetBranches(IA(options.appConfig).svn.getBranchFolder(), function(stdout) {
+            branches = new svnBranch.Branches(stdout);
+            (data = branches.format()).forEach(function(branch) {
+                console.log('%s\u0009%s\u0009%s', chalk.green(branch.prefix), branch.date, branch.branch);
+            });
+            prompt.get([{
+                name: 'branchId',
+                description: 'Which to checkout?',
+                default: 1,
+                pattern: /\d{1,2}/
+            }],
+            function(err, whichBranchId) {
+                var id = parseInt(whichBranchId.branchId, 10), branch = data[id - 1];
+                if (id > data.length || typeof branch === 'undefined') {
+                    console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
+                }
+                options.branchName = branch.branch;
+                svnCheckoutCommand(options);
+            });
+        });
+    }
+
+};
+
+var svnCheckoutCommand = function(options) {
+    var spawn = require('child_process').spawn,
+        child,
+        svnUrl;
+
+    if (options.branchName) {
+        svnUrl = IA(options.appConfig).svn.getUserBranchFolder() + 'branches/' + options.branchName;
+    } else { // ^\trunk
+        svnUrl = IA(options.appConfig).svn.getUserBranchFolder() + 'trunk';
+    }
+
+    child = spawn('svn', [
+        'checkout',
+        svnUrl,
+        path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory)
+    ]);
+
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', function(data) {
+        console.log(data);
+    });
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function(data) {
+        console.log(chalk.red('ERROR: ' + data));
+    });
+    child.on('exit', function() {
+        var fs = require('fs'),
+            userConfigCallback,
+            importantConfigCallback,
+            logFile = path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory, 'log');
+
+        if (options.appConfig.app === 'service') { // frontend of service
+            fs.chmod(logFile, '0777', function(err) {
+                if (err) {
+                    throw err;
+                }
+                console.log(chalk.green('SUCCESS\u0009(UPDATED)\u0009') + 'chmod 0777 of "%s"', logFile);
+            });
+        } else {
+            userConfigCallback = require(__dirname + '/./plugin/userConfigPHP');
+            importantConfigCallback = require(__dirname + '/./plugin/importantConfigPhp');
+            importantConfigCallback.copy(path.join(IA(options.appConfig).path.getAppPath(),
+                                              options.appDirectory, 'legacy', 'config', 'user'
+                                             ));
+            userConfigCallback.copy(path.join(IA(options.appConfig).path.getAppPath(),
+                                              options.appDirectory, 'legacy', 'config', 'user'
+                                             ));
+        }
+        console.log('\n');
+        console.log(chalk.green('SUCCESS\u0009(INFO)\u0009') + 'Checkout successfully to "%s"',
+                    path.join(IA(options.appConfig).path.getAppPath(), options.appDirectory));
+        console.log('\n');
+    });
 };
 
 module.exports = commands;

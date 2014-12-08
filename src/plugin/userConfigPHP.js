@@ -2,32 +2,37 @@ var fs          = require('fs'),
     path        = require('path'),
     prompt      = require('prompt'),
     emailReg    = /(\w+)@intelliad.com/g,
-    api;
+    api,
+    IA          = require(__dirname + '/../ia'),
+    chalk       = require('chalk'),
+    fileName = 'config.user.php';
 
 api = module.exports = {
     copy: function(file) {
         var that = this;
         fs.readFile(path.join((__dirname + '/../../templates/config.user.php')), 'utf8', function(err, data) {
-            fs.writeFile(file, data, 'utf8', function(err) {
+            fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
                 if (err) {
                     throw err;
                 }
-                that.enterEmail(file);
+                console.log(chalk.green('SUCCESS\u0009(CREATED)\u0009') + '"%s" is copied to "%s"',
+                            fileName, file);
+                that.enterEmail(path.join(file, fileName), function(username) {
+                    console.log(chalk.green('SUCCESS\u0009(UPDATED)\u0009') + 'Email is updated to "%s"',
+                                username + '@intelliad.com');
+                });
             });
         });
     },
-    enterEmail: function(file) {
-        prompt.get([{
-            name: 'username',
-            description: 'please give username...',
-            required: true
-        }], function(err, inputs) {
-            fs.readFile(file, 'utf8', function(err, data) {
-                var rst = data.replace(emailReg, function() {
-                    return inputs.username + '@intelliad.com';
-                });
-                fs.writeFile(file, rst, 'utf8');
+    enterEmail: function(file, fn) {
+        var username = IA().util.getUser();
+        fs.readFile(file, 'utf8', function(err, data) {
+            var rst = data.replace(emailReg, function() {
+                return username + '@intelliad.com';
             });
+            fs.writeFile(file, rst, 'utf8');
+            /* jshint expr: true */
+            fn && fn(username);
         });
     }
 };

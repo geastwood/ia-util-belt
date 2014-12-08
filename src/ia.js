@@ -44,6 +44,9 @@ var resolver = function(opts) {
             },
             getAppJsFolder: function() {
                 return this.getBasePath('application', 'javascripts', 'application');
+            },
+            getLegacyConfig: function() {
+                return this.getBasePath('legacy', 'config', 'user');
             }
         },
         jira: {
@@ -57,7 +60,7 @@ var resolver = function(opts) {
         util: {
             getUser: function() {
                 userConfig = require(homeFolder + '/.ia/user.config.json');
-                return userConfig.user;
+                return userConfig.username;
             },
             isTruckFolder: function(path) {
                 return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||
@@ -73,7 +76,7 @@ var resolver = function(opts) {
             },
             getUserBranchFolder: function() {
                 userConfig = require(homeFolder + '/.ia/user.config.json');
-                var config = {username: userConfig.user};
+                var config = {username: userConfig.username};
                 return (configs.cvs.svn.userUrl + configs.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
                     return config[match];
                 });
