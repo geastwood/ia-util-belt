@@ -1,7 +1,7 @@
 {
     "workingCopies": {
-        "baseUrl": "/Volumes/intelliad",
-        "baseUrlDebug": "/Users/feiliu/Projects/Volumes/intelliAd",
+        "baseUrlDebug": "/Volumes/intelliad",
+        "baseUrl": "/Users/feiliu/Projects/Volumes/intelliAd",
         "frontendFolder": "Frontend",
         "serviceFolder": "Service",
         "trunk": {

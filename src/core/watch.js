@@ -1,14 +1,20 @@
 var spawn   = require('child_process').spawn,
     IA      = require(__dirname + '/../ia'),
-    chalk   = require('chalk');
+    chalk   = require('chalk'),
+    api;
 
 api = module.exports = function() {
     return {
+        // watch the `application/javascripts/application` folder for changes
+        // and restart the build
         watch: function(opts) {
             var watchPath = IA(opts).path.getAppJsFolder(), child = spawn('fswatch', [watchPath]), ant;
+
             console.log(chalk.blue('INFO\u0009(STARTED)\u0009') + '%s "%s"', 'Start to monitor on', watchPath);
             child.stdout.setEncoding('utf8');
             child.stdout.on('data', function() {
+
+                // if there already a `build` process, then kill and rebuilt
                 if (ant) {
                     ant.kill('SIGABRT');
                 }

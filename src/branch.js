@@ -1,16 +1,16 @@
-var sys = require('sys'),
-    exec = require('child_process').exec,
-    path = require('path'),
-    chalk = require('chalk'),
-    prompt = require('prompt'),
-    svnBranch = require(__dirname + '/./svnBranch'),
-    IA = require(__dirname + '/./ia');
+var sys         = require('sys'),
+    exec        = require('child_process').exec,
+    path        = require('path'),
+    chalk       = require('chalk'),
+    prompt      = require('prompt'),
+    svnBranch   = require(__dirname + '/./svnBranch'),
+    IA          = require(__dirname + '/./ia');
 
 var commands = {
     ls: function(globals, opts) {
-        var frontendBranches = new svnBranch.LocalBranches(IA({app: 'frontend'}).path.getAppPath(), 'frontend');
-        var serviceBranches = new svnBranch.LocalBranches(IA({app: 'service'}).path.getAppPath(), 'service');
-        var count = 1, data = [];
+        var frontendBranches = new svnBranch.LocalBranches(IA({app: 'frontend'}).path.getAppPath(), 'frontend'),
+            serviceBranches = new svnBranch.LocalBranches(IA({app: 'service'}).path.getAppPath(), 'service'),
+            count = 1, data = [];
 
         console.log('\n========FRONTEND===============');
         frontendBranches.format().forEach(function(file) {
@@ -61,7 +61,9 @@ var commands = {
                 }], function(err, prompts) {
                     var child;
                     if (prompts.yesno === 'yes') {
-                        child = exec('svn switch ' + IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch, function() {});
+                        child = exec('svn switch ' + IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch,
+                                     function() {}
+                                    );
                         child.stdout.on('data', function(data) {
                             sys.puts(data);
                         });
@@ -77,7 +79,6 @@ var commands = {
                 });
             });
         });
-
     },
     current: function(globals) {
         exec('svn info', function(err, stdout) {

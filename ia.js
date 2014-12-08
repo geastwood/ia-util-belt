@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-var baseUrl = __dirname,
-    program = require('commander'),
-    chalk = require('chalk'),
-    prompt = require('prompt'),
-    pkg = require(__dirname + '/package.json'),
+var program = require('commander'),
+    chalk   = require('chalk'),
+    prompt  = require('prompt'),
+    pkg     = require(__dirname + '/package.json'),
     control = require(__dirname + '/src/core/control'),
-    folder = require(__dirname + '/src/core/folder'),
-    IA = require(__dirname + '/src/ia');
+    folder  = require(__dirname + '/src/core/folder'),
+    IA      = require(__dirname + '/src/ia');
 
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
@@ -80,7 +79,6 @@ program
     // Branch
 program.command('branch [cmd]')
     .description('svn branch commands [ls|checkout|switch]')
-    .option('-g --go', 'To go to specified branch')
     .action(function(cmd, options) {
         var globals = parseGlobal(options),
             commands = require(__dirname + '/src/branch');
@@ -164,6 +162,7 @@ program.command('build')
         console.log('    %s    %s', '-sr',  'service  release');
         console.log('    -------------------------------------');
     });
+
 program.command('watch')
     .description('small watch function')
     .option('-t --trunk',           'use trunk')
@@ -182,7 +181,7 @@ program
     .action(function(cmd, opts) {
         var globals = parseGlobal(opts),
             iniFile = IA(globals).path.getAppIni(),
-            devmode = require(baseUrl + '/src/devmode')(iniFile);
+            devmode = require(__dirname + '/src/devmode')(iniFile);
 
         if (cmd === 'is') {
             devmode.read(function(err, data) {
@@ -247,7 +246,7 @@ program.command('buildconfig')
                 component: IA.path(globals).getComponentBuildConfig(),
                 module: IA.path(globals).getModuleBuildConfig()
             },
-            buildConfig = require(baseUrl + '/src/buildconfig')(paths[(options.module ? 'module': 'component')]);
+            buildConfig = require(__dirname + '/src/buildconfig')(paths[(options.module ? 'module': 'component')]);
 
         if (options.search) {
             buildConfig.findFile(options.search, {toRemove: options.remove});

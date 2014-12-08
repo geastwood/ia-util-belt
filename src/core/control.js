@@ -2,8 +2,7 @@ var fs = require('fs'),
     chalk = require('chalk'),
     api,
     path = require('path'),
-    homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
-    userConfigr;
+    homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 
 api = module.exports = function() {
     return {
@@ -39,7 +38,9 @@ api = module.exports = function() {
                         if (err) {
                             throw err;
                         }
-                        console.log(chalk.green('SUCCESS\u0009(Set)\u0009') + '%s is saved to "%s"', inputs.username, userConfigFile);
+                        console.log(chalk.green('SUCCESS\u0009(Set)\u0009') + '%s is saved to "%s"',
+                                    inputs.username,
+                                    userConfigFile);
                         fn(inputs.username);
                     });
                 });

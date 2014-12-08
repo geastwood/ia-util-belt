@@ -1,13 +1,13 @@
-var fs = require('fs');
-var pathUtil = require('path');
-var prompt = require('prompt');
-var emailReg = /(\w+)@intelliad.com/g;
-var api;
+var fs          = require('fs'),
+    path        = require('path'),
+    prompt      = require('prompt'),
+    emailReg    = /(\w+)@intelliad.com/g,
+    api;
 
 api = module.exports = {
     copy: function(file) {
         var that = this;
-        fs.readFile(pathUtil.join((__dirname + '/../../templates/config.user.php')), 'utf8', function(err, data) {
+        fs.readFile(path.join((__dirname + '/../../templates/config.user.php')), 'utf8', function(err, data) {
             fs.writeFile(file, data, 'utf8', function(err) {
                 if (err) {
                     throw err;
@@ -33,4 +33,4 @@ api = module.exports = {
 };
 
 /* DEBUG */
-// api.copy(pathUtil.normalize('/Users/feiliu/Desktop/config.user.php'));
+// api.copy(path.normalize('/Users/feiliu/Desktop/config.user.php'));
