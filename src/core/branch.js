@@ -161,7 +161,7 @@ var svnCheckoutCommand = function(options) {
             });
         } else {
             userConfigCallback = require(__dirname + '/../plugin/userConfigPHP');
-            importantConfigCallback = require(__dirname + '/../plugin/importantConfigPhp');
+            importantConfigCallback = require(__dirname + '/../plugin/importantConfigPHP');
             importantConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
             userConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
         }

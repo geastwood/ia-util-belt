@@ -107,8 +107,9 @@ program.command('watch')
     .option('-r --release',         'use release')
     .option('-c --current',         'use current')
     .action(function(options) {
-        var watcher = require(__dirname + '/src/watch');
-        watcher().watch();
+        var util = require(__dirname + '/src/util'),
+            watcher = require(__dirname + '/src/watch');
+        watcher().watch(util.parseGlobal(options));
     });
 
 program
