@@ -29,7 +29,7 @@ module.exports =function(path) {
             });
         },
         update: function(state, fn) {
-            // on, off, toggle
+            // on, off
             this.read(function(err, data) {
                 var mode, debug;
                 if (err) {
@@ -38,12 +38,9 @@ module.exports =function(path) {
                 if (state === 'on') {
                     mode = 1;
                     debug = 1;
-                } else if (state === 'off') {
+                } else {
                     mode = 0;
                     debug = 0;
-                } else {
-                    mode = data.mode === 1 ? 0 : 1;
-                    debug = data.debug === 1 ? 0 : 1;
                 }
                 data.content = data.content.replace(modeRegex, function(full) {
                     return full.slice(0, full.length - 1) + mode;
@@ -56,11 +53,15 @@ module.exports =function(path) {
                 });
             });
         },
-        log: function(status) {
-            console.log('\n\n' +
-                        chalk[(status ? 'green' : 'red')]
-            .bold('development mode is ', status ? 'ON' : 'OFF') +
-                '\n\n');
+        log: function(status, path) {
+            console.log('\n');
+            console.log(chalk.blue('INFO\u0009(STATUS)\u0009') +
+                        '%s "%s" at %s',
+                        'Development mode is ',
+                        chalk[(status ? 'green' : 'red')].underline(status ? 'ON' : 'OFF'),
+                        path
+                       );
+            console.log('\n');
         }
     };
 };

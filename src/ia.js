@@ -3,7 +3,7 @@ var configs = require(__dirname + '/../config/config.json'),
     homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
     userConfig;
 
-var resolver = function(opts) {
+var api = function(opts) {
     opts = opts || {};
 
     // app  = [frontend|backend]
@@ -87,5 +87,5 @@ var resolver = function(opts) {
 };
 
 module.exports = function(opts) {
-    return resolver(opts);
+    return api(opts);
 };

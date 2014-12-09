@@ -27,6 +27,14 @@ var svnGetBranches = function(repo, fn) {
     return child;
 };
 
+/**
+ * @param {Object} options data needed for checkout a repo
+ *                         options.isTrunk {Boolean}
+ *                         options.appConfig {Object}
+ *                         options.appConfig.app {String} frontend | backend
+ *
+ * @return {Undefined}
+ */
 var checkout = function(options) {
     var branches, data;
 
@@ -49,6 +57,8 @@ var checkout = function(options) {
                 if (id > data.length || typeof branch === 'undefined') {
                     console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
                 }
+
+                // if checkout a `branch`, pass the information along
                 options.branchName = branch.branch;
                 svnCheckoutCommand(options);
             });
@@ -70,6 +80,7 @@ var svnCheckoutCommand = function(options) {
         svnUrl = IA(options.appConfig).svn.getUserBranchFolder() + 'trunk';
     }
 
+    // check the path, if not exists, create with flag '-p'
     if (!fs.existsSync(targetPath)) {
         spawn('mkdir', ['-p', targetPath]);
     }

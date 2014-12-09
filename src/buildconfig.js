@@ -10,9 +10,11 @@ var buildconfig = function(path) {
         findFile: function(pattern, opts) {
             var that = this;
             data.getData(function(content) {
-                var pkgs = content.pkgs;
-                var test = new RegExp(pattern, 'i');
-                var rst = [];
+
+                var pkgs = content.pkgs,
+                    test = new RegExp(pattern, 'i'),
+                    rst = [];
+
                 pkgs.forEach(function(pkg) {
                     if (pkg.fileIncludes) {
                         pkg.fileIncludes.forEach(function(file) {
@@ -22,6 +24,7 @@ var buildconfig = function(path) {
                         });
                     }
                 });
+
                 if (opts.toRemove) {
                     that.toRemove(rst);
                 } else {
@@ -63,7 +66,7 @@ var buildconfig = function(path) {
                         if (err) {
                             throw err;
                         }
-                        console.log('data write to "%s"', path);
+                        console.log(chalk.green('SUCCESS\u0009(WRITE)\u0009') + 'Data write to "%s"', path);
                     });
 
                 });
@@ -78,6 +81,7 @@ var dataManager = function(path) {
     return {
         getData: function(fn) {
             if (hasData === false) {
+                console.log(chalk.blue('INFO\u0009(INFO)\u0009') + 'Search in "%s".', path);
                 fs.readFile(path, 'utf8', function(err, data) {
                     if (err) {
                         throw err;

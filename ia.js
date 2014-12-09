@@ -11,26 +11,6 @@ var program = require('commander'),
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
 
-                /***************/
-                /* GLOBAL FLAG */
-                /***************/
-/**
- * default to 'frontend' [frontend|service]
- * default to 'truck' [trunk|release|current|..]
- */
-// program.option('-f --frontend', 'frontend flag');
-// program.option('-s --service', 'service flag');
-// program.option('-t --trunk', 'use trunk');
-// program.option('-r --release', 'use release');
-// program.option('-c --current', 'use current');
-
-var parseGlobal = function(options) {
-    return {
-        app: options.parent.service ? 'service' : 'frontend',
-        branch: options.parent.release ? 'release' : options.parent.current ? 'current' : 'trunk'
-    };
-};
-
                     /**********/
                     /* HELPER */
                     /**********/
@@ -81,8 +61,7 @@ program.command('branch [cmd]')
     .description('svn branch commands [ls|checkout|switch]')
     .option('-t --trunk', 'Checkout trunk')
     .action(function(cmd, options) {
-        var globals = parseGlobal(options),
-            commands = require(__dirname + '/src/branch');
+        var commands = require(__dirname + '/src/branch');
 
         if (!cmd)
             cmd = 'ls';
@@ -104,35 +83,8 @@ program.command('build')
     .option('-m --module',          'module')
     .action(function(options) {
         var build = require(__dirname + '/src/build'),
-            config = {app: null, branch: null, flag: null},
-            groups = {
-                app: {
-                    options: ['frontend', 'service'],
-                    'default': 'frontend'
-                },
-                branch: {
-                    options: ['trunk', 'release', 'current'],
-                    'default': 'trunk'
-                },
-                flag: {
-                    options: ['part', 'development', 'legacy', 'serviceclient', 'module'],
-                    'default': null
-                }
-            };
-        Object.keys(groups).forEach(function(key) {
-            var found = false;
-            groups[key].options.forEach(function(option) {
-                if (options[option]) {
-                    config[key] = option;
-                    found = true;
-                }
-            });
-            if (!found) {
-                config[key] = groups[key]['default'];
-            }
-        });
-
-        build.build(config);
+            util = require(__dirname + '/src/util');
+        build.build(util.parseGlobal(options));
     }).on('--help', function() {
         console.log(chalk.green.bold('  Details'));
         console.log('\n');
@@ -174,14 +126,15 @@ program.command('watch')
         watcher().watch();
     });
 
-program.parse(process.argv);
-/*
 program
     .command('devmode <cmd>')
-    .description('[on|off|toggle|is] switch dev mode')
-    .action(function(cmd, opts) {
-        var globals = parseGlobal(opts),
-            iniFile = IA(globals).path.getAppIni(),
+    .description('[on|off|is] switch dev mode')
+    .option('-t --trunk',   'use trunk')
+    .option('-r --release', 'use release')
+    .option('-c --current', 'use current')
+    .action(function(cmd, options) {
+        var util = require(__dirname + '/src/util'),
+            iniFile = IA(util.parseGlobal(options)).path.getAppIni(),
             devmode = require(__dirname + '/src/devmode')(iniFile);
 
         if (cmd === 'is') {
@@ -189,18 +142,49 @@ program
                 if (err) {
                     throw err;
                 }
-                devmode.log(data.isOn);
+                devmode.log(data.isOn, iniFile);
             });
         } else {
             devmode.update(cmd, function(err, data) {
                 if (err) {
                     throw err;
                 }
-                devmode.log(data.isOn);
+                devmode.log(data.isOn, iniFile);
             });
+        }
+    })
+    .on('--help', function() {
+        console.log(chalk.green.bold('  Example:\n'));
+        console.log(chalk.green('    ia devmode -t is') + '\u0009\u0009 check current `dev mode` of frontend `trunk`');
+        console.log(chalk.green('    ia devmode --release on') + '\u0009 turn on `dev mode` of frontend `current`');
+        console.log(chalk.green('    ia devmode -c off') + '\u0009\u0009 turn off `dev mode` of frontend `current`');
+    });
+
+program.command('buildconfig')
+    .description('build config related commands')
+    .option('-g --grep <string>', 'Search a file')
+    .option('-d --delete', 'To delete')
+    .option('-m --module', 'Do action on module build config file')
+    .option('-t --trunk',   'use trunk')
+    .option('-r --release', 'use release')
+    .option('-c --current', 'use current')
+    .action(function(options) {
+        var util = require(__dirname + '/src/util'),
+            globals = util.parseGlobal(options),
+            paths = {
+                component: IA(globals).path.getComponentBuildConfig(),
+                module: IA(globals).path.getModuleBuildConfig()
+            },
+            buildConfig = require(__dirname + '/src/buildconfig')(paths[(options.module ? 'module': 'component')]);
+
+        if (options.grep) {
+            buildConfig.findFile(options.grep, {toRemove: options['delete']});
         }
     });
 
+program.parse(process.argv);
+
+/*
 program.command('diff').
     description('svn diff')
     .option('-d --dir <dir>', 'specify the dir optionally')
@@ -236,24 +220,6 @@ program.command('ticket')
         });
     });
 
-program.command('buildconfig')
-    .description('build config related commands')
-    .option('-g --grep <string>', 'Search a file')
-    .option('-d --delete', 'To delete')
-    .option('-m --module', 'Do action on module build config file')
-    .action(function(options) {
-        var globals = parseGlobal(options),
-            paths = {
-                component: IA.path(globals).getComponentBuildConfig(),
-                module: IA.path(globals).getModuleBuildConfig()
-            },
-            buildConfig = require(__dirname + '/src/buildconfig')(paths[(options.module ? 'module': 'component')]);
-
-        if (options.search) {
-            buildConfig.findFile(options.search, {toRemove: options.remove});
-        }
-    });
-
 program.command('find <pattern>')
     .description('a `grep` wrapper')
     .option('-d --definition', 'search only ext.define, e.g. Ext.define(\'IA.util.SomeClass\')')
@@ -284,7 +250,6 @@ program.command('find <pattern>')
             sys.puts(formated);
         });
     });
-
 
 program.parse(process.argv);
 */

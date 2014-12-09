@@ -2,6 +2,24 @@
                                         /* SVN BRANCH PARSER */
                                         /*********************/
 
+/**
+ *
+ * Parse the following data into structure (output from `svn info`)
+ *
+ *  Path: .
+ *  Working Copy Root Path: /Volumes/intelliad/Frontend/trunk
+ *  URL: svn://10.96.1.31/intelliad_frontend_2011/trunk
+ *  Relative URL: ^/trunk
+ *  Repository Root: svn://10.96.1.31/intelliad_frontend_2011
+ *  Repository UUID: a2a3fb1c-9422-4626-8071-d054d963d516
+ *  Revision: 14868
+ *  Node Kind: directory
+ *  Schedule: normal
+ *  Last Changed Author: mtodorovic
+ *  Last Changed Rev: 14866
+ *  Last Changed Date: 2014-12-03 11:39:38 +0100 (Wed, 03 Dec 2014)
+ *
+ */
 var BranchInfo = function(raw) {
     this.raw = raw;
     this.lines = [];
@@ -47,9 +65,10 @@ BranchInfo.prototype.getByName = function(name) {
     return rst;
 };
 
-/**********/
-/* BRANCH */
-/**********/
+/**
+ * Parse the following data into structure (output from `svn ls svn://repo/branches`)
+ * @use BranchLine to parse each line data
+ */
 var Branches = function(raw) {
     this.raw = raw;
     this.lines = [];
@@ -104,6 +123,9 @@ Branches.prototype.format = function() {
     });
 };
 
+/**
+ * Parse branch line data to structure, used by class `Branches` above
+ */
 var BranchLine = function(line) {
     this.line = line;
     this.parts = [];
@@ -111,6 +133,7 @@ var BranchLine = function(line) {
 
 BranchLine.prototype.getByName = function(name) {
     var rst = null;
+
     if (this.parts.length === 0) {
         this.parse();
     }
@@ -139,6 +162,7 @@ BranchLine.prototype.parse = function() {
         return this.parts;
     }
 };
+
 var LocalBranches = function(path, app) {
     this.path = path;
     this.app = app;
