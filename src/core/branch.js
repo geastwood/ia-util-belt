@@ -12,7 +12,7 @@ var exec        = require('child_process').exec,
 var svnGetBranches = function(repo, fn) {
     var child;
 
-    child = exec('svn ls ' + repo + ' --verbose', function(err, stdout, stdin) {
+    child = exec('svn ls ' + repo + ' --verbose ' + IA().util.getSvnCommandFlags(), function(err, stdout, stdin) {
         if (err) {
             throw err;
         }
@@ -97,12 +97,15 @@ var switchBranch = function(options) {
                 }
                 // MUST CHANGE TO FOLDER, AND SWITCH COMMAND
                 process.chdir(IA(options).path.getBasePath());
-                child = exec('svn switch ' + IA(options).svn.getUserBranchFolder() + 'branches/' + branch.branch, function() {});
+                child = exec('svn switch ' + IA(options).svn.getUserBranchFolder() + 'branches/' + branch.branch + ' ' +
+                             IA().util.getSvnCommandFlags(),
+                             function() {});
+
                 child.stdout.on('data', function(data) {
                     console.log(data);
                 });
                 child.on('exit', function() {
-                    exec('svn info', function(err, stdout) {
+                    exec('svn info ' + IA().util.getSvnCommandFlags(), function(err, stdout) {
                         console.log(stdout);
                         console.log(chalk.green('SUCCESS\u0009(SWITCHED)\u0009') + 'now switched to %s', branch.branch);
                     });
@@ -136,7 +139,12 @@ var svnCheckoutCommand = function(options) {
     child = spawn('svn', [
         'checkout',
         svnUrl,
-        targetPath
+        targetPath,
+        '--username',
+        IA().util.getUser(),
+        '--password',
+        IA().util.getPassword(),
+        '--no-auth-cache'
     ]);
 
     child.stdout.setEncoding('utf8');

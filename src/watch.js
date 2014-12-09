@@ -9,7 +9,8 @@ api = module.exports = function() {
         // and restart the build
         watch: function(opts) {
             var watchPath = IA(opts).path.getAppJsFolder(),
-                child = spawn('fswatch', [watchPath]),
+                // child = spawn('fswatch', [watchPath]), // this is for mac version
+                child = spawn('inotifywait', ['-rmc', '--event', 'MODIFY', watchPath]),
                 ant;
 
             console.log(chalk.blue('INFO\u0009(STARTED)\u0009') + '%s "%s"', 'Start to monitor on', watchPath);

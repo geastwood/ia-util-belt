@@ -63,6 +63,13 @@ var api = function(opts) {
                 userConfig = require(homeFolder + '/.ia/user.config.json');
                 return userConfig.username;
             },
+            getPassword: function() {
+                userConfig = require(homeFolder + '/.ia/user.config.json');
+                return userConfig.password;
+            },
+            getSvnCommandFlags: function() {
+                return ['--username', this.getUser(), '--password', this.getPassword(), '--no-auth-cache'].join(' ');
+            },
             isTruckFolder: function(path) {
                 return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||
                        configs.workingCopies.trunk.backend === path;
