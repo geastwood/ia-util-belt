@@ -3,6 +3,7 @@ var exec        = require('child_process').exec,
     chalk       = require('chalk'),
     prompt      = require('prompt'),
     path        = require('path'),
+    util        = require(__dirname + '/../util'),
     svnBranch   = require(__dirname + '/./svnBranch');
 
 /**
@@ -67,6 +68,53 @@ var checkout = function(options) {
 
 };
 
+var switchBranch = function(options) {
+    var branches;
+
+    svnGetBranches(IA(options).svn.getBranchFolder(), function(stdout) {
+        var data;
+        branches = new svnBranch.Branches(stdout);
+        (data = branches.format()).forEach(function(branch) {
+            console.log('%s\u0009%s\u0009%s', chalk.green(branch.prefix), branch.date, branch.branch);
+        });
+        prompt.get([{
+            name: 'branchId',
+            description: 'Which to switch?',
+            'default': 1,
+            pattern: /\d{1,2}/
+        }],
+        function(err, prompts) {
+            var id = parseInt(prompts.branchId, 10), branch = data[id - 1];
+            if (id > data.length || typeof branch === 'undefined') {
+                console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
+            }
+            util.yesno(function(answer) {
+                var child;
+                if (answer === 'no') {
+                    console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)\u0009') + '%s',
+                                'Action is cancelled, nothing changed.');
+                    return;
+                }
+                // MUST CHANGE TO FOLDER, AND SWITCH COMMAND
+                process.chdir(IA(options).path.getBasePath());
+                child = exec('svn switch ' + IA(options).svn.getUserBranchFolder() + 'branches/' + branch.branch, function() {});
+                child.stdout.on('data', function(data) {
+                    console.log(data);
+                });
+                child.on('exit', function() {
+                    exec('svn info', function(err, stdout) {
+                        console.log(stdout);
+                        console.log(chalk.green('SUCCESS\u0009(SWITCHED)\u0009') + 'now switched to %s', branch.branch);
+                    });
+                });
+            }, {
+                message: 'sure to switch to "' + branch.branch + '"?'
+            });
+        });
+    });
+
+};
+
 var svnCheckoutCommand = function(options) {
     var spawn = require('child_process').spawn,
         child,
@@ -124,4 +172,5 @@ var svnCheckoutCommand = function(options) {
 };
 
 module.exports.checkout = checkout;
-module.exports.getBranches = svnGetBranches;
+// module.exports.getBranches = svnGetBranches;
+module.exports.switchBranch = switchBranch;

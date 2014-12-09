@@ -2,32 +2,14 @@
 
 var program = require('commander'),
     chalk   = require('chalk'),
-    prompt  = require('prompt'),
     pkg     = require(__dirname + '/package.json'),
     control = require(__dirname + '/src/core/control'),
     folder  = require(__dirname + '/src/core/folder'),
+    util    = require(__dirname + '/src/util'),
     IA      = require(__dirname + '/src/ia');
 
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
-
-                    /**********/
-                    /* HELPER */
-                    /**********/
-var yesno = function(fn, opts) {
-    var answer = 'no';
-    opts = opts || {};
-
-    prompt.get([{
-        name:   'yesno',
-        message: opts.message || 'continue?',
-        validator: /(yes|no)/,
-        'default': opts['default'] || 'yes'
-    }], function(err, inputs) {
-        answer = inputs.yesno;
-        fn(answer);
-    });
-};
 
                 /*****************/
                 /* CLI INTERFACE */
@@ -37,14 +19,14 @@ program
     .description('walk thought some very basic setup steps')
     .action(function(options) {
         console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
-        yesno(function(answer) {
+        util.yesno(function(answer) {
             if (answer === 'no') {
                 console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
                 return;
             }
             control().username(function(username) {
                 console.log(chalk.blue('INFO\u0009(DISPLAY)') + '\u0009Username is "%s"', username);
-                yesno(function(toCreateFolder) {
+                util.yesno(function(toCreateFolder) {
                     if (toCreateFolder === 'no') {
                         console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
                         return;
@@ -57,15 +39,17 @@ program
     });
 
     // Branch
-program.command('branch [cmd]')
-    .description('svn branch commands [ls|checkout|switch]')
+program.command('branch <cmd>')
+    .description('svn branch commands [checkout|switch]')
     .option('-t --trunk', 'Checkout trunk')
     .action(function(cmd, options) {
         var commands = require(__dirname + '/src/branch');
 
-        if (!cmd)
-            cmd = 'ls';
-        commands[cmd](options);
+        if (['checkout', 'switch'].indexOf(cmd) < 0) {
+            console.log(chalk.red('INFO\u0009(WRONG INPUT)\u0009') + '%s', 'Only option `checkout` and `switch` is valid');
+        } else {
+            commands[cmd](options);
+        }
     });
 
     // build
@@ -84,6 +68,7 @@ program.command('build')
     .action(function(options) {
         var build = require(__dirname + '/src/build'),
             util = require(__dirname + '/src/util');
+
         build.build(util.parseGlobal(options));
     }).on('--help', function() {
         console.log(chalk.green.bold('  Details'));
@@ -180,6 +165,50 @@ program.command('buildconfig')
         if (options.grep) {
             buildConfig.findFile(options.grep, {toRemove: options['delete']});
         }
+    });
+
+program.command('find <pattern>')
+    .description('a `grep` wrapper')
+    .option('-d --definition', 'search only ext.define, e.g. Ext.define(\'IA.util.SomeClass\')')
+    .option('-f --frontend',   'frontend flag')
+    .option('-s --service',    'service flag')
+    .option('-t --trunk',      'use trunk')
+    .option('-r --release',    'use release')
+    .option('-c --current',    'use current')
+    .action(function(pattern, options) {
+        var spawn = require('child_process').spawn,
+            child,
+            targetPath = IA(util.parseGlobal(options)).path.getBasePath();
+
+        if (options['definition']) {
+            pattern = 'Ext\\d?\\.define\\(.*' + pattern;
+        }
+
+        // search recursively and case-insensitive
+        console.log('\n');
+        console.log(chalk.blue('INFO\u0009(SEARCH)\u0009') + 'Searching under "%s"', targetPath);
+        console.log('\n');
+
+        child = spawn('egrep', [
+            '-i', '-R',
+            pattern,
+            targetPath,
+            '--exclude-dir', 'library',
+            '--exclude-dir', 'legacy',
+            '--exclude-dir', 'node_modules',
+            '--exclude-dir', 'tests',
+            '--exclude-dir', 'test',
+            '--exclude-dir', 'build',
+        ]);
+        child.stdout.setEncoding('utf8');
+        child.stdout.on('data', function(stdout) {
+            // give a green color of outputs
+            var formated = stdout.replace((new RegExp(pattern, 'gmi')), function(match) {
+                return chalk.green(match);
+            });
+
+            console.log(formated.replace(new RegExp(targetPath, 'gmi'), '--'));
+        });
     });
 
 program.parse(process.argv);

@@ -1,3 +1,4 @@
+var prompt = require('prompt');
 var util = {
     parseGlobal: function(options) {
         var config = {app: null, branch: null, flag: null},
@@ -28,6 +29,20 @@ var util = {
             }
         });
         return config;
+    },
+    yesno: function(fn, opts) {
+        var answer = 'no';
+        opts = opts || {};
+
+        prompt.get([{
+            name:   'yesno',
+            message: opts.message || 'continue?',
+            validator: /(yes|no)/,
+            'default': opts['default'] || 'yes'
+        }], function(err, inputs) {
+            answer = inputs.yesno;
+            fn(answer);
+        });
     }
 };
 module.exports = util;

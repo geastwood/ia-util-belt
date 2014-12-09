@@ -1,60 +1,31 @@
-var exec        = require('child_process').exec,
-    chalk       = require('chalk'),
-    prompt      = require('prompt'),
-    svnBranch   = require(__dirname + '/./core/svnBranch'),
+var prompt      = require('prompt'),
     coreBranch  = require(__dirname + '/./core/branch'),
     IA          = require(__dirname + '/./ia');
 
 var commands = {
     'switch': function(globals) {
-        var branches;
-
-        if (IA(globals).util.isTruckFolder(process.cwd())) {
-            console.log(chalk.red('ATTENSTION: It\'s not cool to switch the ' + chalk.underline('"trunk"') + '.'));
-            return;
-        }
-
-        coreBranch.svnGetBranches(IA(globals).svn.getBranchFolder(), function(stdout, stdin) {
-            var data;
-            branches = new svnBranch.Branches(stdout);
-            (data = branches.format()).forEach(function(branch) {
-                console.log('%s\u0009%s\u0009%s', chalk.green(branch.prefix), branch.date, branch.branch);
-            });
+        // if (IA(globals).util.isTruckFolder(process.cwd())) {
+        //     console.log(chalk.red('ATTENSTION: It\'s not cool to switch the ' + chalk.underline('"trunk"') + '.'));
+        //     return;
+        // }
+        prompt.get([{ // trunk | current | release
+            name: 'branch',
+            description: 'Which branch to switch?',
+            required: true,
+            'default': 'current',
+            pattern: /(current|release)/
+        }],
+        function(err, whichBranch) { // path of the app
             prompt.get([{
-                name: 'branchId',
-                description: 'Which to switch?',
-                default: 1,
-                pattern: /\d{1,2}/
+                name: 'app',
+                description: 'frontend or service?',
+                'default': 'frontend',
+                pattern: /(frontend|service)/
             }],
-            function(err, prompts) {
-                var id = parseInt(prompts.branchId, 10), branch = data[id - 1];
-                if (id > data.length || typeof branch === 'undefined') {
-                    console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
-                }
-                prompt.get([{
-                    name: 'yesno',
-                    message: 'sure to switch to "' + branch.branch + '"?',
-                    validator: /y[es]*|n[o]?/,
-                    warning: 'Must respond yes or no',
-                    default: 'no'
-                }], function(err, prompts) {
-                    var child;
-                    if (prompts.yesno === 'yes') {
-                        child = exec('svn switch ' + IA(globals).svn.getUserBranchFolder() + 'branches/' + branch.branch,
-                                     function() {}
-                                    );
-                        child.stdout.on('data', function(data) {
-                            console.log(data);
-                        });
-                        child.on('exit', function() {
-                            exec('svn info', function(err, stdout) {
-                                console.log(stdout);
-                                console.log(chalk.green('SUCCESS: now switched to %s'), branch.branch);
-                            });
-                        });
-                    } else {
-                        console.log(chalk.green('ATTENSTION: Action is cancelled, nothing changed.'));
-                    }
+            function(err, whichApp) {
+                coreBranch.switchBranch({
+                    app: whichApp.app,
+                    branch: whichBranch.branch
                 });
             });
         });
