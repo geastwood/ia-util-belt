@@ -211,17 +211,26 @@ program.command('find <pattern>')
             console.log(formated.replace(new RegExp(targetPath, 'gmi'), '--'));
         });
     });
+var apacheOptions = ['start', 'stop', 'graceful-stop','restart','reload',
+    'force-reload','start-htcacheclean','stop-htcacheclean','status'];
 program.command('apache <cmd>')
-    .description('apache 2 command')
+    .description('apache 2 commands')
     .action(function(cmd) {
         var exec = require('child_process').exec, child;
         if (['on', 'off', 'restart'].indexOf(cmd) < 0) {
-            console.log(chalk.red('ERROR\u0009(WRONG COMMAND)\u0009') + '%s', 'Invalid option, only "On|Off|Restart');
+            console.log(chalk.red('ERROR\u0009(WRONG COMMAND)\u0009') + '%s', 'Invalid option, only ' + apacheOptions.join('|'));
         }
         child = exec('service apache2 ' + cmd);
         child.stdout.on('data', function(data) {
             console.log(data);
         });
+    }).on('--help', function() {
+        console.log(chalk.green.bold('  Available commands:'));
+        console.log(' ');
+        console.log(apacheOptions.map(function(option) {
+            return '    * ' + option;
+        }).join('\n'));
+        console.log(' ');
     });
 
 program.parse(process.argv);
