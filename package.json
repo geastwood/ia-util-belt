@@ -12,6 +12,7 @@
     "commander": "^2.5.0"
   },
   "dependencies": {
+    "chalk": "^0.5.1",
     "commander": "^2.5.0",
     "prompt": "^0.2.14"
   }
