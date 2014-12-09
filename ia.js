@@ -211,6 +211,18 @@ program.command('find <pattern>')
             console.log(formated.replace(new RegExp(targetPath, 'gmi'), '--'));
         });
     });
+program.command('apache <cmd>')
+    .description('apache 2 command')
+    .action(function(cmd) {
+        var exec = require('child_process').exec, child;
+        if (['on', 'off', 'restart'].indexOf(cmd) < 0) {
+            console.log(chalk.red('ERROR\u0009(WRONG COMMAND)\u0009') + '%s', 'Invalid option, only "On|Off|Restart');
+        }
+        child = exec('service apache2 ' + cmd);
+        child.stdout.on('data', function(data) {
+            console.log(data);
+        });
+    });
 
 program.parse(process.argv);
 
