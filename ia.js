@@ -20,12 +20,12 @@ program
     .option('-f --file')
     .action(function() {
         util.yesno(function(answer) {
-            var list = ['inotify-tools', 'htop', 'atop', 'multitail'];
             if (answer === 'no') {
                 console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
                 return;
             }
-            console.log(list);
+            var exec = require('child_process').exec;
+            var child = exec('iachange');
         });
     });
 
