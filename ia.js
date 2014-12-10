@@ -21,7 +21,7 @@ program
     .action(function(options) {
         util.yesno(function(answer) {
             if (answer === 'no') {
-                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
                 return;
             }
             var exec = require('child_process').exec;
@@ -32,6 +32,8 @@ program
             child.stderr.on('data', function(data) {
                 console.log(data);
             });
+        }, {
+            message: 'Sure to run scripts?'
         });
     });
 
@@ -42,14 +44,14 @@ program
         console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
         util.yesno(function(answer) {
             if (answer === 'no') {
-                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
                 return;
             }
             control().username(function(username) {
                 console.log(chalk.blue('INFO\u0009(DISPLAY)') + '\u0009Username is "%s"', username);
                 util.yesno(function(toCreateFolder) {
                     if (toCreateFolder === 'no') {
-                        console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                        console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
                         return;
                     }
                     folder().createFolder();
