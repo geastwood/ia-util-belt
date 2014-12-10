@@ -4,3 +4,4 @@
 * [x] add fs watch -> implemented via `inotifywatch`
 * [ ] setup: check env dependencies
 * [ ] config manager
+* [ ] script runner

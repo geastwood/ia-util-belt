@@ -20,18 +20,14 @@ program
     .option('-f --file <file>')
     .action(function(options) {
         util.yesno(function(answer) {
+            var scriptrunner;
             if (answer === 'no') {
                 console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
                 return;
             }
-            var exec = require('child_process').exec;
-            var child = exec('sh scripts/' + options.file);
-            child.stdout.on('data', function(data) {
-                console.log(data);
-            });
-            child.stderr.on('data', function(data) {
-                console.log(data);
-            });
+            scriptrunner = require(__dirname + '/src/runscript');
+            scriptrunner().run(options);
+
         }, {
             message: 'Sure to run scripts?'
         });
