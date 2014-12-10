@@ -17,15 +17,21 @@ program.version('Current version: ' + pkg.version);
 program
     .command('runscript')
     .description('run a user specified script')
-    .option('-f --file')
-    .action(function() {
+    .option('-f --file <file>')
+    .action(function(options) {
         util.yesno(function(answer) {
             if (answer === 'no') {
                 console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
                 return;
             }
             var exec = require('child_process').exec;
-            var child = exec('iachange');
+            var child = exec('sh scripts/' + options.file);
+            child.stdout.on('data', function(data) {
+                console.log(data);
+            });
+            child.stderr.on('data', function(data) {
+                console.log(data);
+            });
         });
     });
 
