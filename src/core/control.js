@@ -1,8 +1,8 @@
-var fs = require('fs'),
-    chalk = require('chalk'),
-    api,
-    path = require('path'),
-    homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+var fs      = require('fs'),
+    chalk   = require('chalk'),
+    path    = require('path'),
+    homeFolder = process.env.HOME,
+    api;
 
 api = module.exports = function() {
     return {

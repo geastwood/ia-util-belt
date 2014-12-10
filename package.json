@@ -1,16 +1,13 @@
 {
   "name": "ia",
-  "version": "0.0.1",
-  "description": "ia utility belt",
+  "version": "0.0.10",
+  "description": "intelliAd frontend utility belt",
   "main": "ia.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fei Liu <liu.feiwood@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "commander": "^2.5.0"
-  },
   "dependencies": {
     "chalk": "^0.5.1",
     "commander": "^2.5.0",

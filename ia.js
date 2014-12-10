@@ -17,7 +17,7 @@ program.version('Current version: ' + pkg.version);
 program
     .command('runscript')
     .description('run a user specified script')
-    .option('-f --file <file>')
+    .option('-f --file <file>', 'Specify the bash file to run, e.g. debug.sh')
     .action(function(options) {
         util.yesno(function(answer) {
             var scriptrunner;
@@ -27,9 +27,8 @@ program
             }
             scriptrunner = require(__dirname + '/src/runscript');
             scriptrunner().run(options);
-
         }, {
-            message: 'Sure to run scripts?'
+            message: 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?'
         });
     });
 
@@ -234,7 +233,7 @@ program.command('find <pattern>')
 var apacheOptions = ['start', 'stop', 'graceful-stop','restart','reload',
     'force-reload','start-htcacheclean','stop-htcacheclean','status'];
 program.command('apache <cmd>')
-    .description('apache 2 commands')
+    .description('apache commands')
     .action(function(cmd) {
         var exec = require('child_process').exec, child;
         if (apacheOptions.indexOf(cmd) < 0) {

@@ -1,6 +1,6 @@
-var fs = require('fs'),
-    path = require('path'),
-    chalk = require('chalk'),
+var fs      = require('fs'),
+    path    = require('path'),
+    chalk   = require('chalk'),
     api,
     fileName = 'config.important.inc.php';
 

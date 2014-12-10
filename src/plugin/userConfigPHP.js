@@ -1,11 +1,11 @@
 var fs          = require('fs'),
     path        = require('path'),
     prompt      = require('prompt'),
-    emailReg    = /(\w+)@intelliad.com/g,
-    api,
     IA          = require(__dirname + '/../ia'),
     chalk       = require('chalk'),
-    fileName = 'config.user.php';
+    emailReg    = /(\w+)@intelliad.com/g,
+    fileName    = 'config.user.php',
+    api;
 
 api = module.exports = {
     copy: function(file) {

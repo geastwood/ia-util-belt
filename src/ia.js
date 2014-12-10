@@ -1,7 +1,14 @@
 var configs = require(__dirname + '/../config/config.json'),
+    homeFolder = process.env.HOME,
     path = require('path'),
-    homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
-    userConfig;
+    userConfig,
+    getUserConfigFolder = function() {
+        var parts = [homeFolder, '.ia'];
+        [].forEach.call(arguments, function(arg) {
+            parts.push(arg);
+        });
+        return path.join.apply(null, parts);
+    };
 
 var api = function(opts) {
     opts = opts || {};
@@ -69,6 +76,13 @@ var api = function(opts) {
             },
             getSvnCommandFlags: function() {
                 return ['--username', this.getUser(), '--password', this.getPassword(), '--no-auth-cache'].join(' ');
+            },
+            getUserConfigFolder: getUserConfigFolder,
+            getScriptFile: function(file) {
+                if (!file) {
+                    throw 'file must supply';
+                }
+                return this.getUserConfigFolder('scripts', file);
             },
             isTruckFolder: function(path) {
                 return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||

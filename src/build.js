@@ -1,7 +1,7 @@
 var api,
     chalk   = require('chalk'),
     spawn   = require('child_process').spawn,
-    IA      = require(__dirname + '/./ia');
+    IA      = require(__dirname + '/ia');
 
 var map = {
     development: 'build-development',
@@ -27,6 +27,6 @@ api = module.exports = {
         child.stderr.on('data', function(data) {
             console.log(chalk.red('ERROR: ' + data));
         });
-        child.on('exit', function(err, sig) {});
+        child.on('exit', function() {});
     }
 };

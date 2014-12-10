@@ -2,6 +2,7 @@
 * [ ] add support for pre-prod2
 * [x] service layer => chmod 0777 application.log
 * [x] add fs watch -> implemented via `inotifywatch`
-* [ ] setup: check env dependencies
 * [ ] config manager
-* [ ] script runner
+* [x] script runner
+* [x] setup: check env dependencies
+* [ ] prompt svn password

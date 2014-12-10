@@ -1,6 +1,6 @@
 var prompt      = require('prompt'),
-    coreBranch  = require(__dirname + '/./core/branch'),
-    IA          = require(__dirname + '/./ia');
+    coreBranch  = require(__dirname + '/core/branch'),
+    IA          = require(__dirname + '/ia');
 
 var commands = {
     'switch': function(globals) {

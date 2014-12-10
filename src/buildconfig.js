@@ -1,6 +1,6 @@
-var fs = require('fs');
-var chalk = require('chalk');
-var promp = require('prompt');
+var fs      = require('fs'),
+    chalk   = require('chalk'),
+    promp   = require('prompt');
 
 var buildconfig = function(path) {
 
