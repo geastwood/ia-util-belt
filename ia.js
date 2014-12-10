@@ -272,36 +272,5 @@ program.command('ticket')
         });
     });
 
-program.command('find <pattern>')
-    .description('a `grep` wrapper')
-    .option('-d --definition', 'search only ext.define, e.g. Ext.define(\'IA.util.SomeClass\')')
-    .action(function(pattern, options) {
-        var globals = parseGlobal(options),
-            sys = require('sys'),
-            exec = require('child_process').exec,
-            child;
-
-        if (options['class']) {
-            pattern = 'Ext\\d?\\.define\\(.*' + pattern;
-        }
-        // TODO, may add path
-        // search recursively and case-insensitive
-        child = exec('egrep -iR "' + pattern + '" . ' +
-             '--exclude-dir library ' +
-             '--exclude-dir legacy ' +
-             '--exclude-dir node_modules ' +
-             '--exclude-dir tests ' +
-             '--exclude-dir test ' +
-             '--exclude-dir build',
-        function(err, stdout, stdin) {
-            // give a green color of outputs
-            var formated = stdout.replace((new RegExp(pattern, 'gmi')), function(match) {
-                return chalk.green(match);
-            });
-
-            sys.puts(formated);
-        });
-    });
-
 program.parse(process.argv);
 */
