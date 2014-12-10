@@ -45,9 +45,6 @@ api = module.exports = function() {
                     });
                 });
             }
-        },
-        isRepo: function(path, options) {
-            return true;
         }
     };
 };

@@ -15,6 +15,18 @@ program.version('Current version: ' + pkg.version);
                 /* CLI INTERFACE */
                 /*****************/
 program
+    .command('devDep')
+    .action(function() {
+        var devDep = require(__dirname + '/src/core/envDependencies');
+        util.yesno(function(answer) {
+            if (answer === 'no') {
+                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
+                return;
+            }
+            devDep().install();
+        });
+    });
+program
     .command('setup')
     .description('walk thought some very basic setup steps')
     .action(function(options) {
