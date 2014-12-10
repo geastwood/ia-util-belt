@@ -12,7 +12,7 @@ api = module.exports = function() {
                     console.log(data);
                 });
                 child.stderr.setEncoding('utf8');
-                chid.stderr.on('data', function(data) {
+                child.stderr.on('data', function(data) {
                     console.log(data);
                 });
             });

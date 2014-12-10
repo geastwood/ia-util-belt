@@ -15,17 +15,20 @@ program.version('Current version: ' + pkg.version);
                 /* CLI INTERFACE */
                 /*****************/
 program
-    .command('devDep')
+    .command('runscript')
+    .description('run a user specified script')
+    .option('-f --file')
     .action(function() {
-        var devDep = require(__dirname + '/src/core/envDependencies');
         util.yesno(function(answer) {
+            var list = ['inotify-tools', 'htop', 'atop', 'multitail'];
             if (answer === 'no') {
                 console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%sNo demage is done.');
                 return;
             }
-            devDep().install();
+            console.log(list);
         });
     });
+
 program
     .command('setup')
     .description('walk thought some very basic setup steps')
