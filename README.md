@@ -15,9 +15,13 @@
 
 * `frontend.trunk.local`
 * `services.trunk.local`
+
 ---
+
 * `frontend.current.local`
 * `services.current.local`
+
 ---
+
 * `frontend.release.local`
 * `services.release.local`
