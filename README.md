@@ -11,3 +11,12 @@
 * **ubuntu** packages
     * apt-get install inotify-tools
 
+## Host
+* `frontend.trunk.local`
+* `services.trunk.local`
+---
+* `frontend.current.local`
+* `services.current.local`
+---
+* `frontend.release.local`
+* `services.release.local`

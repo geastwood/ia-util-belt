@@ -1,20 +1,20 @@
 {
     "workingCopies": {
-        "baseUrl": "/Users/feiliu/Projects/Volumes/intelliAd",
-        "frontendFolder": "Frontend",
+        "baseUrl": "/data/intelliad",
+        "frontendFolder": "frontend",
         "serviceFolder": "services",
         "repos": {
             "trunk": {
-                "frontend": "Trunk",
-                "service": "Trunk"
+                "frontend": "trunk",
+                "service": "trunk"
             },
             "current": {
-                "frontend": "Current",
-                "service": "Current"
+                "frontend": "current",
+                "service": "current"
             },
             "release": {
-                "frontend": "Release",
-                "service": "Release"
+                "frontend": "release",
+                "service": "release"
             }
         }
     },
