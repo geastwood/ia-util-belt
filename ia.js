@@ -253,6 +253,11 @@ program.command('apache <cmd>')
         console.log(' ');
     });
 
+program.command('module <new>')
+    .action(function(cmd) {
+        console.log(cmd);
+    });
+
 program.parse(process.argv);
 
 /*
