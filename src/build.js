@@ -15,7 +15,7 @@ api = module.exports = {
     build: function(opts) {
         var child;
         child = spawn('ant', [
-            map[opts.flag] || '',
+            map[opts.flag] || ' ',
             '-f',
             IA(opts).path.getBuildXml()
         ]);

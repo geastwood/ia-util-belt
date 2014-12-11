@@ -32,7 +32,6 @@ api = module.exports = function() {
             if (!hasPassword) {
                 promptConfigs.push({
                     name: 'password',
-                    required: true,
                     password: true,
                     description: 'Please specify svn password',
                     pattern: /\w{1,20}/
