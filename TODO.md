@@ -6,3 +6,4 @@
 * [x] script runner
 * [x] setup: check env dependencies
 * [ ] prompt svn password
+* [x] add Makefile

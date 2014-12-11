@@ -1,9 +1,25 @@
-PACKAGE = 'ia'
-DISTDIR = '/usr/local/'
+PACKAGE = ia
+DISTDIR = /usr/local
 LIBDIR = $(DISTDIR)/lib
-NODEPATH = '/usr/local/bin/node'
+BINDIR = $(DISTDIR)/bin
+PACKAGEDIR = $(LIBDIR)/$(PACKAGE)
 
-build:
+build: clean
+	@if [ ! -d ~/.ia ]; then \
+		@mkdir -p ~/.ia; \
+		@echo "Create User config folder ~/.ia"; \
+		fi
+	@mkdir -p $(PACKAGEDIR)
+	@echo "PACKAGE EXTRACTED TO: \""$(PACKAGEDIR)\"
+	@cp -r * $(PACKAGEDIR)
+	@cd $(PACKAGEDIR)
+	@mkdir -p ~/.ia/scripts
+	@cp -r scripts/* ~/.ia/scripts
+	@npm install
+	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
+
+clean:
+	@rm -Rf $(PACKAGEDIR)
+	@rm -Rf $(BINDIR)/$(PACKAGE)
 
 .PHONY: build
-
