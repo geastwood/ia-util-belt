@@ -217,6 +217,7 @@ program.command('find <pattern>')
             '--exclude-dir', 'node_modules',
             '--exclude-dir', 'tests',
             '--exclude-dir', 'test',
+            '--exclude-dir', '.svn',
             '--exclude-dir', 'build',
         ]);
         child.stdout.setEncoding('utf8');
