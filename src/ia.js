@@ -55,6 +55,13 @@ var api = function(opts) {
             },
             getLegacyConfig: function() {
                 return this.getBasePath('legacy', 'config', 'user');
+            },
+            getLibBasePath: function() {
+                var base = path.join(__dirname, '/../'), parts = [base];
+                [].forEach.call(arguments, function(arg) {
+                    parts.push(arg);
+                });
+                return path.join.apply(null, parts);
             }
         },
         jira: {
@@ -110,3 +117,4 @@ var api = function(opts) {
 module.exports = function(opts) {
     return api(opts);
 };
+// console.log(api().path.getLibBasePath('templates', 'module', 'definitions'));

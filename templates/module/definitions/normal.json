@@ -1,0 +1,113 @@
+{
+    "name": "normal",
+    "actions": [{
+        "name": "controllers folder",
+        "description": "create \"controllers\" under module",
+        "type" : "createFolder",
+        "target" : "controllers"
+    }, {
+        "name": "i18n folder",
+        "description": "create \"i18n\" folder under module",
+        "type" : "createFolder",
+        "target" : "i18n"
+    }, {
+        "name": "javascripts folder",
+        "description": "create \"javascripts\" folder under module",
+        "type" : "createFolder",
+        "target" : "javascripts"
+    }, {
+        "name": "stylesheets folder",
+        "description": "create \"stylesheets\" folder under module",
+        "type" : "createFolder",
+        "target" : "stylesheets"
+    }, {
+        "name": "views folder",
+        "description": "create \"views\" folder under module",
+        "type" : "createFolder",
+        "target" : "views/scripts/index"
+    }, {
+        "name": "require_all html",
+        "description": "create \"require_all.html\" folder under module",
+        "type" : "copy",
+        "from": "others/require_all.html",
+        "target" : "/"
+    }, {
+        "name": "require_all js",
+        "description": "create \"require_all.js\" folder under module",
+        "type" : "copy",
+        "from": "js/require_all.js",
+        "target" : "/"
+    }, {
+        "name": "DE i18n.csv",
+        "description": "create empty de_DE.csv under i18n",
+        "type" : "copy",
+        "from": "others/de_DE.csv",
+        "target" : "i18n"
+    }, {
+        "name": "EN i18n.csv",
+        "description": "create empty en_US.csv under i18n",
+        "type" : "copy",
+        "from": "others/en_US.csv",
+        "target" : "i18n"
+    }, {
+        "name": "FR i18n.csv",
+        "description": "create empty fr_FR.csv under i18n",
+        "type" : "copy",
+        "from": "others/fr_FR.csv",
+        "target" : "i18n"
+    }, {
+        "name": "views index.phtml",
+        "description": "copy empty index.phtml to \"views/scripts/index\"",
+        "type" : "copy",
+        "from": "others/index.phtml",
+        "target" : "views/scripts/index"
+    }, {
+        "name": "create stylesheet",
+        "description": "create stylesheet with module name",
+        "type" : "createFile",
+        "dynamicName": true,
+        "target" : "stylesheets/{{moduleName}}.css"
+    }, {
+        "name": "Bootstrap php",
+        "description": "create \"Bootstrap.php\" under module",
+        "type": "createFile",
+        "contentFrom": "php/Bootstrap.php",
+        "target" : "Bootstrap.php"
+    }, {
+        "name": "PHP Controller Index",
+        "description": "create \"IndexController\" under module",
+        "type": "createFile",
+        "contentFrom": "php/IndexController.php",
+        "target" : "controllers/IndexController.php"
+    }, {
+        "name": "PHP Controller Data",
+        "description": "create \"DataController\" under module",
+        "type": "createFile",
+        "contentFrom": "php/DataController.php",
+        "target" : "controllers/DataController.php"
+    }, {
+        "name": "PHP Controller Action",
+        "description": "create \"ActionController\" under module",
+        "type": "createFile",
+        "contentFrom": "php/ActionController.php",
+        "target" : "controllers/ActionController.php"
+    }, {
+        "name": "JS i18n.js",
+        "description": "create \"i18n.js\" file under javascripts folder",
+        "type": "createFile",
+        "contentFrom": "js/i18n.js",
+        "target" : "javascripts/i18n.js"
+    }, {
+        "name": "javascript index controller",
+        "description": "create \"Index.js\" file under javascripts controller folder",
+        "type": "createFile",
+        "contentFrom": "js/Index.js",
+        "target" : "javascripts/controller/Index.js"
+    }, {
+        "name": "javascript viewport",
+        "description": "create \"Viewport.js\" file under javascripts view folder",
+        "type": "createFile",
+        "contentFrom": "js/Viewport.js",
+        "target" : "javascripts/view/viewport.js"
+    }]
+}

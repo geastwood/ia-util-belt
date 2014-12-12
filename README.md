@@ -25,3 +25,6 @@
 
 * `frontend.release.local`
 * `services.release.local`
+
+## Changelog
+2014-12-12 (Add) create module via script

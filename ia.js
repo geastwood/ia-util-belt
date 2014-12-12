@@ -253,9 +253,16 @@ program.command('apache <cmd>')
         console.log(' ');
     });
 
-program.command('module <new>')
+program.command('module <cmd>')
+    .description('contains frontend module related functions, e.g, create empty module')
     .action(function(cmd) {
-        console.log(cmd);
+        var valids = ['create'], module;
+        if (valids.indexOf(cmd) < 0) {
+            util.print('error', 'wrong input', 'Valid options are "%s".', valids.join('|'));
+            return;
+        }
+        module = require(__dirname + '/src/module');
+        module()[cmd]();
     });
 
 program.parse(process.argv);
