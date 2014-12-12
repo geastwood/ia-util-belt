@@ -24,7 +24,7 @@ Ext.define('IA.{{moduleName}}.controller.Index', {
             idstring = params.idstring,
             idObject = IA.util.Idstring.buildIdObject(idstring);
 
-        IA.Registry.register('application', 'idstring', me.params.idstring);
+        IA.Registry.register('application', 'idstring', idstring);
         IA.Registry.register('application', 'idObject', idObject);
         IA.Registry.register('application', 'clientId', idObject.clientId);
 
