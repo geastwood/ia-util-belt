@@ -22,7 +22,7 @@ program
         util.yesno(function(answer) {
             var scriptrunner;
             if (answer === 'no') {
-                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
+                util.print('info', 'CANCELLED BY USER', 'No damage is done.');
                 return;
             }
             scriptrunner = require(__dirname + '/src/runscript');
@@ -39,18 +39,18 @@ program
         console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
         util.yesno(function(answer) {
             if (answer === 'no') {
-                console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
+                util.print('info', 'CANCELLED BY USER', 'No damage is done.');
                 return;
             }
             control().username(function(username) {
-                console.log(chalk.blue('INFO\u0009(DISPLAY)') + '\u0009Username is "%s"', username);
+                util.print('info', 'display', 'Username is "%s"', username);
                 util.yesno(function(toCreateFolder) {
                     if (toCreateFolder === 'no') {
-                        console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)') + '\u0009%s', 'No damage is done.');
+                        util.print('info', 'CANCELLED BY USER', 'No damage is done.');
                         return;
                     }
                     folder().createFolder();
-                    console.log(chalk.green('SUCCESS\u0009(PROCESS FINISHED)'));
+                    util.print('success', 'process finished');
                 }, {message: 'create folder structure?'});
             });
         });
@@ -64,7 +64,7 @@ program.command('branch <cmd>')
         var commands = require(__dirname + '/src/branch');
 
         if (['checkout', 'switch'].indexOf(cmd) < 0) {
-            console.log(chalk.red('INFO\u0009(WRONG INPUT)\u0009') + '%s', 'Only option `checkout` and `switch` is valid');
+            util.print('info', 'wrong input', 'Only option `checkout` and `switch` is valid.');
         } else {
             commands[cmd](options);
         }
@@ -205,7 +205,7 @@ program.command('find <pattern>')
 
         // search recursively and case-insensitive
         console.log('\n');
-        console.log(chalk.blue('INFO\u0009(SEARCH)\u0009') + 'Searching under "%s"', targetPath);
+        util.print('info', 'search', 'Searching under "%s"', targetPath);
         console.log('\n');
 
         child = spawn('egrep', [
@@ -238,7 +238,7 @@ program.command('apache <cmd>')
     .action(function(cmd) {
         var exec = require('child_process').exec, child;
         if (apacheOptions.indexOf(cmd) < 0) {
-            console.log(chalk.red('ERROR\u0009(WRONG COMMAND)\u0009') + '%s', 'Invalid option, only ' + apacheOptions.join('|'));
+            util.print('error', 'wrong command', 'Invalid option, only ' + apacheOptions.join('|'));
         }
         child = exec('service apache2 ' + cmd);
         child.stdout.on('data', function(data) {

@@ -1,7 +1,7 @@
 var exec    = require('child_process').exec,
     fs      = require('fs'),
-    chalk   = require('chalk'),
     IA      = require(__dirname + '/ia'),
+    util    = require(__dirname + '/util'),
     api;
 
 api = module.exports = function() {
@@ -11,7 +11,7 @@ api = module.exports = function() {
                 file = IA().util.getScriptFile(options.file);
 
             if (!fs.existsSync(file)) {
-                console.log(chalk.red('INFO\u0009(ERROR)\u0009') + '"%s" doesn\'t exist, fail to execute', options.file);
+                util.print('error', 'error', '"%s" doesn\'t exist, fail to execute.', options.file);
                 return;
             }
 

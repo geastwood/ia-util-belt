@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    util = require(__dirname + '/util'),
     chalk = require('chalk');
 
 module.exports =function(path) {
@@ -55,12 +56,9 @@ module.exports =function(path) {
         },
         log: function(status, path) {
             console.log('\n');
-            console.log(chalk.blue('INFO\u0009(STATUS)\u0009') +
-                        '%s "%s" at %s',
-                        'Development mode is ',
+            util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
                         chalk[(status ? 'green' : 'red')].underline(status ? 'ON' : 'OFF'),
-                        path
-                       );
+                        path);
             console.log('\n');
         }
     };

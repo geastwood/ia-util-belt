@@ -1,8 +1,8 @@
 var fs = require('fs'),
     path = require('path'),
     IA = require(__dirname + '/../ia'),
+    util = require(__dirname + '/../util'),
     api,
-    chalk = require('chalk'),
     folders = [
         path.dirname(IA().path.getRootPath()),
         IA().path.getRootPath(),
@@ -33,9 +33,9 @@ api = module.exports = function() {
             folders.forEach(function(folder) {
                 if (!fs.existsSync(folder)) {
                     fs.mkdirSync(folder);
-                    console.log(chalk.green('SUCCESS\u0009(CREATED)') + '\u0009%s', folder);
+                    util.print('success', 'created', folder);
                 } else {
-                    console.log(chalk.blue('INFO\u0009(SKIPPED)') + '\u0009%s', folder);
+                    util.print('info', 'skipped', folder);
                 }
             });
             fn();

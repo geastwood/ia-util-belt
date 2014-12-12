@@ -1,5 +1,6 @@
 var fs      = require('fs'),
     chalk   = require('chalk'),
+    util    = require(__dirname + '/util'),
     promp   = require('prompt');
 
 var buildconfig = function(path) {
@@ -51,6 +52,10 @@ var buildconfig = function(path) {
                 description: 'Which to delete?',
                 pattern: /\d+/
             }], function(err, prompts) {
+                if (err) {
+                    console.log('Error: cancelled by user.');
+                    return;
+                }
                 data.getData(function(content) {
                     var pkgs = content.pkgs;
                     pkgs.forEach(function(pkg) {
@@ -66,7 +71,7 @@ var buildconfig = function(path) {
                         if (err) {
                             throw err;
                         }
-                        console.log(chalk.green('SUCCESS\u0009(WRITE)\u0009') + 'Data write to "%s"', path);
+                        util.print('success', 'write', 'Data write to "%s"', path);
                     });
 
                 });
@@ -81,7 +86,7 @@ var dataManager = function(path) {
     return {
         getData: function(fn) {
             if (hasData === false) {
-                console.log(chalk.blue('INFO\u0009(INFO)\u0009') + 'Search in "%s".', path);
+                util.print('info', 'info', 'Search in "%s".', path);
                 fs.readFile(path, 'utf8', function(err, data) {
                     if (err) {
                         throw err;

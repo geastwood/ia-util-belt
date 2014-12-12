@@ -1,6 +1,5 @@
 var fs      = require('fs'),
-    chalk   = require('chalk'),
-    path    = require('path'),
+    util    = require(__dirname + '/../util'),
     homeFolder = process.env.HOME,
     api;
 
@@ -46,6 +45,10 @@ api = module.exports = function() {
                 prompt = require('prompt');
                 prompt.get(promptConfigs,
                 function(err, inputs) {
+                    if (err) {
+                        console.log('Error: cancelled by user.');
+                        return;
+                    }
                     var data = JSON.stringify({
                         'username': inputs.username || userConfigs.username,
                         'password': inputs.password || ''
@@ -55,9 +58,7 @@ api = module.exports = function() {
                         if (err) {
                             throw err;
                         }
-                        console.log(chalk.green('SUCCESS\u0009(Set)\u0009') + '%s is saved to "%s"',
-                                    inputs.username,
-                                    userConfigFile);
+                        util.print('success', 'set', '%s is saved to "%s"', inputs.username, userConfigFile);
                         fn(inputs.username||userConfigs.username);
                     });
                 });
