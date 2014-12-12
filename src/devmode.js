@@ -55,11 +55,9 @@ module.exports =function(path) {
             });
         },
         log: function(status, path) {
-            console.log('\n');
             util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
                         chalk[(status ? 'green' : 'red')].underline(status ? 'ON' : 'OFF'),
                         path);
-            console.log('\n');
         }
     };
 };

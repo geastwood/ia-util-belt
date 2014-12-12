@@ -117,4 +117,3 @@ var api = function(opts) {
 module.exports = function(opts) {
     return api(opts);
 };
-// console.log(api().path.getLibBasePath('templates', 'module', 'definitions'));

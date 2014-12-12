@@ -109,11 +109,11 @@ var switchBranch = function(options) {
                              function() {});
 
                 child.stdout.on('data', function(data) {
-                    console.log(data);
+                    util.stdout(data);
                 });
                 child.on('exit', function() {
                     exec('svn info ' + IA().util.getSvnCommandFlags(), function(err, stdout) {
-                        console.log(stdout);
+                        util.stdout(stdout);
                         util.print('success', 'switched', 'now switched to %s', branch.branch);
                     });
                 });
@@ -156,11 +156,11 @@ var svnCheckoutCommand = function(options) {
 
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', function(data) {
-        console.log(data);
+        util.stdout(data);
     });
     child.stderr.setEncoding('utf8');
     child.stderr.on('data', function(data) {
-        console.log(chalk.red('ERROR: ' + data));
+        util.stdout(chalk.red('ERROR: ' + data));
     });
     child.on('exit', function() {
         var userConfigCallback,
@@ -182,7 +182,6 @@ var svnCheckoutCommand = function(options) {
         }
         console.log('\n');
         util.print('success', 'info', 'Checkout successfully to "%s"', path.join(targetPath));
-        console.log('\n');
     });
 };
 

@@ -26,7 +26,7 @@ api = module.exports = function() {
                 ant = spawn('ant', ['-f', IA(opts).path.getBuildXml()]);
                 ant.stdout.setEncoding('utf8');
                 ant.stdout.on('data', function(data) {
-                    console.log(data);
+                    util.stdout(data);
                 });
 
                 ant.on('exit', function(err, sig) {

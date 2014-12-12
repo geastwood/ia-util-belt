@@ -15,9 +15,9 @@ var getModuleName = function(fn) {
     prompt.get([{
         name: 'moduleName',
         description: 'What is the module name?',
-        message: 'module name can only be of `a-z` (small letters)',
+        message: 'module name can only be of `a-z` (small letters).',
         required: true,
-        pattern: /^[a-z_]+$/
+        pattern: /^[a-z]+$/
     }],
     function(err, inputs) {
         if (err) {
@@ -44,7 +44,7 @@ createModule = function(name, fn) {
                 throw err;
             }
             util.stdout(stdout);
-            util.print('success', 'created', 'Folder "%s" is created at %s', name, path.dirname(modulePath));
+            util.print('success', 'created', 'Folder "%s" is created at %s.', name, path.dirname(modulePath));
             fn(true);
         });
     }
@@ -103,14 +103,14 @@ actionFactory = function(options) {
         createFolder: function(configs) {
             var targetPath = path.join(moduleFolder, configs.target);
 
-            util.print('info', 'create', 'Creating folder "%s" for Module "%s".', configs.target, moduleName);
+            util.print('info', 'create', 'Creating folder "%s".', configs.target);
 
             exec('mkdir -p ' + targetPath, function(err, stdout) {
                 if (err) {
                     throw 'create(mkdir) failed.';
                 }
                 util.stdout(stdout);
-                util.print('success', 'created', 'Folder "%s" for Module "%s".', configs.target, moduleName);
+                util.print('success', 'created', 'Folder "%s".', configs.target);
             });
         },
         createFile: function(configs) {
@@ -135,14 +135,14 @@ actionFactory = function(options) {
                 spawn('mkdir', ['-p', path.dirname(targetPath)]);
             }
 
-            util.print('info', 'create', 'Creating file "%s" for Module "%s".', targetFile, moduleName);
+            util.print('info', 'create', 'Creating file "%s".', targetFile);
             exec(['touch', targetPath].join(' '), function(err, stdout) {
                 if (err) {
                     throw 'create file(touch) failed.';
                 }
                 fs.writeFileSync(targetPath, content, 'utf8');
                 util.stdout(stdout);
-                util.print('success', 'file created', 'File "%s" is created for module "%s"', targetFile, moduleName);
+                util.print('success', 'file created', 'File "%s" is created.', targetFile);
             });
         },
         copy: function(configs) {
@@ -173,7 +173,6 @@ api = module.exports = function() {
                     if (!status) {
                         return;
                     }
-
                     // process definition's action
                     processDefinition('normal', inputs.moduleName);
                 });

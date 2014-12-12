@@ -17,10 +17,10 @@ api = module.exports = function() {
 
             child = exec('sh ' + file);
             child.stdout.on('data', function(data) {
-                console.log(data);
+                util.stdout(data);
             });
             child.stderr.on('data', function(data) {
-                console.log(data);
+                util.stdout.log(data);
             });
         }
     };

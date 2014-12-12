@@ -59,10 +59,17 @@ var util = {
         },
         color = colorMap[type],
         message,
-        rest;
-        action = action || 'NONE';
+        rest,
+        i;
 
-        message = chalk[color](type.toUpperCase() + '\u0009(' + action.toUpperCase() + ')\u0009');
+        action = action || 'NONE';
+        action = '(' + action.toUpperCase() + ')';
+
+        for (i = action.length; i < 16; i++) {
+            action += ' ';
+        }
+
+        message = chalk[color](type.toUpperCase() + '\u0009' + action.toUpperCase() + '\u0009');
         rest = nodeUtil.format.apply(null, [].slice.call(arguments, 2));
         console.log(nodeUtil.format.call(null, message, rest));
     },

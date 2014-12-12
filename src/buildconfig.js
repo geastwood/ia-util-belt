@@ -35,7 +35,7 @@ var buildconfig = function(path) {
         },
         format: function(rst) {
             if (rst.length === 0) {
-                console.log(chalk.red('\n\nNo result found.\n\n'));
+                console.log(chalk.red('\nNo result found.\n'));
                 return;
             }
             rst.forEach(function(file, i) {

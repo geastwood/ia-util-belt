@@ -1,6 +1,7 @@
 var api,
     chalk   = require('chalk'),
     spawn   = require('child_process').spawn,
+    util    = require(__dirname + '/util'),
     IA      = require(__dirname + '/ia');
 
 var map = {
@@ -21,11 +22,11 @@ api = module.exports = {
         ]);
         child.stdout.setEncoding('utf8');
         child.stdout.on('data', function(data) {
-            console.log(data);
+            util.stdout(data);
         });
         child.stderr.setEncoding('utf8');
         child.stderr.on('data', function(data) {
-            console.log(chalk.red('ERROR: ' + data));
+            util.stdout(chalk.red('ERROR: ' + data));
         });
         child.on('exit', function() {});
     }
