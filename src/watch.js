@@ -1,6 +1,6 @@
 var spawn   = require('child_process').spawn,
     IA      = require(__dirname + '/ia'),
-    chalk   = require('chalk'),
+    util    = require(__dirname + '/util'),
     api;
 
 api = module.exports = function() {
@@ -13,7 +13,7 @@ api = module.exports = function() {
                 child = spawn('inotifywait', ['-rmc', '--event', 'MODIFY', watchPath]),
                 ant;
 
-            console.log(chalk.blue('INFO\u0009(STARTED)\u0009') + '%s "%s"', 'Start to monitor on', watchPath);
+            util.print('info', 'started', '%s "%s"', 'Start to monitor on', watchPath);
 
             child.stdout.setEncoding('utf8');
             child.stdout.on('data', function() {
@@ -31,11 +31,9 @@ api = module.exports = function() {
 
                 ant.on('exit', function(err, sig) {
                     if (sig === 'SIGABRT') {
-                        console.log(chalk.blue('INFO\u0009(RESTART)\u0009') + '%s',
-                                    'there is another change detected, build restarted.');
+                        util.print('info', 'restarted', 'There is another change detected, build restarted.');
                     } else {
-                        console.log(chalk.blue('INFO\u0009(FINISHED)\u0009') + '%s',
-                                    'Process finished');
+                        util.print('success', 'finished', 'Process finished');
                     }
                 });
             });

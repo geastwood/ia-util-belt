@@ -4,10 +4,6 @@ var prompt      = require('prompt'),
 
 var commands = {
     'switch': function(globals) {
-        // if (IA(globals).util.isTruckFolder(process.cwd())) {
-        //     console.log(chalk.red('ATTENSTION: It\'s not cool to switch the ' + chalk.underline('"trunk"') + '.'));
-        //     return;
-        // }
         prompt.get([{ // trunk | current | release
             name: 'branch',
             description: 'Which branch to switch?',
@@ -16,6 +12,10 @@ var commands = {
             pattern: /(current|release)/
         }],
         function(err, whichBranch) { // path of the app
+            if (err) {
+                console.log('Error: cancelled by user.');
+                return;
+            }
             prompt.get([{
                 name: 'app',
                 description: 'frontend or service?',
@@ -23,6 +23,10 @@ var commands = {
                 pattern: /(frontend|service)/
             }],
             function(err, whichApp) {
+                if (err) {
+                    console.log('Error: cancelled by user.');
+                    return;
+                }
                 coreBranch.switchBranch({
                     app: whichApp.app,
                     branch: whichBranch.branch
@@ -38,6 +42,10 @@ var commands = {
             pattern: /\w{1,20}/
         }],
         function(err, whereApp) { // path of the app
+            if (err) {
+                console.log('Error: cancelled by user.');
+                return;
+            }
             prompt.get([{
                 name: 'app',
                 description: 'frontend or service?',
@@ -45,6 +53,10 @@ var commands = {
                 pattern: /(frontend|service)/
             }],
             function(err, whichApp) {
+                if (err) {
+                    console.log('Error: cancelled by user.');
+                    return;
+                }
                 coreBranch.checkout({
                     isTrunk: options.trunk === true,
                     appConfig: {app: whichApp.app},

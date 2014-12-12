@@ -54,6 +54,10 @@ var checkout = function(options) {
                 pattern: /\d{1,2}/
             }],
             function(err, whichBranchId) {
+                if (err) {
+                    console.log('Error: cancelled by user.');
+                    return;
+                }
                 var id = parseInt(whichBranchId.branchId, 10), branch = data[id - 1];
                 if (id > data.length || typeof branch === 'undefined') {
                     console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
@@ -84,6 +88,10 @@ var switchBranch = function(options) {
             pattern: /\d{1,2}/
         }],
         function(err, prompts) {
+            if (err) {
+                console.log('Error: cancelled by user.');
+                return;
+            }
             var id = parseInt(prompts.branchId, 10), branch = data[id - 1];
             if (id > data.length || typeof branch === 'undefined') {
                 console.error(chalk.red('INPUT INVALID: "%d" is out of range.'), id);
@@ -91,8 +99,7 @@ var switchBranch = function(options) {
             util.yesno(function(answer) {
                 var child;
                 if (answer === 'no') {
-                    console.log(chalk.blue('INFO\u0009(CANCELLED BY USER)\u0009') + '%s',
-                                'Action is cancelled, nothing changed.');
+                    util.print('info', 'cancelled by user', 'Action is cancelled, nothing changed.');
                     return;
                 }
                 // MUST CHANGE TO FOLDER, AND SWITCH COMMAND
@@ -107,7 +114,7 @@ var switchBranch = function(options) {
                 child.on('exit', function() {
                     exec('svn info ' + IA().util.getSvnCommandFlags(), function(err, stdout) {
                         console.log(stdout);
-                        console.log(chalk.green('SUCCESS\u0009(SWITCHED)\u0009') + 'now switched to %s', branch.branch);
+                        util.print('success', 'switched', 'now switched to %s', branch.branch);
                     });
                 });
             }, {
@@ -165,7 +172,7 @@ var svnCheckoutCommand = function(options) {
                 if (err) {
                     throw err;
                 }
-                console.log(chalk.green('SUCCESS\u0009(UPDATED)\u0009') + 'chmod 0777 of "%s"', logFile);
+                util.print('success', 'updated', 'chmod 0777 of "%s"', logFile);
             });
         } else {
             userConfigCallback = require(__dirname + '/../plugin/userConfigPHP');
@@ -174,7 +181,7 @@ var svnCheckoutCommand = function(options) {
             userConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
         }
         console.log('\n');
-        console.log(chalk.green('SUCCESS\u0009(INFO)\u0009') + 'Checkout successfully to "%s"', path.join(targetPath));
+        util.print('success', 'info', 'Checkout successfully to "%s"', path.join(targetPath));
         console.log('\n');
     });
 };
