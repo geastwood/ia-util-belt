@@ -108,6 +108,6 @@
         "description": "create \"Viewport.js\" file under javascripts view folder",
         "type": "createFile",
         "contentFrom": "js/Viewport.js",
-        "target" : "javascripts/view/viewport.js"
+        "target" : "javascripts/view/Viewport.js"
     }]
 }
