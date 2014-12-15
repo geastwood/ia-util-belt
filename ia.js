@@ -231,8 +231,8 @@ program.command('find <pattern>')
         });
     });
 
-var apacheOptions = ['start', 'stop', 'graceful-stop','restart','reload',
-    'force-reload','start-htcacheclean','stop-htcacheclean','status'];
+var apacheOptions = ['start', 'stop', 'graceful-stop', 'restart', 'reload',
+    'force-reload', 'start-htcacheclean', 'stop-htcacheclean', 'status'];
 program.command('apache <cmd>')
     .description('apache commands')
     .action(function(cmd) {
