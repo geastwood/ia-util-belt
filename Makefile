@@ -12,12 +12,17 @@ build: clean
 	@cd $(PACKAGEDIR)
 	@npm install
 	@mkdir -p ~/.ia/scripts
+	echo 'Copy scripts to user folder'
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
 	@rm -Rf /etc/bash_completion.d/ia
-	@cp autocomplete/ia /etc/bash_completion.d/ia
+	@if [[ $(SHELL) == *'sh'* ]] || [[ $(SHELL) == *'bash'* ]]; then \
+		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
+		@cp autocomplete/ia /etc/bash_completion.d/ia; \
+		fi
 
 clean:
+	echo 'Remove old packages and link'
 	@rm -Rf $(PACKAGEDIR)
 	@rm -Rf $(BINDIR)/$(PACKAGE)
 
