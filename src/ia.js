@@ -82,7 +82,7 @@ var api = function(opts) {
                 return userConfig.password;
             },
             getSvnCommandFlags: function() {
-                return ['--username', this.getUser(), '--password', '"', this.getPassword(), '"', '--no-auth-cache'].join(' ');
+                return ['--username', this.getUser(), '--password', '"' + this.getPassword() + '"', '--no-auth-cache'].join(' ');
             },
             getUserConfigFolder: getUserConfigFolder,
             getScriptFile: function(file) {
