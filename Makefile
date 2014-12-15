@@ -14,7 +14,7 @@ build: clean
 	@mkdir -p ~/.ia/scripts
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
-	@rm -r /etc/bash_completion.d/ia
+	@rm -Rf /etc/bash_completion.d/ia
 	@cp autocomplete/ia /etc/bash_completion.d/ia
 
 clean:
