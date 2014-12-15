@@ -28,4 +28,7 @@
 
 ## Changelog
 2014-12-12 (Add) create module via script
-2014-13-16 (Add) auto complete basic commands
+2014-12-16 (Add) auto complete basic commands
+2014-12-16 (Modify) better auto complete
+2014-12-16 (Fix) escape svn password
+2014-12-16 (Fix) hide the password (v0.1.14)

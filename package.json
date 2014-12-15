@@ -1,6 +1,6 @@
 {
   "name": "ia",
-  "version": "0.0.12",
+  "version": "0.1.14",
   "description": "intelliAd frontend utility belt",
   "main": "ia.js",
   "scripts": {
