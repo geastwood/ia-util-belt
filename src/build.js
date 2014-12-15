@@ -14,12 +14,15 @@ var map = {
 
 api = module.exports = {
     build: function(opts) {
-        var child;
-        child = spawn('ant', [
-            map[opts.flag] || ' ',
-            '-f',
-            IA(opts).path.getBuildXml()
-        ]);
+        var child, args;
+
+        if (opts.flag) {
+            args = [map[opts.flag], '-f', IA(opts).path.getBuildXml()];
+        } else {
+            args = ['-f', IA(opts).path.getBuildXml()];
+        }
+
+        child = spawn('ant', args);
         child.stdout.setEncoding('utf8');
         child.stdout.on('data', function(data) {
             util.stdout(data);

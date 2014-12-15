@@ -165,7 +165,8 @@ var svnCheckoutCommand = function(options) {
     child.on('exit', function() {
         var userConfigCallback,
             importantConfigCallback,
-            logFile = path.join(targetPath, 'log');
+            logFile = path.join(targetPath, 'log'),
+            appLogFile = path.join(logFile, 'application.log');
 
         if (options.appConfig.app === 'service') { // frontend of service
             fs.chmod(logFile, '0777', function(err) {
@@ -173,6 +174,7 @@ var svnCheckoutCommand = function(options) {
                     throw err;
                 }
                 util.print('success', 'updated', 'chmod 0777 of "%s"', logFile);
+                exec('touch ' + appLogFile + ' && chmod 0777 ' + appLogFile, function() {});
             });
         } else {
             userConfigCallback = require(__dirname + '/../plugin/userConfigPHP');

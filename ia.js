@@ -68,6 +68,13 @@ program.command('branch <cmd>')
         } else {
             commands[cmd](options);
         }
+    })
+    .on('--help', function() {
+        console.log(chalk.green.bold('  Available commands:'));
+        console.log(' ');
+        console.log(chalk.green('    checkout') + '\u0009\u0009 walk throw steps to checkout a new svn branch');
+        console.log(chalk.green('    switch') + '\u0009\u0009 walk throw steps to switch a working copy to another branch');
+        console.log(' ');
     });
 
     // build
@@ -158,10 +165,17 @@ program
         }
     })
     .on('--help', function() {
+        console.log(chalk.green.bold('  Available commands:'));
+        console.log(' ')
+        console.log(chalk.green('    ls') + '\u0009\u0009 SHOW current configuration');
+        console.log(chalk.green('    on') + '\u0009\u0009 turn ON development mode');
+        console.log(chalk.green('    off') + '\u0009\u0009 turn OFF development mode');
+        console.log(' ')
         console.log(chalk.green.bold('  Example:\n'));
         console.log(chalk.green('    ia devmode -t is') + '\u0009\u0009 check current `dev mode` of frontend `trunk`');
         console.log(chalk.green('    ia devmode --release on') + '\u0009 turn on `dev mode` of frontend `current`');
         console.log(chalk.green('    ia devmode -c off') + '\u0009\u0009 turn off `dev mode` of frontend `current`');
+        console.log(' ')
     });
 
 program.command('buildconfig')

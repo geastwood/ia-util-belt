@@ -56,7 +56,7 @@ module.exports =function(path) {
         },
         log: function(status, path) {
             util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
-                        chalk[(status ? 'green' : 'red')].underline(status ? 'ON' : 'OFF'),
+                        chalk[(status ? 'green' : 'red')](status ? 'ON' : 'OFF'),
                         path);
         }
     };

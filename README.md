@@ -32,3 +32,8 @@
 2014-12-16 (Modify) better auto complete
 2014-12-16 (Fix) escape svn password
 2014-12-16 (Fix) hide the password (v0.1.14)
+2014-12-16 (Fix) fix a bug of build command
+2014-12-16 (Modify) remove devmode understore
+2014-12-16 (Modify) add more help on build command
+2014-12-16 (Modify) add `application.log` on service checkout (v0.1.15)
+
