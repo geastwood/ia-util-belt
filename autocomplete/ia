@@ -5,11 +5,36 @@ _ia()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts="devmode runscript setup branch build watch devmode buildconfig find apache module"
+    moduleOpts="create"
+    devmodeOpts="is on off"
+    apache2Opts="startgc stop graceful-stoprestartreload force-reload start-htcacheclean stop-htcacheclean status"
+    branchOpts="switch checkout"
 
-    if [[ ${cur} == * ]] ; then
+    if [[ ${prev} == "ia" ]]
+    then
         COMPREPLY=( $(compgen -W "${opts}" ${cur}) )
             return 0
-            fi
+    elif [[ ${prev} == "runscript" ]]
+    then
+        COMPREPLY=( $(compgen -W "-f" -- ${cur}) )
+        return 0
+    elif [[ ${prev} == "module" ]]
+    then
+        COMPREPLY=( $(compgen -W "${moduleOpts}" ${cur}) )
+        return 0
+    elif [[ ${prev} == "devmode" ]]
+    then
+        COMPREPLY=( $(compgen -W "${devmodeOpts}" ${cur}) )
+        return 0
+    elif [[ ${prev} == "branch" ]]
+    then
+        COMPREPLY=( $(compgen -W "${branchOpts}" ${cur}) )
+        return 0
+    elif [[ ${prev} == "apache2" ]]
+    then
+        COMPREPLY=( $(compgen -W "${apache2Opts}" ${cur}) )
+        return 0
+    fi
 }
 
 complete -F _ia ia
