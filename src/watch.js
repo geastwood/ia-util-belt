@@ -8,10 +8,12 @@ api = module.exports = function() {
         // watch the `application/javascripts/application` folder for changes
         // and restart the build
         watch: function(opts) {
-            var watchPath = IA(opts).path.getAppJsFolder(),
-                // child = spawn('fswatch', [watchPath]), // this is for mac version
-                child = spawn('inotifywait', ['-rmc', '--event', 'MODIFY', watchPath]),
-                ant;
+            var watchPath = IA(opts).path.getAppJsFolder(), ant, child;
+            if (process.evn.SHELL.indexOf('zsh') >= 0) {
+                child = spawn('fswatch', [watchPath]); // this is for mac version
+            } else {
+                child = spawn('inotifywait', ['-rmc', '--event', 'MODIFY', watchPath]);
+            }
 
             util.print('info', 'started', '%s "%s"', 'Start to monitor on', watchPath);
 

@@ -21,6 +21,10 @@ var api = function(opts) {
     return {
         path: {
             getRootPath: function() {
+                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
+                if (userConfig.overwrites && userConfig.overwrites.workingCopies) {
+                    return path.join(userConfig.overwrites.workingCopies.baseUrl);
+                }
                 return path.join(configs.workingCopies.baseUrl);
             },
             getBasePath: function() {
@@ -74,11 +78,11 @@ var api = function(opts) {
         },
         util: {
             getUser: function() {
-                userConfig = require(homeFolder + '/.ia/user.config.json');
+                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.username;
             },
             getPassword: function() {
-                userConfig = require(homeFolder + '/.ia/user.config.json');
+                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.password;
             },
             getSvnCommandFlags: function() {
@@ -104,7 +108,7 @@ var api = function(opts) {
                 return this.getBase() + '/branches';
             },
             getUserBranchFolder: function() {
-                userConfig = require(homeFolder + '/.ia/user.config.json');
+                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 var config = {username: userConfig.username};
                 return (configs.cvs.svn.userUrl + configs.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
                     return config[match];
