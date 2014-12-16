@@ -39,7 +39,8 @@ Here list all the commands available of this utility tool. They are
 *   **setup**                     walk thought some very basic setup steps
 *   **branch [options] <cmd>**    svn branch commands [checkout|switch]
 *   **build [options]**           Build process releated command
-*   **watch [options]**           small watch function
+*   **watch [options]**           small watch function, watch `application/javascripts` folder for changes, if there is a change
+trigger the build process. If there is a change within the build process, the build process will restart.
 *   **devmode [options] <cmd>**   [on|off|is] switch dev mode
 *   **buildconfig [options]**     build config related commands
 *   **find [options] <pattern>**  a `grep` wrapper
@@ -54,6 +55,9 @@ Here list all the commands available of this utility tool. They are
 | **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | ia branch checkout --trunk |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontent`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | ia build -ftd |
 `-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module`
+| **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | ia watch -t // watch for `trunk/frontend/application/javascripts` |
+| **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | ia devmode -t is // check the devmode of `trunk`|
+
 ### Get help by `-h` or `--help`
 
 It's always possible specify `-h` or `--help` for a detailed help section. For example
