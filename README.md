@@ -54,7 +54,6 @@ trigger the build process. If there is a change within the build process, the bu
 | **setup**         | n/a  |  n/a    | n/a |
 | **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | ia branch checkout --trunk |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontent`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | ia build -ftd |
-`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module`
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | ia watch -t // watch for `trunk/frontend/application/javascripts` |
 | **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | ia devmode -t is // check the devmode of `trunk`|
 
