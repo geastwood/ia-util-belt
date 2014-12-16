@@ -1,5 +1,6 @@
 var configs = require(__dirname + '/../config/config.json'),
     homeFolder = process.env.HOME,
+    fs = require('fs'),
     path = require('path'),
     userConfig,
     getUserConfigFolder = function() {
@@ -21,7 +22,13 @@ var api = function(opts) {
     return {
         path: {
             getRootPath: function() {
-                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
+                var userConfig;
+                if (fs.existsSync(path.join(homeFolder, '/.ia/user.config.json'))) {
+                    userConfig = require(homeFolder + '/.ia/user.config.json');
+                } else {
+                    userConfig = {};
+                }
+
                 if (userConfig.overwrites && userConfig.overwrites.workingCopies) {
                     return path.join(userConfig.overwrites.workingCopies.baseUrl);
                 }
