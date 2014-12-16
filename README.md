@@ -54,7 +54,7 @@ trigger the build process. If there is a change within the build process, the bu
 | **runscript**     | n/a   |  `-f --file` specify the script name to run  | `ia runscript -f dev_dependency.sh` // run a custom shell script |
 | **setup**         | n/a  |  n/a    | n/a |
 | **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | `ia branch checkout --trunk` |
-| **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontent`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
+| **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
 | **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|
 | **apache**        | `start`, `stop`, `restart` (support all apache commands, here lists the often-used ones)|n/a| `ia apache restart` // restart apache2 service|

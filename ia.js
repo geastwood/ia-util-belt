@@ -10,6 +10,12 @@ var program = require('commander'),
 
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
+var globalHelp = function() {
+    console.log(chalk.green.bold('  More details:'));
+    console.log(' ');
+    console.log('    Visit: ' + chalk.green(pkg.help.url));
+    console.log(' ');
+};
 
                 /*****************/
                 /* CLI INTERFACE */
@@ -30,6 +36,9 @@ program
         }, {
             message: 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?'
         });
+    })
+    .on('--help', function() {
+        globalHelp();
     });
 
 program
@@ -54,6 +63,9 @@ program
                 }, {message: 'create folder structure?'});
             });
         });
+    })
+    .on('--help', function() {
+        globalHelp();
     });
 
     // Branch
@@ -75,6 +87,7 @@ program.command('branch <cmd>')
         console.log(chalk.green('    checkout') + '\u0009\u0009 walk throw steps to checkout a new svn branch');
         console.log(chalk.green('    switch') + '\u0009\u0009 walk throw steps to switch a working copy to another branch');
         console.log(' ');
+        globalHelp();
     });
 
     // build
@@ -95,7 +108,8 @@ program.command('build')
             util = require(__dirname + '/src/util');
 
         build.build(util.parseGlobal(options));
-    }).on('--help', function() {
+    })
+    .on('--help', function() {
         console.log(chalk.green.bold('  Details'));
         console.log('\n');
         console.log(chalk.green('    `-f` and `-s` stand for `frontend` and `service`'));
@@ -124,6 +138,7 @@ program.command('build')
         console.log('    %s    %s', '-sc',  'service  release');
         console.log('    %s    %s', '-sr',  'service  release');
         console.log('    -------------------------------------');
+        globalHelp();
     });
 
 program.command('watch')
@@ -135,6 +150,9 @@ program.command('watch')
         var util = require(__dirname + '/src/util'),
             watcher = require(__dirname + '/src/watch');
         watcher().watch(util.parseGlobal(options));
+    })
+    .on('--help', function() {
+        globalHelp();
     });
 
 program
@@ -166,16 +184,17 @@ program
     })
     .on('--help', function() {
         console.log(chalk.green.bold('  Available commands:'));
-        console.log(' ')
+        console.log(' ');
         console.log(chalk.green('    ls') + '\u0009\u0009 SHOW current configuration');
         console.log(chalk.green('    on') + '\u0009\u0009 turn ON development mode');
         console.log(chalk.green('    off') + '\u0009\u0009 turn OFF development mode');
-        console.log(' ')
+        console.log(' ');
         console.log(chalk.green.bold('  Example:\n'));
         console.log(chalk.green('    ia devmode -t is') + '\u0009\u0009 check current `dev mode` of frontend `trunk`');
         console.log(chalk.green('    ia devmode --release on') + '\u0009 turn on `dev mode` of frontend `current`');
         console.log(chalk.green('    ia devmode -c off') + '\u0009\u0009 turn off `dev mode` of frontend `current`');
-        console.log(' ')
+        console.log(' ');
+        globalHelp();
     });
 
 program.command('buildconfig')
@@ -198,6 +217,9 @@ program.command('buildconfig')
         if (options.grep) {
             buildConfig.findFile(options.grep, {toRemove: options['delete']});
         }
+    })
+    .on('--help', function() {
+        globalHelp();
     });
 
 program.command('find <pattern>')
@@ -243,6 +265,9 @@ program.command('find <pattern>')
 
             console.log(formated.replace(new RegExp(targetPath, 'gmi'), '--'));
         });
+    })
+    .on('--help', function() {
+        globalHelp();
     });
 
 var apacheOptions = ['start', 'stop', 'graceful-stop', 'restart', 'reload',
@@ -258,13 +283,15 @@ program.command('apache <cmd>')
         child.stdout.on('data', function(data) {
             console.log(data);
         });
-    }).on('--help', function() {
+    })
+    .on('--help', function() {
         console.log(chalk.green.bold('  Available commands:'));
         console.log(' ');
         console.log(apacheOptions.map(function(option) {
             return '    * ' + option;
         }).join('\n'));
         console.log(' ');
+        globalHelp();
     });
 
 program.command('module <cmd>')
@@ -278,11 +305,9 @@ program.command('module <cmd>')
         module = require(__dirname + '/src/module');
         module()[cmd]();
     });
+
 program.on('--help', function() {
-    console.log(chalk.green.bold('  More details:'));
-    console.log(' ');
-    console.log('    Visit: ' + chalk.green(pkg.help.url));
-    console.log(' ');
+    globalHelp();
 });
 
 program.parse(process.argv);
