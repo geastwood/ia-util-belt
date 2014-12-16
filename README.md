@@ -43,8 +43,8 @@ Here list all the commands available of this utility tool. They are
 trigger the build process. If there is a change within the build process, the build process will restart.
 *   **devmode [options] <cmd>**   [on|off|is] switch dev mode
 *   **buildconfig [options]**     build config related commands
-*   **find [options] <pattern>**  a `grep` wrapper
-*   **apache <cmd>**              apache commands
+*   **find [options] <pattern>**  a `grep` wrapper exclude some temp folders, such as *library*, *legacy*, *test*, *.svn*
+*   **apache <cmd>**              apache commands wrapper, delegate to service apache2
 *   **module <cmd>**              contains frontend module related functions, e.g, create empty module
 
 #### Overview
@@ -58,7 +58,10 @@ trigger the build process. If there is a change within the build process, the bu
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
 | **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|
 | **apache**        | `start`, `stop`, `restart` (support all apache commands, here lists the often-used ones)|n/a| `ia apache restart` // restart apache2 service|
-| **module**        | `create` |n/a| `ia module create` // create empty frontend module|
+| **module**        | `create` | n/a | `ia module create` // create empty frontend module|
+| **buildconfig**   | n/a | `-g --grep <string>`, `-d --delete`, `-m --module`, `-t --trunk'`, `-r --release`, `-c --current` | `ia buildconfig -tgd google` // prompt to delete module contains name *google* in build config file|
+| **find**          | n/a | `-d --definition`, `-f --frontend`, `-s --service`, `-t --trunk`, `-r --release`, `-c --current`| `ia find -dt google` // find in frontend trunk Ext classes name contains *google*|
+
 
 ### Get help by `-h` or `--help`
 
