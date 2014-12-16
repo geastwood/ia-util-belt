@@ -47,9 +47,10 @@ Here list all the commands available of this utility tool. They are
 *   **module <cmd>**              contains frontend module related functions, e.g, create empty module
 
 
-| command| subcommand | comments |
-| --------| -------- ||
-| runscripts| cell 2||
+| header 1 | header 2 |
+| -------- | -------- |
+| cell 1   | cell 2   |
+| cell 3   | cell 4   |
 
 
 ### Get help by `-h` or `--help`
