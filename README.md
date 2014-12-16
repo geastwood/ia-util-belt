@@ -47,10 +47,10 @@ Here list all the commands available of this utility tool. They are
 *   **module <cmd>**              contains frontend module related functions, e.g, create empty module
 
 
-| command | subcommand | flags |
-| -------- | -------- | ------- |
-| cell 1   | cell 2   |  n/a    |
-| cell 3   | cell 4   |  n/a    |
+| command | subcommand | flags  | examples |
+| -------- | -------- | ------- | --------- |
+| runscript     | n/a   |  `-f --file` specify the script name to run  | ia runscript -f dev_dependency.sh |
+| setup         | n/a  |  n/a    | n/a |
 
 
 ### Get help by `-h` or `--help`
