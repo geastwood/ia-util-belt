@@ -67,12 +67,12 @@ trigger the build process. If there is a change within the build process, the bu
 
 It's always possible specify `-h` or `--help` for a detailed help section. For example
 
-`ia -h` // will show an overview of this cli tool
-`ia build -h` // will show an overview off all `build` command
+* `ia -h` // will show an overview of this cli tool
+* `ia build -h` // will show an overview off all `build` command
 
 ## How to update
 
-1. navigate to the folder where it has the git repo, or clone the latest repo from git server[(How to install)](#how-to-install)
+1. navigate to the folder where you have the git repo, or clone the latest repo from git server[(How to install)](#how-to-install)
 2. `make` which will clean the symbolic link and lib folder, copy again files to library folder.
 It will not touch user config file under `~/.ia`, it may copy additional *scripts* to `~/.ia/scripts` folder
 
