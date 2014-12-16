@@ -51,6 +51,7 @@ Here list all the commands available of this utility tool. They are
 | -------- | -------- | ------- | --------- |
 | runscript     | n/a   |  `-f --file` specify the script name to run  | ia runscript -f dev_dependency.sh |
 | setup         | n/a  |  n/a    | n/a |
+| branch        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | ia branch checkout --trunk |
 
 
 ### Get help by `-h` or `--help`
