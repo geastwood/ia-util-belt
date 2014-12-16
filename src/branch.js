@@ -3,10 +3,10 @@ var prompt      = require('prompt'),
     IA          = require(__dirname + '/ia');
 
 var commands = {
-    'switch': function(globals) {
+    'switch': function() {
         prompt.get([{ // trunk | current | release
             name: 'branch',
-            description: 'Which branch to switch?',
+            description: ('Which branch to switch?').green,
             required: true,
             'default': 'current',
             pattern: /(current|release)/
@@ -18,7 +18,7 @@ var commands = {
             }
             prompt.get([{
                 name: 'app',
-                description: 'frontend or service?',
+                description: ('frontend or service?').green,
                 'default': 'frontend',
                 pattern: /(frontend|service)/
             }],
@@ -37,7 +37,7 @@ var commands = {
     checkout: function(options) {
         prompt.get([{
             name: 'folder',
-            description: 'Folder name under "' + IA().path.getRootPath() + '"',
+            description: ('Folder name under "' + IA().path.getRootPath() + '"').green,
             required: true,
             pattern: /\w{1,20}/
         }],
@@ -48,7 +48,7 @@ var commands = {
             }
             prompt.get([{
                 name: 'app',
-                description: 'frontend or service?',
+                description: ('frontend or service?').green,
                 'default': 'frontend',
                 pattern: /(frontend|service)/
             }],

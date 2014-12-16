@@ -14,8 +14,8 @@ var api,
 var getModuleName = function(fn) {
     prompt.get([{
         name: 'moduleName',
-        description: 'What is the module name?',
-        message: 'module name can only be of `a-z` (small letters).',
+        description: ('What is the module name?').green,
+        message: ('module name can only be of `a-z` (small letters).').red,
         required: true,
         pattern: /^[a-z]+$/
     }],
@@ -96,8 +96,7 @@ processDefinition = function(name, moduleName) {
  * @return {Object} Interface, which receive detail of the action
  */
 actionFactory = function(options) {
-    var moduleFolder = resolver.getModuleFolder(options.moduleName),
-        moduleName = options.moduleName;
+    var moduleFolder = resolver.getModuleFolder(options.moduleName);
 
     return {
         createFolder: function(configs) {

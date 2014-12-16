@@ -39,7 +39,7 @@ var util = {
 
         prompt.get([{
             name:   'yesno',
-            message: opts.message || 'continue?',
+            message: (opts.message || 'continue?').green,
             validator: /(yes|no)/,
             'default': opts['default'] || 'yes'
         }], function(err, inputs) {

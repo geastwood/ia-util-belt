@@ -24,7 +24,7 @@ api = module.exports = function() {
                 promptConfigs.push({
                     name: 'username',
                     required: true,
-                    description: 'Please specify username',
+                    description: ('Please specify username').green,
                     pattern: /\w{1,20}/
                 });
             }
@@ -33,7 +33,7 @@ api = module.exports = function() {
                     name: 'password',
                     hidden: true,
                     password: true,
-                    description: 'Please specify svn password',
+                    description: ('Please specify svn password').green,
                     pattern: /\w{1,20}/
                 });
             }

@@ -49,7 +49,7 @@ var checkout = function(options) {
             });
             prompt.get([{
                 name: 'branchId',
-                description: 'Which to checkout?',
+                description: ('Which to checkout?').green,
                 default: 1,
                 pattern: /\d{1,2}/
             }],

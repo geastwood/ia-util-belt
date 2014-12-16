@@ -1,7 +1,7 @@
 var fs      = require('fs'),
     chalk   = require('chalk'),
     util    = require(__dirname + '/util'),
-    promp   = require('prompt');
+    prompt   = require('prompt');
 
 var buildconfig = function(path) {
 
@@ -47,9 +47,9 @@ var buildconfig = function(path) {
             if (rst.length === 0) {
                 return;
             }
-            promp.get([{
+            prompt.get([{
                 name: 'id',
-                description: 'Which to delete?',
+                description: ('Which to delete?').green,
                 pattern: /\d+/
             }], function(err, prompts) {
                 if (err) {
