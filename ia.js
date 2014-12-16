@@ -88,7 +88,7 @@ program.command('build')
     .option('-p --part',            'part')
     .option('-d --development',     'development')
     .option('-l --legacy',          'legacy')
-    .option('-s --serviceclient',   'serviceclient')
+    .option('-v --serviceclient',   'serviceclient')
     .option('-m --module',          'module')
     .action(function(options) {
         var build = require(__dirname + '/src/build'),

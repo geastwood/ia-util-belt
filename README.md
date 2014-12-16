@@ -49,11 +49,11 @@ Here list all the commands available of this utility tool. They are
 
 | command | subcommand | flags  | examples |
 | -------- | -------- | ------- | --------- |
-| runscript     | n/a   |  `-f --file` specify the script name to run  | ia runscript -f dev_dependency.sh |
-| setup         | n/a  |  n/a    | n/a |
-| branch        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | ia branch checkout --trunk |
-
-
+| **runscript**     | n/a   |  `-f --file` specify the script name to run  | ia runscript -f dev_dependency.sh |
+| **setup**         | n/a  |  n/a    | n/a |
+| **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | ia branch checkout --trunk |
+| **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontent`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | ia build -ftd |
+`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module`
 ### Get help by `-h` or `--help`
 
 It's always possible specify `-h` or `--help` for a detailed help section. For example
