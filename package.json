@@ -10,6 +10,9 @@
       "type" : "git",
       "url" : "http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git"
   },
+  "help": {
+      "url": "http://git-1.rz1.intelliad.com/fliu/ia-util-belt/tree/master#ia-utility-belt"
+  },
   "author": "Fei Liu <liu.feiwood@gmail.com>",
   "license": "MIT",
   "dependencies": {

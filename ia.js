@@ -278,6 +278,12 @@ program.command('module <cmd>')
         module = require(__dirname + '/src/module');
         module()[cmd]();
     });
+program.on('--help', function() {
+    console.log(chalk.green.bold('  More details:'));
+    console.log(' ');
+    console.log('    Visit: ' + chalk.green(pkg.help.url));
+    console.log(' ');
+});
 
 program.parse(process.argv);
 
