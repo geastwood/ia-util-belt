@@ -9,7 +9,7 @@
 
 ## How to update
 
-1. go to the folder where it has the git repo, or clone the latest repo from git server[(How to install)](README#how-to-install)
+1. go to the folder where it has the git repo, or clone the latest repo from git server[(How to install)](#how-to-install)
 
 ## Where it installed
 
