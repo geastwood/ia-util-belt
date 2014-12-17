@@ -62,16 +62,16 @@ trigger the build process. If there is a change within the build process, the bu
 | **buildconfig**   | n/a | `-g --grep <string>`, `-d --delete`, `-m --module`, `-t --trunk'`, `-r --release`, `-c --current` | `ia buildconfig -tgd google` // prompt to delete module contains name *google* in build config file|
 | **find**          | n/a | `-d --definition`, `-f --frontend`, `-s --service`, `-t --trunk`, `-r --release`, `-c --current`| `ia find -dt google` // find in frontend trunk Ext classes name contains *google*|
 
-#### runscript command
+#### `runscript` command
 
-To exec script using `runscript` command a file must be specified, e.g. `ia runscript -f debug.sh`. All scripts file are located under `~/.ia/scripts/`. If to pass additional arguments, specify **-a** flag, e.g. `ia runscript -f debug.sh -a 'path/to/a/file'`
+To exec script using *runscript* command a file must be specified, e.g. *ia runscript -f debug.sh*. All scripts file are located under *~/.ia/scripts/*. If to pass additional arguments, specify **-a** flag, e.g. *ia runscript -f debug.sh -a 'path/to/a/file'*
 
 There are two types of scripts can be run with this command,
 
-1. .sh // bash scripts
-2. .js // javasript script
+1. .sh => bash scripts
+2. .js => javasript script
 
-All predefined scripts are under [scripts][scripts], which will be copied to `~/.ia/scripts` folder during **make** process. When this command is run, it will search scripts by name in `~/ia/scripts` folder.
+All predefined scripts are under [scripts](scripts), which will be copied to *~/.ia/scripts* folder during **make** process. When this command is run, it will search scripts by name in *~/ia/scripts* folder.
 
 ### Get help by `-h` or `--help`
 
