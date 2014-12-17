@@ -7,34 +7,41 @@ var fs          = require('fs'),
     fileName    = 'config.user.php',
     api;
 
-api = module.exports = {
-    copy: function(file) {
-        var that = this;
-        fs.readFile(path.join((__dirname + '/../../templates/config.user.php')), 'utf8', function(err, data) {
-            fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
-                if (err) {
-                    throw err;
-                }
-                console.log(chalk.green('SUCCESS\u0009(CREATED)\u0009') + '"%s" is copied to "%s"',
-                            fileName, file);
-                that.enterEmail(path.join(file, fileName), function(username) {
-                    console.log(chalk.green('SUCCESS\u0009(UPDATED)\u0009') + 'Email is updated to "%s"',
-                                username + '@intelliad.com');
+api = module.exports = function(options) {
+
+    options = options || {};
+
+    var packageDir = options.packageDir || __dirname;
+
+    return {
+        copy: function(file) {
+            var that = this;
+            fs.readFile(path.join((packageDir + '/../../templates/config.user.php')), 'utf8', function(err, data) {
+                fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log(chalk.green('SUCCESS\u0009(CREATED)\u0009') + '"%s" is copied to "%s"',
+                                fileName, file);
+                    that.enterEmail(path.join(file, fileName), function(username) {
+                        console.log(chalk.green('SUCCESS\u0009(UPDATED)\u0009') + 'Email is updated to "%s"',
+                                    username + '@intelliad.com');
+                    });
                 });
             });
-        });
-    },
-    enterEmail: function(file, fn) {
-        var username = IA().util.getUser();
-        fs.readFile(file, 'utf8', function(err, data) {
-            var rst = data.replace(emailReg, function() {
-                return username + '@intelliad.com';
+        },
+        enterEmail: function(file, fn) {
+            var username = IA().util.getUser();
+            fs.readFile(file, 'utf8', function(err, data) {
+                var rst = data.replace(emailReg, function() {
+                    return username + '@intelliad.com';
+                });
+                fs.writeFile(file, rst, 'utf8');
+                /* jshint expr: true */
+                fn && fn(username);
             });
-            fs.writeFile(file, rst, 'utf8');
-            /* jshint expr: true */
-            fn && fn(username);
-        });
-    }
+        }
+    };
 };
 
 /* DEBUG */

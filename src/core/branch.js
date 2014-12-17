@@ -179,8 +179,8 @@ var svnCheckoutCommand = function(options) {
         } else {
             userConfigCallback = require(__dirname + '/../plugin/userConfigPHP');
             importantConfigCallback = require(__dirname + '/../plugin/importantConfigPHP');
-            importantConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
-            userConfigCallback.copy(path.join(targetPath, 'legacy', 'config', 'user'));
+            importantConfigCallback().copy(path.join(targetPath, 'legacy', 'config', 'user'));
+            userConfigCallback().copy(path.join(targetPath, 'legacy', 'config', 'user'));
         }
         console.log('\n');
         util.print('success', 'info', 'Checkout successfully to "%s"', path.join(targetPath));

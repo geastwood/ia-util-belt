@@ -4,19 +4,23 @@ var fs      = require('fs'),
     api,
     fileName = 'config.important.inc.php';
 
-api = module.exports = {
-    copy: function(file) {
+api = module.exports = function(options) {
+    options = options || {};
 
-        fs.readFile(path.join((__dirname + '/../../templates/config.important.inc.php')), 'utf8', function(err, data) {
-            fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
-                if (err) {
-                    throw err;
-                }
-                console.log(chalk.green('SUCCESS\u0009(CREATED)\u0009') + '"%s" is copied to "%s"',
-                            fileName, file);
+    var packageDir = options.packageDir || __dirname;
+    return {
+        copy: function(file) {
+            fs.readFile(path.join((packageDir + '/../../templates/config.important.inc.php')), 'utf8', function(err, data) {
+                fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log(chalk.green('SUCCESS\u0009(CREATED)\u0009') + '"%s" is copied to "%s"',
+                                fileName, file);
+                });
             });
-        });
-    }
+        }
+    };
 };
 
 /* DEBUG */
