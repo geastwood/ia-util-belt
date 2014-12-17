@@ -51,7 +51,7 @@ trigger the build process. If there is a change within the build process, the bu
 
 | command | subcommand | flags  | examples |
 | -------- | -------- | ------- | --------- |
-| **runscript**     | n/a   |  `-f --file` specify the script name to run  | `ia runscript -f dev_dependency.sh` // run a custom shell script |
+| **runscript**     | n/a   |  `-f --file` specify the script name to run, `-a -args` specify arguments for script, `-s --slience` disable interactive mode | `ia runscript -f dev_dependency.sh` // run a custom shell script |
 | **setup**         | n/a  |  n/a    | n/a |
 | **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | `ia branch checkout --trunk` |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
@@ -62,6 +62,16 @@ trigger the build process. If there is a change within the build process, the bu
 | **buildconfig**   | n/a | `-g --grep <string>`, `-d --delete`, `-m --module`, `-t --trunk'`, `-r --release`, `-c --current` | `ia buildconfig -tgd google` // prompt to delete module contains name *google* in build config file|
 | **find**          | n/a | `-d --definition`, `-f --frontend`, `-s --service`, `-t --trunk`, `-r --release`, `-c --current`| `ia find -dt google` // find in frontend trunk Ext classes name contains *google*|
 
+#### runscript command
+
+To exec script using `runscript` command a file must be specified, e.g. `ia runscript -f debug.sh`. All scripts file are located under `~/.ia/scripts/`. If to pass additional arguments, specify **-a** flag, e.g. `ia runscript -f debug.sh -a 'path/to/a/file'`
+
+There are two types of scripts can be run with this command,
+
+1. .sh // bash scripts
+2. .js // javasript script
+
+All predefined scripts are under [scripts][scripts], which will be copied to `~/.ia/scripts` folder during **make** process. When this command is run, it will search scripts by name in `~/ia/scripts` folder.
 
 ### Get help by `-h` or `--help`
 
@@ -88,28 +98,14 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 
 ## Changelog
 * 2014-12-12 (Add) create module via script
-* 2014-12-16 (Add) auto complete basic commands
-* 2014-12-16 (Modify) better auto complete
-* 2014-12-16 (Fix) escape svn password
-* 2014-12-16 (Fix) hide the password                                (v0.1.14)
-* 2014-12-16 (Fix) fix a bug of build command
-* 2014-12-16 (Modify) remove devmode underscore
-* 2014-12-16 (Modify) add more help on build command
-* 2014-12-16 (Modify) add `application.log` on service checkout     (v0.1.15)
+* 2014-12-15 (Add) auto complete basic commands
+* 2014-12-15 (Modify) better auto complete
+* 2014-12-15 (Fix) escape svn password
+* 2014-12-15 (Fix) hide the password                                (v0.1.14)
+* 2014-12-15 (Fix) fix a bug of build command
+* 2014-12-15 (Modify) remove devmode underscore
+* 2014-12-15 (Modify) add more help on build command
+* 2014-12-15 (Modify) add `application.log` on service checkout     (v0.1.15)
 * 2014-12-16 (Add) add working copies folder overwrite
-* 2014-12-17 (Fix) replace all prompt colors                        (v0.1.16)
-
-
-## Host
-* `frontend.trunk.local`
-* `services.trunk.local`
-
----
-
-* `frontend.current.local`
-* `services.current.local`
-
----
-
-* `frontend.release.local`
-* `services.release.local`
+* 2014-12-16 (Fix) replace all prompt colors                        (v0.1.16)
+* 2014-12-17 (Add) Add remove repo scripts                          (v0.1.17)

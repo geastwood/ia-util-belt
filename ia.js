@@ -24,18 +24,29 @@ program
     .command('runscript')
     .description('run a user specified script')
     .option('-f --file <file>', 'Specify the bash file to run, e.g. debug.sh')
+    .option('-s --silence', 'run in silent, no promot')
+    .option('-a --args <args>', 'Provide arguments')
     .action(function(options) {
-        util.yesno(function(answer) {
+
+        function runscript() {
             var scriptrunner;
-            if (answer === 'no') {
-                util.print('info', 'CANCELLED BY USER', 'No damage is done.');
-                return;
-            }
             scriptrunner = require(__dirname + '/src/runscript');
             scriptrunner().run(options);
-        }, {
-            message: 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?'
-        });
+        }
+
+        if (options.silence) {
+            runscript();
+        } else {
+            util.yesno(function(answer) {
+                if (answer === 'no') {
+                    util.print('info', 'CANCELLED BY USER', 'No damage is done.');
+                    return;
+                }
+                runscript();
+            }, {
+                message: 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?'
+            });
+        }
     })
     .on('--help', function() {
         globalHelp();
