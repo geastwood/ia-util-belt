@@ -73,6 +73,11 @@ There are two types of scripts can be run with this command,
 
 All predefined scripts are under [scripts](scripts), which will be copied to *~/.ia/scripts* folder during **make** process. When this command is run, it will search scripts by name in *~/ia/scripts* folder.
 
+**Examples**
+
+* `ia runscript -s -f clean_repo.sh -a "current"` // remove **frontend** and **services** from /data/intelliad/current/
+* `ia runscript -s -f clean_repo.sh -a "release"` // remove **frontend** and **services** from /data/intelliad/current/
+
 ### Get help by `-h` or `--help`
 
 It's always possible specify `-h` or `--help` for a detailed help section. For example
