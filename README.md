@@ -73,10 +73,12 @@ There are two types of scripts can be run with this command,
 
 All predefined scripts are under [scripts](scripts), which will be copied to *~/.ia/scripts* folder during **make** process. When this command is run, it will search scripts by name in *~/ia/scripts* folder.
 
-**Examples**
+**Often used script**
 
 * `ia runscript -s -f clean_repo.sh -a "current"` // remove **frontend** and **services** from /data/intelliad/current/
 * `ia runscript -s -f clean_repo.sh -a "release"` // remove **frontend** and **services** from /data/intelliad/current/
+* `ia runscript -f fr_post_checkout.js` // add two user config `config.user.php` and `config.important.inc.php`
+* `ia runscript -f service_post_checkout.js` // chmod **log** folder and chmod create **log/application.log**
 
 ### Get help by `-h` or `--help`
 
@@ -114,3 +116,4 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 * 2014-12-16 (Add) add working copies folder overwrite
 * 2014-12-16 (Fix) replace all prompt colors                        (v0.1.16)
 * 2014-12-17 (Add) Add remove repo scripts                          (v0.1.17)
+* 2014-12-17 (Add) Add frontend and service config && chmod log     (v0.1.18)
