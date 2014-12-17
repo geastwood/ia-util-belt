@@ -46,9 +46,16 @@ api = module.exports = function() {
 
             factory[ext]({
                 file: file,
-                args: options.args
+                args: options.args,
+                packageDir: path.resolve(__dirname, '..'),
+                core: {
+                    prompt: require('prompt'),
+                    IA: IA,
+                    util: util
+                }
             });
 
         }
     };
 };
+// console.log(path.resolve(__dirname, '..'));

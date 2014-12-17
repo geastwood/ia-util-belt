@@ -1,22 +1,22 @@
 var fs          = require('fs'),
     path        = require('path'),
-    prompt      = require('prompt'),
     IA          = require(__dirname + '/../ia'),
     chalk       = require('chalk'),
     emailReg    = /(\w+)@intelliad.com/g,
     fileName    = 'config.user.php',
+    packageDir  = path.resolve(__dirname, '../..'),
     api;
 
 api = module.exports = function(options) {
 
     options = options || {};
 
-    var packageDir = options.packageDir || __dirname;
+    packageDir = options.packageDir || packageDir;
 
     return {
         copy: function(file) {
             var that = this;
-            fs.readFile(path.join((packageDir + '/../../templates/config.user.php')), 'utf8', function(err, data) {
+            fs.readFile(path.join(packageDir, 'templates/config.user.php'), 'utf8', function(err, data) {
                 fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
                     if (err) {
                         throw err;
@@ -45,4 +45,5 @@ api = module.exports = function(options) {
 };
 
 /* DEBUG */
-// api.copy(path.normalize('/Users/feiliu/Desktop/config.user.php'));
+// api().copy(path.normalize('/Users/feiliu/Desktop/config.user.php'));
+// api()

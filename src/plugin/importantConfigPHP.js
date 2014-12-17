@@ -2,15 +2,17 @@ var fs      = require('fs'),
     path    = require('path'),
     chalk   = require('chalk'),
     api,
+    packageDir  = path.resolve(__dirname, '../..'),
     fileName = 'config.important.inc.php';
 
 api = module.exports = function(options) {
     options = options || {};
 
-    var packageDir = options.packageDir || __dirname;
+    packageDir = options.packageDir || packageDir;
+
     return {
         copy: function(file) {
-            fs.readFile(path.join((packageDir + '/../../templates/config.important.inc.php')), 'utf8', function(err, data) {
+            fs.readFile(path.join(packageDir, 'templates/config.important.inc.php'), 'utf8', function(err, data) {
                 fs.writeFile(path.join(file, fileName), data, 'utf8', function(err) {
                     if (err) {
                         throw err;
