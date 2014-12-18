@@ -64,6 +64,22 @@ var commands = {
                 });
             });
         });
+    },
+    update: function() {
+        prompt.get([{ // trunk | current | release
+            name: 'branch',
+            description: ('Which branch to update?').green,
+            required: true,
+            'default': 'trunk',
+            pattern: /(trunk|current|release)/
+        }],
+        function(err, whichBranch) { // path of the app
+            if (err) {
+                console.log('Error: cancelled by user.');
+                return;
+            }
+            coreBranch.update(whichBranch);
+        });
     }
 };
 

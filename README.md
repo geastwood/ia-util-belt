@@ -37,7 +37,7 @@ Here list all the commands available of this utility tool. They are
 
 *   **runscript [options]**       =>    run a user specified script
 *   **setup**                     walk thought some very basic setup steps
-*   **branch [options] <cmd>**    svn branch commands [checkout|switch]
+*   **branch [options] <cmd>**    svn branch commands [checkout|switch|update]
 *   **build [options]**           Build process releated command
 *   **watch [options]**           small watch function, watch `application/javascripts` folder for changes, if there is a change
 trigger the build process. If there is a change within the build process, the build process will restart.
@@ -53,7 +53,7 @@ trigger the build process. If there is a change within the build process, the bu
 | -------- | -------- | ------- | --------- |
 | **runscript**     | n/a   |  `-f --file` specify the script name to run, `-a -args` specify arguments for script, `-s --slience` disable interactive mode | `ia runscript -f dev_dependency.sh` // run a custom shell script |
 | **setup**         | n/a  |  n/a    | n/a |
-| **branch**        | `checkout`, `switch` | `-t --trunk`, if specified, no **branches** will be prompt | `ia branch checkout --trunk` |
+| **branch**        | `checkout`, `switch`, `update` | `-t --trunk`, if specified, no **branches** will be prompt | `ia branch checkout --trunk` |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
 | **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|
@@ -117,3 +117,4 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 * 2014-12-16 (Fix) replace all prompt colors                        (v0.1.16)
 * 2014-12-17 (Add) Add remove repo scripts                          (v0.1.17)
 * 2014-12-17 (Add) Add frontend and service config && chmod log     (v0.1.18)
+* 2014-12-17 (Add) Add `ia branch update` for updating rpos         (v0.1.20)

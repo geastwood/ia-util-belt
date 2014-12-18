@@ -185,8 +185,41 @@ var svnCheckoutCommand = function(options) {
         console.log('\n');
         util.print('success', 'info', 'Checkout successfully to "%s"', path.join(targetPath));
     });
+},
+
+// update svn repo, first frontend, then service
+update = function(options) {
+    var spawn = require('child_process').spawn,
+        front,
+        service,
+        front_path = IA({app: 'frontend', branch: options.branch}).path.getBasePath(),
+        service_path = IA({app: 'service', branch: options.branch}).path.getBasePath();
+
+    front = spawn('svn', [
+        'update',
+        front_path
+    ]);
+    front.stdout.on('data', function(data) {
+        util.stdout(data);
+    });
+
+    front.on('exit', function() {
+        util.print('success', 'success', 'Repo updated at "%s"', front_path);
+
+        service = spawn('svn', [
+            'update',
+            service_path
+        ]);
+        service.stdout.on('data', function(data) {
+            util.stdout(data);
+        });
+        service.on('exit', function() {
+            util.print('success', 'success', 'Repo updated at "%s"', service_path);
+        });
+    });
+
 };
 
 module.exports.checkout = checkout;
-// module.exports.getBranches = svnGetBranches;
 module.exports.switchBranch = switchBranch;
+module.exports.update = update;

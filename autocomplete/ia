@@ -8,7 +8,7 @@ _ia()
     moduleOpts="create"
     devmodeOpts="is on off"
     apache2Opts="startgc stop graceful-stoprestartreload force-reload start-htcacheclean stop-htcacheclean status"
-    branchOpts="switch checkout"
+    branchOpts="switch checkout update"
 
     if [[ ${prev} == "ia" ]]
     then

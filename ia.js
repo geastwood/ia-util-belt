@@ -93,12 +93,12 @@ program
 
     // Branch
 program.command('branch <cmd>')
-    .description('svn branch commands [checkout|switch]')
-    .option('-t --trunk', 'Checkout trunk')
+    .description('svn branch commands [checkout|switch|update]')
+    .option('-t --trunk', 'Branch trunk')
     .action(function(cmd, options) {
         var commands = require(__dirname + '/src/branch');
 
-        if (['checkout', 'switch'].indexOf(cmd) < 0) {
+        if (['checkout', 'switch', 'update'].indexOf(cmd) < 0) {
             util.print('info', 'wrong input', 'Only option `checkout` and `switch` is valid.');
         } else {
             commands[cmd](options);
