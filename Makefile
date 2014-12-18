@@ -10,8 +10,7 @@ build: clean
 	@mkdir -p $(PACKAGEDIR)
 	@echo "PACKAGE EXTRACTED TO: \""$(PACKAGEDIR)\"
 	@cp -r * $(PACKAGEDIR)
-	@cd $(PACKAGEDIR)
-	@npm install
+	@cd $(PACKAGEDIR); npm install
 	@mkdir -p ~/.ia/scripts
 	@echo 'Copy scripts to user folder'
 	@cp -r scripts/* ~/.ia/scripts
