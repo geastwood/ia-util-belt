@@ -17,7 +17,7 @@ build: clean
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
 	@rm -Rf /etc/bash_completion.d/ia
-	@if [[ $(SHELL) == *'sh'* ]] || [[ $(SHELL) == *'bash'* ]]; then \
+	@if [[ $(SHELL) == "bin/sh" ]] || [[ $(SHELL) == "bin/bash" ]]; then \
 		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
 		cp autocomplete/ia /etc/bash_completion.d/ia; \
 		fi
