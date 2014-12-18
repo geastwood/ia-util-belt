@@ -49,6 +49,18 @@ program
         }
     })
     .on('--help', function() {
+
+        console.log(chalk.green.bold('  Often-used:'));
+        console.log(' ');
+        console.log('   \u2022 ia runscript -s -f clean_repo.sh -a "current" \u0009' +
+                        'remove `frontend` and `services` from /data/intelliad/current/');
+        console.log('   \u2022 ia runscript -s -f clean_repo.sh -a "release" \u0009' +
+                        'remove `frontend` and `services` from /data/intelliad/current/');
+        console.log('   \u2022 ia runscript -f fr_post_checkout.js           \u0009' +
+                        'add two user config `config.user.php` and `config.important.inc.php`');
+        console.log('   \u2022 ia runscript -f service_post_checkout.js      \u0009' +
+                        'create `log/application.log` chmod `log` folder recursively');
+        console.log(' ');
         globalHelp();
     });
 

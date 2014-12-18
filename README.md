@@ -78,7 +78,7 @@ All predefined scripts are under [scripts](scripts), which will be copied to *~/
 * `ia runscript -s -f clean_repo.sh -a "current"` // remove **frontend** and **services** from /data/intelliad/current/
 * `ia runscript -s -f clean_repo.sh -a "release"` // remove **frontend** and **services** from /data/intelliad/current/
 * `ia runscript -f fr_post_checkout.js` // add two user config `config.user.php` and `config.important.inc.php`
-* `ia runscript -f service_post_checkout.js` // chmod **log** folder and chmod create **log/application.log**
+* `ia runscript -f service_post_checkout.js` // create **log/application.log** chmod `log` folder recursively
 
 ### Get help by `-h` or `--help`
 
