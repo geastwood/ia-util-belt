@@ -1,6 +1,6 @@
 <?php
 
-$activeDb = '10.96.1.66';
+$activeDb = '10.104.16.13';
 
 $config['user']['main'] = array(
     // cookies
