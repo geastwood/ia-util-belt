@@ -332,7 +332,55 @@ program.command('module <cmd>')
 program.command('ticket <cmd>')
     .description('ticket template related functions')
     .action(function(cmd) {
-        var cmds = ['create'/*, 'edit'*/], inquirer = require('inquirer');
+        var cmds = [/*'create', */'edit'], inquirer = require('inquirer');
+        if (cmds.indexOf(cmd) < 0) {
+            throw 'invalid options "' + cmd + '"';
+        }
+
+        // select preset ['ticket template', 'release template', 'empty control list']
+        // give name
+        //
+        // entering edit mode
+        inquirer.prompt([{
+            name: 'myName',
+            type: 'list',
+            choices: ['fei', 'li', 'f', 'foo'],
+            message: 'pls select',
+            'default': 'f'
+        }, {
+            name: 'myCheckbox',
+            type: 'checkbox',
+            choices: ['js', 'php', 'bash', 'hask'],
+            default: ['bash'],
+            message: function(answers) {
+                return 'which lang do you like the most' + answers.myName + '?';
+            },
+            when: function(answers) {
+                return answers.myName === 'fei';
+            }
+
+        }, {
+            name: 'myInput',
+            type: 'input',
+            message: 'input test',
+            default: 'this is a default string'
+        }], function(answers) {
+            console.log(answers);
+        });
+
+    });
+
+program.on('--help', function() {
+    globalHelp();
+});
+
+program.parse(process.argv);
+
+/*
+program.command('ticket <cmd>')
+    .description('ticket template related functions')
+    .action(function(cmd) {
+        var cmds = ['create', 'edit'], inquirer = require('inquirer');
         if (cmds.indexOf(cmd) < 0) {
             throw 'invalid options "' + cmd + '"';
         }
@@ -346,9 +394,9 @@ program.command('ticket <cmd>')
             name: 'myCheckbox',
             type: 'checkbox',
             choices: ['js', 'php', 'bash', 'hask'],
-            default: ['js', 'bash'],
-            message: function() {
-                return 'which lang do you like the most?';
+            default: ['bash'],
+            message: function(answers) {
+                return 'which lang do you like the most' + answers.myName + '?';
             },
             when: function(answers) {
                 return answers.myName === 'fei';
@@ -367,6 +415,12 @@ program.on('--help', function() {
 program.parse(process.argv);
 
 /*
+program.command('diff').
+    description('svn diff')
+    .option('-d --dir <dir>', 'specify the dir optionally')
+    .action(function(options) {
+        var globals = parseGlobal(options),
+            sys = require('sys'),
 program.command('diff').
     description('svn diff')
     .option('-d --dir <dir>', 'specify the dir optionally')
