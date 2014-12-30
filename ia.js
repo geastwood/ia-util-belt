@@ -329,6 +329,37 @@ program.command('module <cmd>')
         module()[cmd]();
     });
 
+program.command('ticket <cmd>')
+    .description('ticket template related functions')
+    .action(function(cmd) {
+        var cmds = ['create'/*, 'edit'*/], inquirer = require('inquirer');
+        if (cmds.indexOf(cmd) < 0) {
+            throw 'invalid options "' + cmd + '"';
+        }
+        inquirer.prompt([{
+            name: 'myName',
+            type: 'list',
+            choices: ['fei', 'li', 'f', 'foo'],
+            message: 'pls select',
+            'default': 'f'
+        }, {
+            name: 'myCheckbox',
+            type: 'checkbox',
+            choices: ['js', 'php', 'bash', 'hask'],
+            default: ['js', 'bash'],
+            message: function() {
+                return 'which lang do you like the most?';
+            },
+            when: function(answers) {
+                return answers.myName === 'fei';
+            }
+
+        }], function(answers) {
+            console.log(answers);
+        });
+
+    });
+
 program.on('--help', function() {
     globalHelp();
 });
