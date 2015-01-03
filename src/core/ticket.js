@@ -83,7 +83,8 @@ var rowSession = function session(data, templateAnswers, fn, options) {
     });
 };
 
-var recordSession = function session(data) {
+var recordSession = function session(data, fn) {
+    fn = fn || _.noop;
 
     inquirer.prompt([{
         name: 'templateAction',
@@ -108,14 +109,14 @@ var recordSession = function session(data) {
         if (answers.templateAction === 'edit') {
             rowSession(data, answers, function(rst) {
                 if (rst.exit) {
-                    session(data);
+                    session(data, fn);
                 }
             });
         } else if (answers.templateAction === 'print') {
             console.log(data.print('pretty'));
             session(data);
         } else if (answers.templateAction === 'exit') {
-            console.log('Exit triggered');
+            fn(data);
         }
     });
 };
