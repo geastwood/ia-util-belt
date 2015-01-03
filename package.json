@@ -1,24 +1,25 @@
 {
-    "name": "ia",
-    "version": "0.1.20",
-    "description": "intelliAd frontend utility belt",
-    "main": "ia.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git"
-    },
-    "help": {
-        "url": "http://git-1.rz1.intelliad.com/fliu/ia-util-belt/tree/master#ia-utility-belt"
-    },
-    "author": "Fei Liu <liu.feiwood@gmail.com>",
-    "license": "MIT",
-    "dependencies": {
-        "chalk": "^0.5.1",
-        "commander": "^2.5.0",
-        "inquirer": "^0.8.0",
-        "prompt": "^0.2.14"
-    }
+  "name": "ia",
+  "version": "0.1.20",
+  "description": "intelliAd frontend utility belt",
+  "main": "ia.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git"
+  },
+  "help": {
+    "url": "http://git-1.rz1.intelliad.com/fliu/ia-util-belt/tree/master#ia-utility-belt"
+  },
+  "author": "Fei Liu <liu.feiwood@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "commander": "^2.5.0",
+    "inquirer": "^0.8.0",
+    "lodash": "^2.4.1",
+    "prompt": "^0.2.14"
+  }
 }

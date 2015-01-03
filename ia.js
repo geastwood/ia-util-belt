@@ -329,83 +329,24 @@ program.command('module <cmd>')
         module()[cmd]();
     });
 
-program.command('ticket <cmd>')
+program.command('ticket')
     .description('ticket template related functions')
-    .action(function(cmd) {
-        var cmds = [/*'create', */'edit'], inquirer = require('inquirer');
-        if (cmds.indexOf(cmd) < 0) {
-            throw 'invalid options "' + cmd + '"';
-        }
-
-        // select preset ['ticket template', 'release template', 'empty control list']
-        // give name
-        //
-        // entering edit mode
+    .action(function() {
+        var inquirer = require('inquirer'),
+            ticket = require('./src/ticket');
         inquirer.prompt([{
-            name: 'myName',
+            name: 'cmd',
             type: 'list',
-            choices: ['fei', 'li', 'f', 'foo'],
-            message: 'pls select',
-            'default': 'f'
-        }, {
-            name: 'myCheckbox',
-            type: 'checkbox',
-            choices: ['js', 'php', 'bash', 'hask'],
-            default: ['bash'],
-            message: function(answers) {
-                return 'which lang do you like the most' + answers.myName + '?';
-            },
-            when: function(answers) {
-                return answers.myName === 'fei';
-            }
-
-        }, {
-            name: 'myInput',
-            type: 'input',
-            message: 'input test',
-            default: 'this is a default string'
-        }], function(answers) {
-            console.log(answers);
+            message: 'Please select command',
+            choices: [
+                {name: 'Create', value: 'create'},
+                {name: 'Edit', value: 'edit'}
+            ],
+            'default': 'create'
+        }],
+        function(answers) {
+            ticket[answers.cmd]();
         });
-
-    });
-
-program.on('--help', function() {
-    globalHelp();
-});
-
-program.parse(process.argv);
-
-/*
-program.command('ticket <cmd>')
-    .description('ticket template related functions')
-    .action(function(cmd) {
-        var cmds = ['create', 'edit'], inquirer = require('inquirer');
-        if (cmds.indexOf(cmd) < 0) {
-            throw 'invalid options "' + cmd + '"';
-        }
-        inquirer.prompt([{
-            name: 'myName',
-            type: 'list',
-            choices: ['fei', 'li', 'f', 'foo'],
-            message: 'pls select',
-            'default': 'f'
-        }, {
-            name: 'myCheckbox',
-            type: 'checkbox',
-            choices: ['js', 'php', 'bash', 'hask'],
-            default: ['bash'],
-            message: function(answers) {
-                return 'which lang do you like the most' + answers.myName + '?';
-            },
-            when: function(answers) {
-                return answers.myName === 'fei';
-            }
-
-        }], function(answers) {
-            console.log(answers);
-        });
-
     });
 
 program.on('--help', function() {
