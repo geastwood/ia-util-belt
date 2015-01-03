@@ -1,9 +1,5 @@
 var inquirer = require('inquirer');
-var Manager = require('../../lib/ticket-template-core/src/data/manager');
-var provider = require('../../lib/ticket-template-core/src/data/provider');
 var _ = require('lodash');
-
-var m = Manager.create(provider.create('jira', 'id'));
 
 var rowSession = function session(data, templateAnswers, fn, options) {
     inquirer.prompt([{
@@ -124,8 +120,4 @@ var recordSession = function session(data) {
     });
 };
 
-module.exports = function() {
-    m.getData().then(function(data) {
-        recordSession(data);
-    });
-};
+module.exports = recordSession;
