@@ -339,8 +339,10 @@ program.command('ticket')
             type: 'list',
             message: 'Please select command',
             choices: [
-                {name: 'Create', value: 'create'},
-                {name: 'Edit', value: 'edit'}
+                {name: 'Create (Local)', value: 'create'},
+                {name: 'Edit (Remote)', value: 'edit'},
+                {name: 'Read (Local)', value: 'read'},
+                {name: 'Delete (Local)', value: 'delete'}
             ],
             'default': 'create'
         }],

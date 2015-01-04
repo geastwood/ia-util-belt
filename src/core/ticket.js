@@ -83,6 +83,9 @@ var rowSession = function session(data, templateAnswers, fn, options) {
     });
 };
 
+/**
+ * @recursive
+ */
 var recordSession = function session(data, fn) {
     fn = fn || _.noop;
 
@@ -114,7 +117,7 @@ var recordSession = function session(data, fn) {
             });
         } else if (answers.templateAction === 'print') {
             console.log(data.print('pretty'));
-            session(data);
+            session(data, fn);
         } else if (answers.templateAction === 'exit') {
             fn(data);
         }

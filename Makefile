@@ -13,6 +13,7 @@ build: clean
 	@cp -r * $(PACKAGEDIR)
 	@cd $(PACKAGEDIR); npm install
 	@mkdir -p ~/.ia/scripts
+	@mkdir -p ~/.ia/data/templates
 	@echo 'Copy scripts to user folder'
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
