@@ -18,15 +18,22 @@ build: clean
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
 	@rm -Rf /etc/bash_completion.d/ia
-	@if [[ $(SHELL) == "bin/sh" ]] || [[ $(SHELL) == "bin/bash" ]]; then \
+	@if [[ $(SHELL) == "/bin/sh" ]] || [[ $(SHELL) == "/bin/bash" ]]; then \
 		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
 		cp autocomplete/ia /etc/bash_completion.d/ia; \
 		fi
 	@echo 'Installing dependency at '$(TICKETDIR)
 	@cd $(TICKETDIR); npm install
 	# super hacky, changing page size for cli
-	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js
-	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
+	@if [[ $(SHELL) == "/bin/sh" ]] || [[ $(SHELL) == "/bin/bash" ]]; then \
+		echo 'bash'; \
+		sed -i 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js; \
+		sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js; \
+		else \
+		echo 'zsh'; \
+		sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js; \
+		sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js; \
+		fi
 
 clean:
 	@echo 'Remove old packages and link'
