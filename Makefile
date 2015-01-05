@@ -26,11 +26,9 @@ build: clean
 	@cd $(TICKETDIR); npm install
 	# super hacky, changing page size for cli
 	@if [[ $(SHELL) == "/bin/sh" ]] || [[ $(SHELL) == "/bin/bash" ]]; then \
-		echo 'bash'; \
 		sed -i 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		else \
-		echo 'zsh'; \
 		sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		fi
