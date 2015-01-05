@@ -38,7 +38,7 @@ module.exports = {
                 ticket(data, function(data) {
                     console.log(chalk.yellow(ttUtil.pad('=').pad('', 140)));
                     console.log(data.print('pretty'));
-                    console.log(chalk.yellow(ttUtil('=').pad('', 140)), '\n');
+                    console.log(chalk.yellow(ttUtil.pad('=').pad('', 140)), '\n');
                     inquirer.prompt([{
                         name: 'save',
                         type: 'confirm',

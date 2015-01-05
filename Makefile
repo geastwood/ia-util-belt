@@ -29,7 +29,7 @@ build: clean
 	@sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
 
 clean:
-	echo 'Remove old packages and link'
+	@echo 'Remove old packages and link'
 	@rm -Rf $(PACKAGEDIR)
 	@rm -Rf $(BINDIR)/$(PACKAGE)
 
