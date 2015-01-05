@@ -22,10 +22,11 @@ build: clean
 		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
 		cp autocomplete/ia /etc/bash_completion.d/ia; \
 		fi
+	@echo 'Installing dependency at '$(TICKETDIR)
 	@cd $(TICKETDIR); npm install
 	# super hacky
-	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' lib/ticket-template-core/node_modules/inquirer/lib/objects/choices.js
-	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' node_modules/inquirer/lib/objects/choices.js
+	@cd $(PACKAGEDIR); sed -i '' 's/var pageSize = 7/var pageSize = 100/' node_modules/inquirer/lib/objects/choices.js
+	@cd $(TICKETDIR); sed -i '' 's/var pageSize = 7/var pageSize = 100/' lib/ticket-template-core/node_modules/inquirer/lib/objects/choices.js
 
 clean:
 	echo 'Remove old packages and link'
