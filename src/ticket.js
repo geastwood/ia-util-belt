@@ -10,6 +10,7 @@ var util = require('./util');
 var chalk = require('chalk');
 var IA = require('./ia');
 var templateDataFolder = IA().util.getUserConfigFolder('data', 'templates');
+var spawn = require('child_process').spawn;
 
 module.exports = {
     edit: function() {
@@ -111,12 +112,21 @@ module.exports = {
         });
     },
     pipe: function(data, ticketNr) {
-        var pbcopy = require('child_process').spawn('pbcopy', [], {stdin: 'pipe'}),
+
+        var clipboard = spawn('pbcopy', [], {stdin: 'pipe'}),
             rs = new require('stream').Readable();
+
+        clipboard.on('error', function() {
+            clipboard = spawn('xsel', ['--clipboard', '--input'], {stdin: 'pipe'});
+            clipboard.on('error', function() {
+                util.print('error', 'error', 'This function require either "%s" or "%s" to work.', 'pbcopy', 'xsel');
+                return;
+            });
+        });
 
         rs.push(data);
         rs.push(null);
-        rs.pipe(pbcopy.stdin);
+        rs.pipe(clipboard.stdin);
         util.print('success',
                    'success',
                    'Data of ' + chalk.green("%s") + ' has been copied to clipboard',
