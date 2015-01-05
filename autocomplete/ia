@@ -4,7 +4,7 @@ _ia()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="devmode runscript setup branch build watch devmode buildconfig find apache module"
+    opts="devmode runscript setup branch build watch devmode buildconfig find apache module ticket"
     moduleOpts="create"
     devmodeOpts="is on off"
     apache2Opts="startgc stop graceful-stoprestartreload force-reload start-htcacheclean stop-htcacheclean status"

@@ -105,6 +105,10 @@ var api = function(opts) {
             isTruckFolder: function(path) {
                 return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||
                        configs.workingCopies.trunk.backend === path;
+            },
+            getJiraPassword: function() {
+                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
+                return userConfig.jiraPassword;
             }
         },
         svn: {

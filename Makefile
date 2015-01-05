@@ -24,9 +24,9 @@ build: clean
 		fi
 	@echo 'Installing dependency at '$(TICKETDIR)
 	@cd $(TICKETDIR); npm install
-	# super hacky
-	@sed -i 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js
-	@sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
+	# super hacky, changing page size for cli
+	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js
+	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
 
 clean:
 	@echo 'Remove old packages and link'

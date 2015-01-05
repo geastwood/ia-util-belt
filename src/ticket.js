@@ -47,7 +47,12 @@ module.exports = {
                     }],
                     function(answers) {
                         if (answers.save) {
-                            that.pipe(data.print('jira'), ticketNr);
+                            var options = {
+                                id: ticketNr,
+                                user: IA().util.getUser(),
+                                password: IA().util.getJiraPassword()
+                            };
+                            that.pipe(data.print('jira'), options);
                         } else {
                             util.print('info', 'info', 'No damage done, cancelled by user.');
                         }
