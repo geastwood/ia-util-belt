@@ -118,3 +118,4 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 * 2014-12-17 (Add) Add remove repo scripts                          (v0.1.17)
 * 2014-12-17 (Add) Add frontend and service config && chmod log     (v0.1.18)
 * 2014-12-17 (Add) Add `ia branch update` for updating rpos         (v0.1.20)
+* 2014-01-05 (Add) Add ticket template related functions            (v0.1.21)

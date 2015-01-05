@@ -4,6 +4,7 @@ DISTDIR = /usr/local
 LIBDIR = $(DISTDIR)/lib
 BINDIR = $(DISTDIR)/bin
 PACKAGEDIR = $(LIBDIR)/$(PACKAGE)
+TICKETDIR = $(PACKAGEDIR)/lib/ticket-template-core/
 
 build: clean
 	@if [ ! -d ~/.ia ]; then mkdir -p ~/.ia; echo "Create User config folder ~/.ia"; fi
@@ -12,6 +13,7 @@ build: clean
 	@cp -r * $(PACKAGEDIR)
 	@cd $(PACKAGEDIR); npm install
 	@mkdir -p ~/.ia/scripts
+	@mkdir -p ~/.ia/data/templates
 	@echo 'Copy scripts to user folder'
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
@@ -20,6 +22,10 @@ build: clean
 		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
 		cp autocomplete/ia /etc/bash_completion.d/ia; \
 		fi
+	@cd $(TICKETDIR); npm install
+	# super hacky
+	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' lib/ticket-template-core/node_modules/inquirer/lib/objects/choices.js
+	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' node_modules/inquirer/lib/objects/choices.js
 
 clean:
 	echo 'Remove old packages and link'

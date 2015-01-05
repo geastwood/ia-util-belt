@@ -329,35 +329,26 @@ program.command('module <cmd>')
         module()[cmd]();
     });
 
-program.command('ticket <cmd>')
+program.command('ticket')
     .description('ticket template related functions')
-    .action(function(cmd) {
-        var cmds = ['create'/*, 'edit'*/], inquirer = require('inquirer');
-        if (cmds.indexOf(cmd) < 0) {
-            throw 'invalid options "' + cmd + '"';
-        }
+    .action(function() {
+        var inquirer = require('inquirer'),
+            ticket = require('./src/ticket');
         inquirer.prompt([{
-            name: 'myName',
+            name: 'cmd',
             type: 'list',
-            choices: ['fei', 'li', 'f', 'foo'],
-            message: 'pls select',
-            'default': 'f'
-        }, {
-            name: 'myCheckbox',
-            type: 'checkbox',
-            choices: ['js', 'php', 'bash', 'hask'],
-            default: ['js', 'bash'],
-            message: function() {
-                return 'which lang do you like the most?';
-            },
-            when: function(answers) {
-                return answers.myName === 'fei';
-            }
-
-        }], function(answers) {
-            console.log(answers);
+            message: 'Please select command',
+            choices: [
+                {name: 'Create (Local)', value: 'create'},
+                {name: 'Edit (Remote)', value: 'edit'},
+                {name: 'Read (Local)', value: 'read'},
+                {name: 'Delete (Local)', value: 'delete'}
+            ],
+            'default': 'create'
+        }],
+        function(answers) {
+            ticket[answers.cmd]();
         });
-
     });
 
 program.on('--help', function() {
@@ -367,6 +358,12 @@ program.on('--help', function() {
 program.parse(process.argv);
 
 /*
+program.command('diff').
+    description('svn diff')
+    .option('-d --dir <dir>', 'specify the dir optionally')
+    .action(function(options) {
+        var globals = parseGlobal(options),
+            sys = require('sys'),
 program.command('diff').
     description('svn diff')
     .option('-d --dir <dir>', 'specify the dir optionally')
