@@ -18,14 +18,14 @@ build: clean
 	@cp -r scripts/* ~/.ia/scripts
 	@ln -s $(PACKAGEDIR)/ia.js $(BINDIR)/$(PACKAGE)
 	@rm -Rf /etc/bash_completion.d/ia
-	@if [[ $(SHELL) == "bin/sh" ]] || [[ $(SHELL) == "bin/bash" ]]; then \
+	@if [ -z $(ZSH) ]; then \
 		echo 'Copy autocomplete file to /etc/bash_completion.d/ia'; \
 		cp autocomplete/ia /etc/bash_completion.d/ia; \
 		fi
 	@echo 'Installing dependency at '$(TICKETDIR)
 	@cd $(TICKETDIR); npm install
 	# super hacky, changing page size for cli
-	@if [[ $(SHELL) == "bin/sh" ]] || [[ $(SHELL) == "bin/bash" ]]; then \
+	@if [ -z $(ZSH) ]; then \
 		sed -i 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js; \
 		else \
