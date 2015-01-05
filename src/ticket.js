@@ -112,17 +112,17 @@ module.exports = {
         });
     },
     pipe: function(data, ticketNr) {
-
-        var clipboard = spawn('pbcopy', [], {stdin: 'pipe'}),
+        var clipboard,
             rs = new require('stream').Readable();
 
-        clipboard.on('error', function() {
+        if (fs.existsSync('/usr/bin/pbcopy')) {
+            clipboard = spawn('pbcopy', [], {stdin: 'pipe'});
+        } else if (fs.existsSync('/usr/bin/xsel')) {
             clipboard = spawn('xsel', ['--clipboard', '--input'], {stdin: 'pipe'});
-            clipboard.on('error', function() {
-                util.print('error', 'error', 'This function require either "%s" or "%s" to work.', 'pbcopy', 'xsel');
-                return;
-            });
-        });
+        } else {
+            util.print('error', 'error', 'This function require either "%s" or "%s" to work.', 'pbcopy(Mac)', 'xsel(Linux)');
+            return;
+        }
 
         rs.push(data);
         rs.push(null);
