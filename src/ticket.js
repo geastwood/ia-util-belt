@@ -32,7 +32,12 @@ module.exports = {
         }],
         function(answers) {
             var ticketNr = answers.ticketNr,
-                m = Manager.create(provider.create('jira', ticketNr));
+                options = {
+                    id: ticketNr,
+                    user: IA().util.getUser(),
+                    password: IA().util.getJiraPassword()
+                },
+                m = Manager.create(provider.create('jira', options));
 
             m.getData().then(function(data) {
                 ticket(data, function(data) {
@@ -47,12 +52,7 @@ module.exports = {
                     }],
                     function(answers) {
                         if (answers.save) {
-                            var options = {
-                                id: ticketNr,
-                                user: IA().util.getUser(),
-                                password: IA().util.getJiraPassword()
-                            };
-                            that.pipe(data.print('jira'), options);
+                            that.pipe(data.print('jira'), ticketNr);
                         } else {
                             util.print('info', 'info', 'No damage done, cancelled by user.');
                         }
