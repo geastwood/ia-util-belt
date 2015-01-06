@@ -38,7 +38,7 @@ module.exports = {
                     user: IA().util.getUser(),
                     password: IA().util.getJiraPassword()
                 },
-                m = Manager.create(provider.create('jira', options));
+                m = Manager.create(provider.create('jira', options), 'jira');
 
             m.getData().then(function(data) {
                 ticket(data, function(data) {
@@ -79,7 +79,7 @@ module.exports = {
             message: 'Please select template'
         }], function(answers) {
             var m = Manager.create(provider.create('local', path.join(presets.filepath, answers.type)));
-            m.getData('parse').then(function(data) {
+            m.getData().then(function(data) {
                 ticket(data, function(data) {
                     inquirer.prompt([{
                         name: 'filename',
@@ -123,7 +123,9 @@ module.exports = {
             util.print('error', 'error', 'This function require either "%s" or "%s" to work.', 'pbcopy(Mac)', 'xsel(Linux)');
             return;
         }
+        clipboard.stdin.setEncoding('utf8');
 
+        rs.setEncoding('utf8');
         rs.push(data);
         rs.push(null);
         rs.pipe(clipboard.stdin);
@@ -133,7 +135,7 @@ module.exports = {
                    ticketNr);
     },
     write: function(data, file) {
-        fs.writeFile(file, data, function(err) {
+        fs.writeFile(file, data, 'utf8', function(err) {
             if (err) {
                 throw err;
             }
@@ -185,8 +187,25 @@ module.exports = {
             }
         }],
         function(answers) {
-            fs.readFile(path.join(templateDataFolder, answers.filename), 'utf8', function(err, data) {
-                that.pipe(data, answers.filename);
+            var filename = answers.filename,
+                m = Manager.create(provider.create('local', path.join(templateDataFolder, filename)), 'jira');
+
+            m.getData().then(function(data) {
+                console.log(chalk.yellow(ttUtil.pad('=').pad('', 140)));
+                console.log(data.print('pretty'));
+                console.log(chalk.yellow(ttUtil.pad('=').pad('', 140)), '\n');
+                inquirer.prompt([{
+                    name: 'confirm',
+                    type: 'confirm',
+                    message: 'Paste this content to clipborad?',
+                    'default': true
+                }], function(answers) {
+                    if (answers.confirm) {
+                        that.pipe(data.print('jira'), filename);
+                    } else {
+                        util.print('info', 'info', 'No damage done, cancelled by user.');
+                    }
+                });
             });
         });
     }
