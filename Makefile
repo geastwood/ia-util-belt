@@ -7,13 +7,15 @@ PACKAGEDIR = $(LIBDIR)/$(PACKAGE)
 TICKETDIR = $(PACKAGEDIR)/lib/ticket-template-core
 
 linux: clean base
-	@echo "build for linux"
+	@echo "Build for linux => DONE!"
 	@rm -Rf /etc/bash_completion.d/ia
 	@echo 'Copy autocomplete file to /etc/bash_completion.d/ia'
 	@cp autocomplete/ia /etc/bash_completion.d/ia
+	@sed -i 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js
+	@sed -i 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
 
 mac: clean base
-	@echo "build for mac"
+	@echo "Build for mac => DONE!"
 	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(PACKAGEDIR)/node_modules/inquirer/lib/objects/choices.js
 	@sed -i '' 's/var pageSize = 7/var pageSize = 100/' $(TICKETDIR)/node_modules/inquirer/lib/objects/choices.js
 
