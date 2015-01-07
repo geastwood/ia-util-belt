@@ -3,7 +3,7 @@
 ## How to install
 
 1. **node** needs to be installed first.
-2. `git --recursive clone http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git`
+2. `git clone --recursive http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git` ia
 3. `cd ia`
 4. `make` // make the execuable
 
