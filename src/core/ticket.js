@@ -94,7 +94,9 @@ var recordSession = function session(data, fn) {
         type: 'expand',
         choices: [{
             key: 'e', name: 'Edit', value: 'edit'
-        }, {
+        },/* {
+            key: 'c', name: 'Command', value: 'command'
+        },*/ {
             key: 'p', name: 'Print', value: 'print'
         }, {
             key: 'x', name: 'Exit', value: 'exit'
@@ -108,6 +110,16 @@ var recordSession = function session(data, fn) {
         when: function(answers) {
             return answers.templateAction === 'edit';
         }
+    }, {
+        name: 'command',
+        type: 'input',
+        message: 'Please give command',
+        when: function(answers) {
+            return answers.templateAction === 'command';
+        },
+        validate: function(v) {
+            return data.cmd(v).validate();
+        }
     }], function(answers) {
         if (answers.templateAction === 'edit') {
             rowSession(data, answers, function(rst) {
@@ -116,12 +128,24 @@ var recordSession = function session(data, fn) {
                 }
             });
         } else if (answers.templateAction === 'print') {
-            console.log(data.print('pretty'));
+            console.log(data.print('pretty', true));
             session(data, fn);
+        } else if (answers.templateAction === 'command') {
+            command(data, answers, function(rst) {
+                if (rst.exit) {
+                    session(data, fn);
+                }
+            });
         } else if (answers.templateAction === 'exit') {
             fn(data);
         }
     });
+};
+
+var command = function(data, answers, fn) {
+    // console.log(data.print('pretty'));
+    data.cmd(answers.command).run();
+    fn({exit: true});
 };
 
 module.exports = recordSession;
