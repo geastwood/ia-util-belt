@@ -53,11 +53,38 @@ module.exports = {
                     }],
                     function(answers) {
                         if (answers.save) {
-                            that.pipe(data.print('jira'), ticketNr);
+                            that.pipe(data.output(), ticketNr);
                         } else {
                             util.print('info', 'info', 'No damage done, cancelled by user.');
                         }
                     });
+                });
+            });
+        });
+    },
+    clipboard: function() {
+
+        var clipboard, m, data = '', that = this;
+
+        if (fs.existsSync('/usr/bin/pbcopy')) {
+            clipboard = spawn('pbpaste', []);
+        } else if (fs.existsSync('/usr/bin/xsel')) {
+            clipboard = spawn('xsel', ['--clipboard', '--output']);
+        } else {
+            util.print('error', 'error', 'This function require either "%s" or "%s" to work.', 'pbcopy(Mac)', 'xsel(Linux)');
+            return;
+        }
+
+        clipboard.stdout.setEncoding('utf8');
+        clipboard.stdout.on('data', function(chunk) {
+            data += chunk;
+        });
+
+        clipboard.stdout.on('end', function() {
+            m = Manager.create(provider.create('direct', data));
+            m.getData().then(function(data) {
+                ticket(data, function(data) {
+                    that.pipe(data.output(), 'clipboard data');
                 });
             });
         });
@@ -102,7 +129,7 @@ module.exports = {
                     }],
                     function(answers) {
                         if (answers.save) {
-                            that.write(data.print('jira'), path.join(templateDataFolder, answers.filename));
+                            that.write(data.output(), path.join(templateDataFolder, answers.filename));
                         } else {
                             util.print('info', 'info', 'No damage done, cancelled by user.');
                         }
@@ -188,7 +215,7 @@ module.exports = {
         }],
         function(answers) {
             var filename = answers.filename,
-                m = Manager.create(provider.create('local', path.join(templateDataFolder, filename)), 'jira');
+                m = Manager.create(provider.create('local', path.join(templateDataFolder, filename)));
 
             m.getData().then(function(data) {
                 console.log(chalk.yellow(ttUtil.pad('=').pad('', 140)));
@@ -201,7 +228,7 @@ module.exports = {
                     'default': true
                 }], function(answers) {
                     if (answers.confirm) {
-                        that.pipe(data.print('jira'), filename);
+                        that.pipe(data.output(), filename);
                     } else {
                         util.print('info', 'info', 'No damage done, cancelled by user.');
                     }

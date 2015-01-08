@@ -341,6 +341,7 @@ program.command('ticket')
             choices: [
                 {name: 'Create (Local)', value: 'create'},
                 {name: 'Edit (Remote)', value: 'edit'},
+                {name: 'Edit (Local clipboard)', value: 'clipboard'},
                 {name: 'Read (Local)', value: 'read'},
                 {name: 'Delete (Local)', value: 'delete'}
             ],
