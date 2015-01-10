@@ -68,7 +68,7 @@ program
     .command('setup')
     .description('walk thought some very basic setup steps')
     .action(function(options) {
-        console.log('\nThis process will run initial setups, save username, create folder struceture.\n');
+        console.log('\nThis process will run initial setups, save username, create folder structure.\n');
         util.yesno(function(answer) {
             if (answer === 'no') {
                 util.print('info', 'CANCELLED BY USER', 'No damage is done.');
@@ -88,28 +88,6 @@ program
         });
     })
     .on('--help', function() {
-        globalHelp();
-    });
-
-    // Branch
-program.command('branch <cmd>')
-    .description('svn branch commands [checkout|switch|update]')
-    .option('-t --trunk', 'Branch trunk')
-    .action(function(cmd, options) {
-        var commands = require(__dirname + '/src/branch');
-
-        if (['checkout', 'switch', 'update'].indexOf(cmd) < 0) {
-            util.print('info', 'wrong input', 'Only option `checkout` and `switch` is valid.');
-        } else {
-            commands[cmd](options);
-        }
-    })
-    .on('--help', function() {
-        console.log(chalk.green.bold('  Available commands:'));
-        console.log(' ');
-        console.log(chalk.green('    checkout') + '\u0009\u0009 walk throw steps to checkout a new svn branch');
-        console.log(chalk.green('    switch') + '\u0009\u0009 walk throw steps to switch a working copy to another branch');
-        console.log(' ');
         globalHelp();
     });
 
@@ -142,19 +120,19 @@ program.command('build')
         console.log('    %s    %s', '-ftd', 'frontend  trunk  development');
         console.log('    %s    %s', '-ftp', 'frontend  trunk  part');
         console.log('    %s    %s', '-ftl', 'frontend  trunk  legacy');
-        console.log('    %s    %s', '-fts', 'frontend  trunk  serviceclient');
+        console.log('    %s    %s', '-fts', 'frontend  trunk  service-client');
         console.log('    %s    %s', '-ftm', 'frontend  trunk  modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-fcd', 'frontend current development');
         console.log('    %s    %s', '-fcp', 'frontend current part');
         console.log('    %s    %s', '-fcl', 'frontend current legacy');
-        console.log('    %s    %s', '-fcs', 'frontend current serviceclient');
+        console.log('    %s    %s', '-fcs', 'frontend current service-client');
         console.log('    %s    %s', '-fcm', 'frontend current modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-frd', 'frontend release development');
         console.log('    %s    %s', '-frp', 'frontend release part');
         console.log('    %s    %s', '-frl', 'frontend release legacy');
-        console.log('    %s    %s', '-frs', 'frontend release serviceclient');
+        console.log('    %s    %s', '-frs', 'frontend release service-client');
         console.log('    %s    %s', '-frm', 'frontend release modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-st',  'service  release');
@@ -357,48 +335,3 @@ program.on('--help', function() {
 });
 
 program.parse(process.argv);
-
-/*
-program.command('diff').
-    description('svn diff')
-    .option('-d --dir <dir>', 'specify the dir optionally')
-    .action(function(options) {
-        var globals = parseGlobal(options),
-            sys = require('sys'),
-program.command('diff').
-    description('svn diff')
-    .option('-d --dir <dir>', 'specify the dir optionally')
-    .action(function(options) {
-        var globals = parseGlobal(options),
-            sys = require('sys'),
-            exec = require('child_process').exec;
-        exec("svn diff " + (options.dir ? options.dir : ".") + "| colordiff", function(err, stdout, stdin) {
-            sys.puts(stdout);
-        });
-    });
-
-program.command('ticket')
-    .description('ticket commands')
-    .option('-n --number <number>', 'ticket number')
-    .action(function(options) {
-        var globals = parseGlobal(options),
-            url = IA(globals).jira.getTicketView(),
-            exec = require('child_process').exec,
-            child;
-
-        if (options.number) {
-            url = url + options.number;
-        }
-
-        child = exec("open " + url, function(err, stdout, stdin) {
-            if (err) {
-                throw err;
-            }
-        });
-        child.on('exit', function() {
-            console.log('New tab is opened');
-        });
-    });
-
-program.parse(process.argv);
-*/
