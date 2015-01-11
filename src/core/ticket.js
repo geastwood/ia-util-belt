@@ -94,9 +94,9 @@ var recordSession = function session(data, fn) {
         type: 'expand',
         choices: [{
             key: 'e', name: 'Edit', value: 'edit'
-        },/* {
+        }, {
             key: 'c', name: 'Command', value: 'command'
-        },*/ {
+        }, {
             key: 'p', name: 'Print', value: 'print'
         }, {
             key: 'x', name: 'Exit', value: 'exit'
@@ -118,7 +118,9 @@ var recordSession = function session(data, fn) {
             return answers.templateAction === 'command';
         },
         validate: function(v) {
-            return data.cmd(v).validate();
+            // return data.cmd(v).validate();
+            // TODO validate
+            return true;
         }
     }], function(answers) {
         if (answers.templateAction === 'edit') {
@@ -144,7 +146,7 @@ var recordSession = function session(data, fn) {
 
 var command = function(data, answers, fn) {
     // console.log(data.print('pretty'));
-    data.cmd(answers.command).run();
+    data.command(answers.command);
     fn({exit: true});
 };
 
