@@ -75,14 +75,6 @@ var api = function(opts) {
                 return path.join.apply(null, parts);
             }
         },
-        jira: {
-            getBaseUrl: function() {
-                return configs.jira.baseUrl;
-            },
-            getTicketView: function() {
-                return this.getBaseUrl() + '/browse/';
-            }
-        },
         util: {
             getUser: function() {
                 userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
@@ -102,16 +94,12 @@ var api = function(opts) {
                 }
                 return this.getUserConfigFolder('scripts', file);
             },
-            isTruckFolder: function(path) {
-                return path.indexOf(configs.workingCopies.trunk.frontend) >= 0  ||
-                       configs.workingCopies.trunk.backend === path;
-            },
             getJiraPassword: function() {
                 userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.jiraPassword;
             }
         },
-        svn: {
+        svn: { // Currently unused
             getBase: function() {
                 return configs.cvs.svn.url + configs.cvs.svn[app];
             },

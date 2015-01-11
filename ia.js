@@ -3,7 +3,6 @@
 var program = require('commander'),
     chalk   = require('chalk'),
     pkg     = require(__dirname + '/package.json'),
-    control = require(__dirname + '/src/core/control'),
     folder  = require(__dirname + '/src/core/folder'),
     util    = require(__dirname + '/src/util'),
     IA      = require(__dirname + '/src/ia');
@@ -67,33 +66,7 @@ program
     .command('config')
     .description('config this cli')
     .action(function () {
-        require('./src/config')();
-    });
-program
-    .command('setup')
-    .description('walk thought some very basic setup steps')
-    .action(function(options) {
-        console.log('\nThis process will run initial setups, save username, create folder structure.\n');
-        util.yesno(function(answer) {
-            if (answer === 'no') {
-                util.print('info', 'CANCELLED BY USER', 'No damage is done.');
-                return;
-            }
-            control().username(function(username) {
-                util.print('info', 'display', 'Username is "%s"', username);
-                util.yesno(function(toCreateFolder) {
-                    if (toCreateFolder === 'no') {
-                        util.print('info', 'CANCELLED BY USER', 'No damage is done.');
-                        return;
-                    }
-                    folder().createFolder();
-                    util.print('success', 'process finished');
-                }, {message: 'create folder structure?'});
-            });
-        });
-    })
-    .on('--help', function() {
-        globalHelp();
+        require('./src/user_config')();
     });
 
     // build

@@ -5,7 +5,7 @@
 1. **node** needs to be installed first.
 2. `git clone --recursive http://git-1.rz1.intelliad.com/fliu/ia-util-belt.git ia`
 3. `cd ia`
-4. `make` // make the execuable
+4. `make` // make the executable `make linux` or `make mac`
 
 ## How to use
 
@@ -36,8 +36,7 @@ There are two sets of global conventions used in this tool, defining **applicati
 Here list all the commands available of this utility tool. They are
 
 *   **runscript [options]**       =>    run a user specified script
-*   **setup**                     walk thought some very basic setup steps
-*   **branch [options] <cmd>**    svn branch commands [checkout|switch|update]
+*   **config**                     walk thought some very basic setup steps
 *   **build [options]**           Build process releated command
 *   **watch [options]**           small watch function, watch `application/javascripts` folder for changes, if there is a change
 trigger the build process. If there is a change within the build process, the build process will restart.
@@ -52,8 +51,7 @@ trigger the build process. If there is a change within the build process, the bu
 | command | subcommand | flags  | examples |
 | -------- | -------- | ------- | --------- |
 | **runscript**     | n/a   |  `-f --file` specify the script name to run, `-a -args` specify arguments for script, `-s --slience` disable interactive mode | `ia runscript -f dev_dependency.sh` // run a custom shell script |
-| **setup**         | n/a  |  n/a    | n/a |
-| **branch**        | `checkout`, `switch`, `update` | `-t --trunk`, if specified, no **branches** will be prompt | `ia branch checkout --trunk` |
+| **config**        | n/a  |  n/a    | n/a |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
 | **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|

@@ -18,9 +18,6 @@
             }
         }
     },
-    "jira": {
-        "baseUrl": "http://jira.muc.intelliad.de"
-    },
     "cvs": {
         "svn": {
             "url": "svn://10.96.1.31/",
