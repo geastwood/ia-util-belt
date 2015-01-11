@@ -63,7 +63,12 @@ program
         console.log(' ');
         globalHelp();
     });
-
+program
+    .command('config')
+    .description('config this cli')
+    .action(function () {
+        require('./src/config')();
+    });
 program
     .command('setup')
     .description('walk thought some very basic setup steps')
