@@ -1,31 +1,34 @@
 var api,
-    fs      = require('fs'),
-    path    = require('path'),
-    prompt  = require('prompt'),
-    exec    = require('child_process').exec,
-    spawn   = require('child_process').spawn,
-    IA      = require(__dirname + '/ia'),
-    util    = require(__dirname + '/util');
+    fs          = require('fs'),
+    path        = require('path'),
+    inquirer    = require('inquirer'),
+    Q           = require('q'),
+    exec        = require('child_process').exec,
+    spawn       = require('child_process').spawn,
+    IA          = require('./ia'),
+    util        = require('./util');
 
 /**
- * called by api
- * @private
+ * get Module Name in async mode
+ * @returns {promise|*|Q.promise}
  */
-var getModuleName = function(fn) {
-    prompt.get([{
+var getModuleName = function() {
+    var defer = Q.defer();
+    inquirer.prompt([{
         name: 'moduleName',
-        description: ('What is the module name?').green,
-        message: ('module name can only be of `a-z` (small letters).').red,
-        required: true,
-        pattern: /^[a-z]+$/
-    }],
-    function(err, inputs) {
-        if (err) {
-            util.print('error', 'error', err);
-            return;
+        message: 'What is the module name?',
+        validate: function(v) {
+            var pattern = /^[a-z]+$/;
+            if (!pattern.test(v)) {
+                return 'module name can only be of `a-z` (small letters).';
+            }
+            return true;
         }
-        fn(inputs);
+    }], function(answers) {
+        defer.resolve(answers.moduleName);
     });
+
+    return defer.promise;
 },
 
 /**
@@ -166,16 +169,14 @@ actionFactory = function(options) {
 api = module.exports = function() {
     return {
         create: function() {
-            getModuleName(function(inputs) {
-                // create module root folder
-                createModule(inputs.moduleName, function(status) {
+            getModuleName().then(function(moduleName) {
+                createModule(moduleName, function(status) {
                     if (!status) {
                         return;
                     }
                     // process definition's action
-                    processDefinition('normal', inputs.moduleName);
+                    processDefinition('normal', moduleName);
                 });
-
             });
         }
     };

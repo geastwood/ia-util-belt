@@ -42,8 +42,3 @@ api = module.exports = function() {
         }
     };
 };
-
-/* DEBUG */
-// api().createFolder(function() {
-//     console.log('custom folder creation callback');
-// });
