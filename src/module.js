@@ -29,18 +29,22 @@ var getModuleName = function() {
     });
 
     return defer.promise;
-},
-
+};
 /**
- * create the module folder
+ * create module
+ *
+ * @param name
+ * @returns {*}
  */
-createModule = function(name, fn) {
+var createModule = function(name) {
+    var defer = Q.defer();
     var modulePath = resolver.getModuleFolder(name);
 
-    if (fs.existsSync(modulePath)) {
-        util.print('error', 'fail', 'Module with the name "%s" exists.', name);
-        fn(false);
-    } else {
+    fs.exists(modulePath, function(exists) {
+        defer[ exists ? 'reject' : 'resolve' ](name);
+    });
+
+    return defer.promise.then(function(name) {
         util.print('info', 'info', 'Module with the name "%s" can be created(no name conflict).', name);
         exec('mkdir ' + modulePath, function(err, stdout) {
             if (err) {
@@ -48,10 +52,12 @@ createModule = function(name, fn) {
             }
             util.stdout(stdout);
             util.print('success', 'created', 'Folder "%s" is created at %s.', name, path.dirname(modulePath));
-            fn(true);
+            processDefinition('normal', name);
         });
-    }
-},
+    }).catch(function(name) {
+        util.print('error', 'fail', 'Module with the name "%s" exists.', name);
+    });
+};
 
                             /*****************/
                             /* path resolver */
@@ -60,23 +66,23 @@ createModule = function(name, fn) {
  * @private
  * @util
  */
-resolver = {
+var resolver = {
     getDefinition: function() {
         return IA().path.getLibBasePath('templates', 'module', 'definitions');
     },
-    getLocalMoldule: function() {
+    getLocalModule: function() {
         return IA().path.getLibBasePath('templates', 'module');
     },
     getModuleFolder: function(name) {
         return path.join(IA({app: 'frontend', branch: 'trunk'}).path.getBasePath('application', 'modules'), name);
     }
-},
+};
 
 /**
  * Process definition
  *
  */
-processDefinition = function(name, moduleName) {
+var processDefinition = function(name, moduleName) {
     var definition = require(path.join(resolver.getDefinition(), name)),
         defName = definition.name,
         actions = definition.actions;
@@ -90,7 +96,7 @@ processDefinition = function(name, moduleName) {
             modulePath: resolver.getModuleFolder(moduleName)
         })[action.type](action);
     });
-},
+};
 
 /**
  * receive options from process definition
@@ -98,7 +104,7 @@ processDefinition = function(name, moduleName) {
  * @param {Object} options {definitionName:String, modulePath:String, moduleName:String}
  * @return {Object} Interface, which receive detail of the action
  */
-actionFactory = function(options) {
+var actionFactory = function(options) {
     var moduleFolder = resolver.getModuleFolder(options.moduleName);
 
     return {
@@ -127,7 +133,7 @@ actionFactory = function(options) {
             }
 
             if (configs.contentFrom) {
-                content = fs.readFileSync(path.join(resolver.getLocalMoldule(), configs.contentFrom), 'utf8');
+                content = fs.readFileSync(path.join(resolver.getLocalModule(), configs.contentFrom), 'utf8');
                 content = util.interpolate(content, options);
             }
 
@@ -149,7 +155,7 @@ actionFactory = function(options) {
         },
         copy: function(configs) {
             var targetPath = path.join(moduleFolder, configs.target),
-                fromPath = path.join(resolver.getLocalMoldule(), configs.from);
+                fromPath = path.join(resolver.getLocalModule(), configs.from);
 
             util.print('info', 'copy', 'Copy file "%s" to "%s".', configs.from, configs.target);
             exec(['cp', fromPath, targetPath].join(' '), function(err, stdout) {
@@ -169,15 +175,7 @@ actionFactory = function(options) {
 api = module.exports = function() {
     return {
         create: function() {
-            getModuleName().then(function(moduleName) {
-                createModule(moduleName, function(status) {
-                    if (!status) {
-                        return;
-                    }
-                    // process definition's action
-                    processDefinition('normal', moduleName);
-                });
-            });
+            getModuleName().then(createModule);
         }
     };
 };
