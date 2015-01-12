@@ -1,8 +1,8 @@
-var api,
-    chalk   = require('chalk'),
-    spawn   = require('child_process').spawn,
-    util    = require(__dirname + '/util'),
-    IA      = require(__dirname + '/ia');
+var api;
+var chalk   = require('chalk');
+var spawn   = require('child_process').spawn;
+var util    = require(__dirname + '/util');
+var IA      = require(__dirname + '/ia');
 
 var map = {
     development: 'build-development',

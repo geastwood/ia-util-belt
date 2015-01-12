@@ -1,7 +1,7 @@
-var fs      = require('fs'),
-    chalk   = require('chalk'),
-    util    = require(__dirname + '/util'),
-    prompt   = require('prompt');
+var fs      = require('fs');
+var chalk   = require('chalk');
+var util    = require(__dirname + '/util');
+var prompt  = require('prompt');
 
 var buildconfig = function(path) {
 

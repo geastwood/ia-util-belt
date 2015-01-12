@@ -30,10 +30,11 @@ var getModuleName = function() {
 
     return defer.promise;
 };
+
 /**
  * create module
  *
- * @param name
+ * @param {String} name
  * @returns {*}
  */
 var createModule = function(name) {

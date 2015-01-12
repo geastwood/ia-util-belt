@@ -1,23 +1,24 @@
-var configs = require(__dirname + '/../config/config.json'),
-    homeFolder = process.env.HOME,
-    fs = require('fs'),
-    path = require('path'),
-    userConfig,
-    getUserConfigFolder = function() {
-        var parts = [homeFolder, '.ia'];
-        [].forEach.call(arguments, function(arg) {
-            parts.push(arg);
-        });
-        return path.join.apply(null, parts);
-    };
+var configs         = require(__dirname + '/../config/config.json');
+var homeFolder      = process.env.HOME;
+var fs              = require('fs');
+var path            = require('path');
+var userConfig;
+var getUserConfigFolder = function() {
+    var parts = [homeFolder, '.ia'];
+    [].forEach.call(arguments, function(arg) {
+        parts.push(arg);
+    });
+    return path.join.apply(null, parts);
+};
 
 var api = function(opts) {
+    var app, branch;
     opts = opts || {};
 
     // app  = [frontend|backend]
     // branch = [trunk|current|release]
-    var app  = opts.app || 'frontend',
-        branch = opts.branch || 'trunk';
+    app = opts.app || 'frontend';
+    branch = opts.branch || 'trunk';
 
     return {
         path: {
@@ -97,21 +98,6 @@ var api = function(opts) {
             getJiraPassword: function() {
                 userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.jiraPassword;
-            }
-        },
-        svn: { // Currently unused
-            getBase: function() {
-                return configs.cvs.svn.url + configs.cvs.svn[app];
-            },
-            getBranchFolder: function() {
-                return this.getBase() + '/branches';
-            },
-            getUserBranchFolder: function() {
-                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
-                var config = {username: userConfig.username};
-                return (configs.cvs.svn.userUrl + configs.cvs.svn[app] + '/').replace(/\{\{(\S+)}}/, function(a, match) {
-                    return config[match];
-                });
             }
         }
     };

@@ -58,4 +58,3 @@ api = module.exports = function() {
         }
     };
 };
-// console.log(path.resolve(__dirname, '..'));

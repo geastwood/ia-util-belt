@@ -1,16 +1,16 @@
-var _ = require('lodash');
-var fs = require('fs');
-var path = require('path');
-var inquirer = require('inquirer');
-var ticket = require('./core/ticket');
-var Manager = require('../lib/ticket-template-core/src/data/manager');
-var provider = require('../lib/ticket-template-core/src/data/provider');
-var ttUtil = require('../lib/ticket-template-core/src/util');
-var util = require('./util');
-var chalk = require('chalk');
-var IA = require('./ia');
+var _           = require('lodash');
+var fs          = require('fs');
+var path        = require('path');
+var inquirer    = require('inquirer');
+var ticket      = require('./core/ticket');
+var Manager     = require('../lib/ticket-template-core/src/data/manager');
+var provider    = require('../lib/ticket-template-core/src/data/provider');
+var ttUtil      = require('../lib/ticket-template-core/src/util');
+var util        = require('./util');
+var chalk       = require('chalk');
+var IA          = require('./ia');
+var spawn       = require('child_process').spawn;
 var templateDataFolder = IA().util.getUserConfigFolder('data', 'templates');
-var spawn = require('child_process').spawn;
 
 module.exports = {
     edit: function() {

@@ -1,6 +1,6 @@
-var fs = require('fs'),
-    util = require(__dirname + '/util'),
-    chalk = require('chalk');
+var fs = require('fs');
+var util = require(__dirname + '/util');
+var chalk = require('chalk');
 
 module.exports =function(path) {
 
@@ -10,11 +10,11 @@ module.exports =function(path) {
     return {
         read: function(fn) {
             fs.readFile(path, 'utf8', function(err, data) {
+                var mode = modeRegex.exec(data),
+                    debug = debugRegex.exec(data), modeFlag, debugFlag;
                 if (err) {
                     fn(err);
                 }
-                var mode = modeRegex.exec(data),
-                debug = debugRegex.exec(data), modeFlag, debugFlag;
                 if (mode === null || debug === null) {
                     fn('error when parsing.');
                 }

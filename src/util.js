@@ -1,6 +1,6 @@
-var prompt      = require('prompt'),
-    chalk       = require('chalk'),
-    nodeUtil    = require('util');
+var prompt      = require('prompt');
+var chalk       = require('chalk');
+var nodeUtil    = require('util');
 
 var util = {
     parseGlobal: function(options) {
