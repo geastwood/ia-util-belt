@@ -1,105 +1,112 @@
-var fs      = require('fs');
-var chalk   = require('chalk');
-var util    = require(__dirname + '/util');
-var prompt  = require('prompt');
+var fs          = require('fs');
+var chalk       = require('chalk');
+var util        = require(__dirname + '/util');
+var prompt      = require('prompt');
+var Q           = require('q');
+var _           = require('lodash');
+var inquirer    = require('inquirer');
+
+var getSelection = function(data) {
+    var defer = Q.defer();
+
+    inquirer.prompt([{
+        name: 'selectedId',
+        type: 'checkbox',
+        choices: data.map(function(v, i) {
+            return {name: v.path + v.text, value: i};
+        }),
+        message: 'Please select module to delete'
+    }], function(answers) {
+        defer.resolve(answers.selectedId.map(function(id) {
+            return data[id];
+        }));
+    });
+
+    return defer.promise;
+};
+
+var write = function(path, data) {
+    var defer = Q.defer();
+    fs.writeFile(path, JSON.stringify(data, null, 4), 'utf8', function(err) {
+        util.print('success', 'write', 'Data write to "%s"', path);
+        defer.resolve(true);
+    });
+    return defer.promise;
+};
+
+// TODO
+var helper = {
+    shouldDelete: function (pkgs, target) {
+        pkgs.forEach(function(pkg) {
+            if (pkg.fileIncludes) {
+                _.remove(pkg.fileIncludes, function(item) {
+                    return _.isEqual(item, target);
+                });
+            }
+        });
+        return pkgs;
+    }
+};
 
 var buildconfig = function(path) {
-
-    var data = dataManager(path);
-
+    var raw = null;
     return {
-        findFile: function(pattern, opts) {
-            var that = this;
-            data.getData(function(content) {
-
-                var pkgs = content.pkgs,
-                    test = new RegExp(pattern, 'i'),
-                    rst = [];
-
-                pkgs.forEach(function(pkg) {
-                    if (pkg.fileIncludes) {
-                        pkg.fileIncludes.forEach(function(file) {
-                            if (test.test(file.text)) {
-                                rst.push(file);
-                            }
-                        });
-                    }
-                });
-
-                if (opts.toRemove) {
-                    that.toRemove(rst);
-                } else {
-                    that.format(rst);
-                }
+        getData: function() {
+            return Q.nfbind(fs.readFile)(path, 'utf8').then(JSON.parse);
+        },
+        getPkgs: function() {
+            return this.getData().then(function(data) {
+                raw = data;
+                return data.pkgs;
             });
         },
-        format: function(rst) {
-            if (rst.length === 0) {
+        removePkgs: function(toRemovePkgs) {
+            toRemovePkgs.forEach(function(target) {
+                raw.pkgs = helper.shouldDelete(raw.pkgs, target);
+            });
+            return raw;
+        },
+        find: function(pattern) {
+            return this.getPkgs().then(function(pkgs) {
+                var test = new RegExp(pattern, 'i');
+
+                return pkgs.reduce(function(initial, curr) {
+                    var fileIncludes = curr.fileIncludes || [];
+                    return _.union(initial, fileIncludes.filter(function(file) {
+                        return test.test(file.text);
+                    }));
+                }, []);
+            });
+        },
+        getMatched: function(pattern) {
+            return this.find(pattern).then(function(rst) {
+                if (rst.length === 0) {
+                    throw new Error('empty');
+                }
+                return rst;
+            });
+        },
+        remove: function(pattern) {
+            this.getMatched(pattern).then(function(data) {
+                return getSelection(data);
+            }).then(function(toRemovePkgs) {
+                return this.removePkgs(toRemovePkgs);
+            }.bind(this)).then(function(data) {
+                return write(path, data);
+            }).catch(function() { // reject with status false
                 console.log(chalk.red('\nNo result found.\n'));
-                return;
-            }
-            rst.forEach(function(file, i) {
-                console.log(chalk.green('match #' + (i + 1) + ' --> ') + '%s%s', file.path, file.text);
             });
         },
-        toRemove: function(rst) {
-            this.format(rst);
-            if (rst.length === 0) {
-                return;
-            }
-            prompt.get([{
-                name: 'id',
-                description: ('Which to delete?').green,
-                pattern: /\d+/
-            }], function(err, prompts) {
-                if (err) {
-                    console.log('Error: cancelled by user.');
-                    return;
+        print: function(pattern) {
+            this.organized(pattern).then(function(struct) {
+                if (struct.status === 'empty') {
+                    console.log(chalk.red('\nNo result found.\n'));
+                } else {
+                    struct.data.matchRst.forEach(function(file, i) {
+                        console.log(chalk.green('match #' + (i + 1) + ' --> ') + '%s%s', file.path, file.text);
+                    });
                 }
-                data.getData(function(content) {
-                    var pkgs = content.pkgs;
-                    pkgs.forEach(function(pkg) {
-                        if (pkg.fileIncludes) {
-                            var id = pkg.fileIncludes.indexOf(rst[prompts.id - 1]);
-                            if (id >= 0) {
-                                pkg.fileIncludes.splice(id, 1);
-                            }
-                        }
-                    });
-                    content = JSON.stringify(content, null, '    ');
-                    fs.writeFile(path, content, function(err) {
-                        if (err) {
-                            throw err;
-                        }
-                        util.print('success', 'write', 'Data write to "%s"', path);
-                    });
-
-                });
             });
         }
     };
 };
-
-var dataManager = function(path) {
-    var hasData = false, content = null;
-
-    return {
-        getData: function(fn) {
-            if (hasData === false) {
-                util.print('info', 'info', 'Search in "%s".', path);
-                fs.readFile(path, 'utf8', function(err, data) {
-                    if (err) {
-                        throw err;
-                    }
-                    hasData = true;
-                    content = JSON.parse(data);
-                    fn(content);
-                });
-            } else {
-                fn(content);
-            }
-        }
-    };
-};
-
-module.exports = buildconfig;

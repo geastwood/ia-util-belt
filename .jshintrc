@@ -2,5 +2,5 @@
     "undef": true,
     "unused": true,
     "node": true,
-    "predef": ["node", "devel"]
+    "predef": ["node", "devel", "require"]
 }

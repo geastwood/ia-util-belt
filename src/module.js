@@ -1,12 +1,12 @@
-var api,
-    fs          = require('fs'),
-    path        = require('path'),
-    inquirer    = require('inquirer'),
-    Q           = require('q'),
-    exec        = require('child_process').exec,
-    spawn       = require('child_process').spawn,
-    IA          = require('./ia'),
-    util        = require('./util');
+var fs          = require('fs');
+var path        = require('path');
+var inquirer    = require('inquirer');
+var Q           = require('q');
+var exec        = require('child_process').exec;
+var spawn       = require('child_process').spawn;
+var IA          = require('./ia');
+var util        = require('./util');
+var api;
 
 /**
  * get Module Name in async mode

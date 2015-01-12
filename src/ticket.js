@@ -178,7 +178,7 @@ module.exports = {
             name: 'deleteList',
             type: 'checkbox',
             choices: choices,
-            message: 'Please select to delete',
+            message: 'Please select to delete'
         }], function(answers) {
             answers.deleteList.forEach(function(file) {
                 fs.unlink(path.join(templateDataFolder, file), function(err) {

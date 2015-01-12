@@ -3,7 +3,6 @@
 var program = require('commander'),
     chalk   = require('chalk'),
     pkg     = require(__dirname + '/package.json'),
-    folder  = require(__dirname + '/src/core/folder'),
     util    = require(__dirname + '/src/util'),
     IA      = require(__dirname + '/src/ia');
 
@@ -191,11 +190,12 @@ program.command('buildconfig')
                 component: IA(globals).path.getComponentBuildConfig(),
                 module: IA(globals).path.getModuleBuildConfig()
             },
-            buildConfig = require(__dirname + '/src/buildconfig')(paths[(options.module ? 'module': 'component')]);
+            buildConfig = require('./src/buildconfig');
 
-        if (options.grep) {
-            buildConfig.findFile(options.grep, {toRemove: options['delete']});
-        }
+        buildConfig(paths[(options.module ? 'module': 'component')]).remove(options.grep);
+        // if (options.grep) {
+        //     buildConfig.findFile(options.grep, {toRemove: options['delete']});
+        // }
     })
     .on('--help', function() {
         globalHelp();
