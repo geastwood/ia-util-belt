@@ -93,7 +93,7 @@ module.exports = {
         var presets = Manager.getPresets(),
             files = presets.files.map(function(filename) {
                 return {
-                    name: filename.charAt(0).toUpperCase() + filename.slice(1) + ' Template',
+                    name: (filename.charAt(0).toUpperCase() + filename.slice(1) + ' Template').replace('_', ' '),
                     value: filename
                 };
             }),
