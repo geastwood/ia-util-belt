@@ -50,7 +50,7 @@ trigger the build process. If there is a change within the build process, the bu
 
 | command | subcommand | flags  | examples |
 | -------- | -------- | ------- | --------- |
-| **runscript**     | n/a   |  `-f --file` specify the script name to run, `-a -args` specify arguments for script, `-s --slience` disable interactive mode | `ia runscript -f dev_dependency.sh` // run a custom shell script |
+| **runscript**     | n/a   |  `-f --file` specify the script name to run, `-a -args` specify arguments for script, `-s --silence` disable interactive mode | `ia runscript -f dev_dependency.sh` // run a custom shell script |
 | **config**        | n/a  |  n/a    | n/a |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
@@ -67,7 +67,7 @@ To exec script using *runscript* command a file must be specified, e.g. *ia runs
 There are two types of scripts can be run with this command,
 
 1. .sh => bash scripts
-2. .js => javasript script
+2. .js => javascript script
 
 All predefined scripts are under [scripts](scripts), which will be copied to *~/.ia/scripts* folder during **make** process. When this command is run, it will search scripts by name in *~/ia/scripts* folder.
 
@@ -77,6 +77,7 @@ All predefined scripts are under [scripts](scripts), which will be copied to *~/
 * `ia runscript -s -f clean_repo.sh -a "release"` // remove **frontend** and **services** from /data/intelliad/current/
 * `ia runscript -f fr_post_checkout.js` // add two user config `config.user.php` and `config.important.inc.php`
 * `ia runscript -f service_post_checkout.js` // create **log/application.log** chmod `log` folder recursively
+* `ia runscript -f folder_struct.js` // create default folder structure, if exists, won't overwrite
 
 ### Get help by `-h` or `--help`
 
@@ -92,6 +93,10 @@ It's always possible specify `-h` or `--help` for a detailed help section. For e
 It will not touch user config file under `~/.ia`, it may copy additional *scripts* to `~/.ia/scripts` folder
 
 ## Where it installed
+
+For build, there are two targets, `mac` and `linux` (default)
+
+if only run `make` it will build for linux, to build make run `make mac`.
 
 * library at `/usr/local/lib/ia`
 * user specific config under `~/.ia/`
@@ -117,3 +122,4 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 * 2014-12-17 (Add) Add frontend and service config && chmod log     (v0.1.18)
 * 2014-12-17 (Add) Add `ia branch update` for updating rpos         (v0.1.20)
 * 2014-01-05 (Add) Add ticket template related functions            (v0.1.21)
+* 2015-01-05 (Add) massive refactor                                 (v0.2.00)

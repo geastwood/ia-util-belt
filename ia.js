@@ -98,19 +98,19 @@ program.command('build')
         console.log('    %s    %s', '-ftd', 'frontend  trunk  development');
         console.log('    %s    %s', '-ftp', 'frontend  trunk  part');
         console.log('    %s    %s', '-ftl', 'frontend  trunk  legacy');
-        console.log('    %s    %s', '-fts', 'frontend  trunk  service-client');
+        console.log('    %s    %s', '-ftv', 'frontend  trunk  service-client');
         console.log('    %s    %s', '-ftm', 'frontend  trunk  modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-fcd', 'frontend current development');
         console.log('    %s    %s', '-fcp', 'frontend current part');
         console.log('    %s    %s', '-fcl', 'frontend current legacy');
-        console.log('    %s    %s', '-fcs', 'frontend current service-client');
+        console.log('    %s    %s', '-fcv', 'frontend current service-client');
         console.log('    %s    %s', '-fcm', 'frontend current modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-frd', 'frontend release development');
         console.log('    %s    %s', '-frp', 'frontend release part');
         console.log('    %s    %s', '-frl', 'frontend release legacy');
-        console.log('    %s    %s', '-frs', 'frontend release service-client');
+        console.log('    %s    %s', '-frv', 'frontend release service-client');
         console.log('    %s    %s', '-frm', 'frontend release modules');
         console.log('    -------------------------------------');
         console.log('    %s    %s', '-st',  'service  release');
@@ -128,6 +128,7 @@ program.command('watch')
     .action(function(options) {
         var util = require(__dirname + '/src/util'),
             watcher = require(__dirname + '/src/watch');
+
         watcher().watch(util.parseGlobal(options));
     })
     .on('--help', function() {
@@ -213,7 +214,7 @@ program.command('find <pattern>')
             child,
             targetPath = IA(util.parseGlobal(options)).path.getBasePath();
 
-        if (options['definition']) {
+        if (options.definition) {
             pattern = 'Ext\\d?\\.define\\(.*' + pattern;
         }
 
