@@ -4,6 +4,7 @@ var program = require('commander'),
     chalk   = require('chalk'),
     pkg     = require(__dirname + '/package.json'),
     util    = require(__dirname + '/src/util'),
+    _       = require('lodash'),
     IA      = require(__dirname + '/src/ia');
 
 // provide the version from package.json
@@ -190,12 +191,10 @@ program.command('buildconfig')
                 component: IA(globals).path.getComponentBuildConfig(),
                 module: IA(globals).path.getModuleBuildConfig()
             },
-            buildConfig = require('./src/buildconfig');
+            buildConfig = require('./src/buildconfig'),
+            command = typeof options['delete'] === 'undefined' ? 'print' : 'remove';
 
-        buildConfig(paths[(options.module ? 'module': 'component')]).print(options.grep);
-        // if (options.grep) {
-        //     buildConfig.findFile(options.grep, {toRemove: options['delete']});
-        // }
+        buildConfig(paths[(options.module ? 'module': 'component')])[command](options.grep);
     })
     .on('--help', function() {
         globalHelp();
