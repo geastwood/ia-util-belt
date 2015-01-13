@@ -98,15 +98,15 @@ var buildconfig = function(path) {
             });
         },
         print: function(pattern) {
-            this.organized(pattern).then(function(struct) {
-                if (struct.status === 'empty') {
-                    console.log(chalk.red('\nNo result found.\n'));
-                } else {
-                    struct.data.matchRst.forEach(function(file, i) {
-                        console.log(chalk.green('match #' + (i + 1) + ' --> ') + '%s%s', file.path, file.text);
-                    });
-                }
+            this.getMatched(pattern).then(function(data) {
+                data.forEach(function(file, i) {
+                    console.log(chalk.green('match #' + (i + 1) + ' --> ') + '%s%s', file.path, file.text);
+                });
+            }).catch(function() { // reject with status false
+                console.log(chalk.red('\nNo result found.\n'));
             });
         }
     };
 };
+
+module.exports = buildconfig;

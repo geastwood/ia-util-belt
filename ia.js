@@ -192,7 +192,7 @@ program.command('buildconfig')
             },
             buildConfig = require('./src/buildconfig');
 
-        buildConfig(paths[(options.module ? 'module': 'component')]).remove(options.grep);
+        buildConfig(paths[(options.module ? 'module': 'component')]).print(options.grep);
         // if (options.grep) {
         //     buildConfig.findFile(options.grep, {toRemove: options['delete']});
         // }
