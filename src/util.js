@@ -42,7 +42,7 @@ var util = {
      */
     yesno: function(opts) {
         var defer = Q.defer();
-        var config = _.defaults(opts, {
+        _.defaults(opts || {}, {
             message: 'continue?',
             'defaultYes': true
         });
@@ -50,8 +50,8 @@ var util = {
         inquirer.prompt([{
             name: 'yesno',
             type: 'confirm',
-            message: config.message,
-            'default': config.defaultYes
+            message: opts.message,
+            'default': opts.defaultYes
         }], function(answers) {
             defer.resolve(answers.yesno);
         });
