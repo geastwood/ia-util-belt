@@ -26,6 +26,7 @@ program
     .option('-s --silence', 'run in silent, no promot')
     .option('-a --args <args>', 'Provide arguments')
     .action(function(options) {
+        var opts = {};
 
         function runscript() {
             var scriptrunner;
@@ -36,14 +37,13 @@ program
         if (options.silence) {
             runscript();
         } else {
-            util.yesno(function(answer) {
-                if (answer === 'no') {
+            opts.message = 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?';
+            util.yesno(opts).then(function(toContinue) {
+                if (toContinue === false) {
                     util.print('info', 'CANCELLED BY USER', 'No damage is done.');
                     return;
                 }
                 runscript();
-            }, {
-                message: 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?'
             });
         }
     })

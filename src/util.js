@@ -1,6 +1,8 @@
-var prompt      = require('prompt');
+var inquirer    = require('inquirer');
 var chalk       = require('chalk');
 var nodeUtil    = require('util');
+var Q           = require('q');
+var _           = require('lodash');
 
 var util = {
     parseGlobal: function(options) {
@@ -33,23 +35,28 @@ var util = {
         });
         return config;
     },
-    yesno: function(fn, opts) {
-        var answer = 'no';
-        opts = opts || {};
-
-        prompt.get([{
-            name:   'yesno',
-            message: (opts.message || 'continue?').green,
-            validator: /(yes|no)/,
-            'default': opts['default'] || 'yes'
-        }], function(err, inputs) {
-            if (err) {
-                console.log('Error: cancelled by user.');
-                return;
-            }
-            answer = inputs.yesno;
-            fn(answer);
+    /**
+     * confirm utility, return promise for interaction
+     * @param opts
+     * @returns {promise|*|Q.promise}
+     */
+    yesno: function(opts) {
+        var defer = Q.defer();
+        var config = _.defaults(opts, {
+            message: 'continue?',
+            'defaultYes': true
         });
+
+        inquirer.prompt([{
+            name: 'yesno',
+            type: 'confirm',
+            message: config.message,
+            'default': config.defaultYes
+        }], function(answers) {
+            defer.resolve(answers.yesno);
+        });
+
+        return defer.promise;
     },
     print: function(type, action) {
         var colorMap = {
