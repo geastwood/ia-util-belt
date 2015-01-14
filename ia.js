@@ -139,25 +139,16 @@ program
     .option('-r --release', 'use release')
     .option('-c --current', 'use current')
     .action(function(cmd, options) {
-        var util = require(__dirname + '/src/util'),
-            iniFile = IA(util.parseGlobal(options)).path.getAppIni(),
-            devmode = require(__dirname + '/src/devmode')(iniFile);
+        var devmode = require('./src/devmode'), iniFile;
 
-        if (cmd === 'is') {
-            devmode.read(function(err, data) {
-                if (err) {
-                    throw err;
-                }
-                devmode.log(data.isOn, iniFile);
-            });
-        } else {
-            devmode.update(cmd, function(err, data) {
-                if (err) {
-                    throw err;
-                }
-                devmode.log(data.isOn, iniFile);
-            });
-        }
+        prompt.getBranch(options).then(function(opts) {
+            iniFile = IA(opts).path.getAppIni();
+            return devmode(iniFile)[(cmd === 'is') ? 'load' : 'update'](cmd);
+        }).then(function(status) {
+            util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
+                chalk[(status.isOn ? 'green' : 'red')](status.isOn ? 'ON' : 'OFF'),
+                iniFile);
+        });
     })
     .on('--help', function() {
         console.log(chalk.green.bold('  Available commands:'));

@@ -116,3 +116,9 @@ module.exports.getBuildOptions = function(options) {
 
     return app({rst: {}, args: options}).then(branch).then(target);
 };
+module.exports.getApp = function(options) {
+    return factory.create('app')({rst: {}, args: options});
+};
+module.exports.getBranch = function(options) {
+    return factory.create('branch')({rst: {}, args: options});
+};

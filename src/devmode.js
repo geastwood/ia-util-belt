@@ -1,42 +1,40 @@
-var fs = require('fs');
-var util = require(__dirname + '/util');
-var chalk = require('chalk');
+var fs      = require('fs');
+var Q       = require('q');
 
-module.exports =function(path) {
+module.exports = function(path) {
 
     var modeRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.developerMode(?:\s*)=(?:\s)(\d)/gm,
-    debugRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.debug(?:\s*)=(?:\s)(\d)$/gm;
+        debugRegex = /(?:\[development\s*:\s*developmentBase[\s\S]*)^app\.debug(?:\s*)=(?:\s)(\d)$/gm;
 
     return {
-        read: function(fn) {
-            fs.readFile(path, 'utf8', function(err, data) {
+        readFile: Q.nfbind(fs.readFile)(path, 'utf8'),
+        load: function() {
+            return this.readFile.then(function (data) {
                 var mode = modeRegex.exec(data),
+                    defer = Q.defer(),
                     debug = debugRegex.exec(data), modeFlag, debugFlag;
-                if (err) {
-                    fn(err);
-                }
+
                 if (mode === null || debug === null) {
-                    fn('error when parsing.');
+                    defer.reject('error when parsing.');
                 }
                 modeFlag = parseInt(mode[1], 10);
                 debugFlag = parseInt(mode[1], 10);
 
-                fn(null, {
+                defer.resolve({
                     isOn: modeFlag && debugFlag,
                     mode: modeFlag,
                     debug: debugFlag,
                     content: data
                 });
+
+                return defer.promise;
             });
         },
-        update: function(state, fn) {
+        update: function(action) {
             // on, off
-            this.read(function(err, data) {
-                var mode, debug;
-                if (err) {
-                    fn(err);
-                }
-                if (state === 'on') {
+            return this.load().then(function(data) {
+                var mode, debug, defer = Q.defer();
+                if (action === 'on') {
                     mode = 1;
                     debug = 1;
                 } else {
@@ -50,14 +48,13 @@ module.exports =function(path) {
                     return full.slice(0, full.length - 1) + debug;
                 });
                 fs.writeFile(path, data.content, function(err) {
-                    fn(err, {isOn: mode && debug});
+                    if (err) {
+                        defer.reject(err);
+                    }
+                    defer.resolve({isOn: mode && debug});
                 });
+                return defer.promise;
             });
-        },
-        log: function(status, path) {
-            util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
-                        chalk[(status ? 'green' : 'red')](status ? 'ON' : 'OFF'),
-                        path);
         }
     };
 };
