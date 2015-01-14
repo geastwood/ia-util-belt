@@ -4,7 +4,6 @@ var program = require('commander'),
     chalk   = require('chalk'),
     pkg     = require(__dirname + '/package.json'),
     util    = require(__dirname + '/src/util'),
-    _       = require('lodash'),
     IA      = require(__dirname + '/src/ia');
 
 // provide the version from package.json

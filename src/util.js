@@ -60,14 +60,14 @@ var util = {
     },
     print: function(type, action) {
         var colorMap = {
-            info: 'blue',
-            error: 'red',
-            success: 'green'
-        },
-        color = colorMap[type],
-        message,
-        rest,
-        i;
+                info: 'blue',
+                error: 'red',
+                success: 'green'
+            },
+            color = colorMap[type],
+            message,
+            rest,
+            i;
 
         action = action || 'NONE';
         action = '(' + action.toUpperCase() + ')';
@@ -110,4 +110,5 @@ var util = {
         });
     }
 };
+
 module.exports = util;
