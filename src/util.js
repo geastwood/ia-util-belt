@@ -35,29 +35,103 @@ var util = {
         });
         return config;
     },
-    /**
-     * confirm utility, return promise for interaction
-     * @param opts
-     * @returns {promise|*|Q.promise}
-     */
-    yesno: function(opts) {
-        var defer = Q.defer();
-        _.defaults(opts || {}, {
-            message: 'continue?',
-            'defaultYes': true
-        });
+    parseOptions: {
+        getApp: function(opts) {
+            var defer = Q.defer();
+            var rst = opts.rst;
+            // TODO
+            if (opts.args.frontend || opts.args.service) {
+                rst.app = opts.args.frontend ? 'frontend' : 'service';
+                defer.resolve({
+                    rst: rst,
+                    args: opts.args
+                });
+            } else {
+                inquirer.prompt([{
+                    name: 'app',
+                    type: 'list',
+                    choices: [{
+                        name: 'Frontend', value: 'frontend'
+                    }, {
+                        name: 'Service', value: 'service'
+                    }],
+                    message: 'Please select application'
+                }], function(answers) {
+                    rst.app = answers.app;
+                    defer.resolve({rst: rst, args: opts.args});
 
-        inquirer.prompt([{
-            name: 'yesno',
-            type: 'confirm',
-            message: opts.message,
-            'default': opts.defaultYes
-        }], function(answers) {
-            defer.resolve(answers.yesno);
-        });
+                });
+            }
+            return defer.promise;
+        },
+        getBranch: function(opts) {
+            var defer = Q.defer(), rst = opts.rst,
+                list = ['trunk', 'release', 'current'],
+                isDefined = list.some(function(key) {
+                    return typeof opts.args[key] !== 'undefined';
+                });
+            // TODO
+            if (isDefined) {
+                list.forEach(function(key) {
+                    if (opts.args[key]) {
+                        rst.branch = key;
+                    }
+                });
+                defer.resolve({rst: rst, args: opts.args});
+            } else {
+                inquirer.prompt([{
+                    name: 'branch',
+                    type: 'list',
+                    choices: ['trunk', 'current', 'release'],
+                    message: 'Please select branch'
+                }], function(answers) {
+                    rst.branch = answers.branch;
+                    defer.resolve({
+                        rst: rst,
+                        args: opts.args
+                    });
+                });
+            }
+            return defer.promise;
+        },
+        getTarget: function(opts) {
+            var defer = Q.defer(),
+                list = ['full' ,'part', 'development', 'legacy', 'serviceclient', 'module'],
+                isDefined = list.some(function(key) {
+                    return typeof opts.args[key] !== 'undefined';
+                }),
+                rst = opts.rst;
 
-        return defer.promise;
+            // TODO
+            if (isDefined) {
+                list.forEach(function(key) {
+                    if (opts.args[key]) {
+                        rst.target = key;
+                    }
+                });
+                defer.resolve({
+                    rst: rst,
+                    args: opts.args
+                });
+            }
+            else {
+                inquirer.prompt([{
+                    name: 'target',
+                    type: 'list',
+                    choices: list,
+                    message: 'Please select a target'
+                }], function(answers) {
+                    rst.target = answers.target;
+                    defer.resolve({
+                        rst: rst,
+                        args: opts.args
+                    });
+                });
+            }
+            return defer.promise;
+        }
     },
+
     print: function(type, action) {
         var colorMap = {
                 info: 'blue',
@@ -80,9 +154,11 @@ var util = {
         rest = nodeUtil.format.apply(null, [].slice.call(arguments, 2));
         console.log(nodeUtil.format.call(null, message, rest));
     },
+
     stdout: function(data) {
         nodeUtil.print(data);
     },
+
     /**
      * Simple interpolate function
      *
@@ -112,3 +188,10 @@ var util = {
 };
 
 module.exports = util;
+//util.parseOptions.getApp({rst: {}, args: {}})
+//    .then(util.parseOptions.getBranch)
+//    .then(util.parseOptions.getTarget)
+//    .then(function(data) {
+//        console.log(data);
+//    }
+//);

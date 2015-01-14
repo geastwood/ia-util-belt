@@ -2,9 +2,10 @@
 
 var program = require('commander'),
     chalk   = require('chalk'),
-    pkg     = require(__dirname + '/package.json'),
-    util    = require(__dirname + '/src/util'),
-    IA      = require(__dirname + '/src/ia');
+    pkg     = require('./package.json'),
+    util    = require('./src/util'),
+    prompt  = require('./src/prompt'),
+    IA      = require('./src/ia');
 
 // provide the version from package.json
 program.version('Current version: ' + pkg.version);
@@ -37,7 +38,7 @@ program
             runscript();
         } else {
             opts.message = 'Sure to run script "' + chalk.green(IA().util.getScriptFile(options.file)) + '"?';
-            util.yesno(opts).then(function(toContinue) {
+            prompt.yesno(opts).then(function(toContinue) {
                 if (toContinue === false) {
                     util.print('info', 'CANCELLED BY USER', 'No damage is done.');
                     return;
@@ -82,10 +83,7 @@ program.command('build')
     .option('-v --serviceclient',   'serviceclient')
     .option('-m --module',          'module')
     .action(function(options) {
-        var build = require(__dirname + '/src/build'),
-            util = require(__dirname + '/src/util');
-
-        build.build(util.parseGlobal(options));
+        require(__dirname + '/src/build').build(options);
     })
     .on('--help', function() {
         console.log(chalk.green.bold('  Details'));
