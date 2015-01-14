@@ -198,54 +198,6 @@ program.command('buildconfig')
         globalHelp();
     });
 
-program.command('find <pattern>')
-    .description('a `grep` wrapper')
-    .option('-d --definition', 'search only ext.define, e.g. Ext.define(\'IA.util.SomeClass\')')
-    .option('-f --frontend',   'frontend flag')
-    .option('-s --service',    'service flag')
-    .option('-t --trunk',      'use trunk')
-    .option('-r --release',    'use release')
-    .option('-c --current',    'use current')
-    .action(function(pattern, options) {
-        var spawn = require('child_process').spawn,
-            child,
-            targetPath = IA(util.parseGlobal(options)).path.getBasePath();
-
-        if (options.definition) {
-            pattern = 'Ext\\d?\\.define\\(.*' + pattern;
-        }
-
-        // search recursively and case-insensitive
-        console.log('\n');
-        util.print('info', 'search', 'Searching under "%s"', targetPath);
-        console.log('\n');
-
-        child = spawn('egrep', [
-            '-i', '-R',
-            pattern,
-            targetPath,
-            '--exclude-dir', 'library',
-            '--exclude-dir', 'legacy',
-            '--exclude-dir', 'node_modules',
-            '--exclude-dir', 'tests',
-            '--exclude-dir', 'test',
-            '--exclude-dir', '.svn',
-            '--exclude-dir', 'build',
-        ]);
-        child.stdout.setEncoding('utf8');
-        child.stdout.on('data', function(stdout) {
-            // give a green color of outputs
-            var formated = stdout.replace((new RegExp(pattern, 'gmi')), function(match) {
-                return chalk.green(match);
-            });
-
-            console.log(formated.replace(new RegExp(targetPath, 'gmi'), '--'));
-        });
-    })
-    .on('--help', function() {
-        globalHelp();
-    });
-
 var apacheOptions = ['start', 'stop', 'graceful-stop', 'restart', 'reload',
     'force-reload', 'start-htcacheclean', 'stop-htcacheclean', 'status'];
 program.command('apache <cmd>')

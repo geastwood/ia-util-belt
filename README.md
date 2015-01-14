@@ -42,7 +42,6 @@ Here list all the commands available of this utility tool. They are
 trigger the build process. If there is a change within the build process, the build process will restart.
 *   **devmode [options] <cmd>**   [on|off|is] switch dev mode
 *   **buildconfig [options]**     build config related commands
-*   **find [options] <pattern>**  a `grep` wrapper exclude some temp folders, such as *library*, *legacy*, *test*, *.svn*
 *   **apache <cmd>**              apache commands wrapper, delegate to service apache2
 *   **module <cmd>**              contains frontend module related functions, e.g, create empty module
 
@@ -58,7 +57,6 @@ trigger the build process. If there is a change within the build process, the bu
 | **apache**        | `start`, `stop`, `restart` (support all apache commands, here lists the often-used ones)|n/a| `ia apache restart` // restart apache2 service|
 | **module**        | `create` | n/a | `ia module create` // create empty frontend module|
 | **buildconfig**   | n/a | `-g --grep <string>`, `-d --delete`, `-m --module`, `-t --trunk'`, `-r --release`, `-c --current` | `ia buildconfig -tgd google` // prompt to delete module contains name *google* in build config file|
-| **find**          | n/a | `-d --definition`, `-f --frontend`, `-s --service`, `-t --trunk`, `-r --release`, `-c --current`| `ia find -dt google` // find in frontend trunk Ext classes name contains *google*|
 
 #### `runscript` command
 
@@ -120,6 +118,7 @@ The library folder `ia` is created under `/usr/local/lib/` during `make` command
 * 2014-12-16 (Fix) replace all prompt colors                        (v0.1.16)
 * 2014-12-17 (Add) Add remove repo scripts                          (v0.1.17)
 * 2014-12-17 (Add) Add frontend and service config && chmod log     (v0.1.18)
-* 2014-12-17 (Add) Add `ia branch update` for updating rpos         (v0.1.20)
+* 2014-12-17 (Add) Add `ia branch update` for updating repos        (v0.1.20)
 * 2014-01-05 (Add) Add ticket template related functions            (v0.1.21)
 * 2015-01-05 (Add) massive refactor                                 (v0.2.00)
+* 2015-01-12 (Remove) remove unused command such as branch find     (v0.2.01)
