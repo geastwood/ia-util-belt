@@ -83,7 +83,7 @@ program.command('build')
     .option('-v --serviceclient',   'serviceclient')
     .option('-m --module',          'module')
     .action(function(options) {
-        require(__dirname + '/src/build').build(options);
+        require('./src/build').build(options);
     })
     .on('--help', function() {
         console.log(chalk.green.bold('  Details'));

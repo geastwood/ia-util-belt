@@ -1,6 +1,6 @@
 <?php
 
-class {{moduleName|capitilize}}_ActionController extends IA_Controller
+class {{moduleName|capitalize}}_ActionController extends IA_Controller
 {
 
 }

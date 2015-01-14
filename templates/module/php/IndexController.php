@@ -1,6 +1,6 @@
 <?php
 
-class {{moduleName|capitilize}}_IndexController extends IA_Controller
+class {{moduleName|capitalize}}_IndexController extends IA_Controller
 {
 
     /**

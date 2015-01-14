@@ -2,7 +2,7 @@
 /**
  * Bootstrap for module channels
  */
-class {{moduleName|capitilize}}_Bootstrap extends Zend_Application_Module_Bootstrap
+class {{moduleName|capitalize}}_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
 }

@@ -1,10 +1,8 @@
-var inquirer    = require('inquirer');
 var chalk       = require('chalk');
 var nodeUtil    = require('util');
-var Q           = require('q');
-var _           = require('lodash');
 
 var util = {
+
     parseGlobal: function(options) {
         var config = {app: null, branch: null, flag: null},
             groups = {
@@ -35,103 +33,6 @@ var util = {
         });
         return config;
     },
-    parseOptions: {
-        getApp: function(opts) {
-            var defer = Q.defer();
-            var rst = opts.rst;
-            // TODO
-            if (opts.args.frontend || opts.args.service) {
-                rst.app = opts.args.frontend ? 'frontend' : 'service';
-                defer.resolve({
-                    rst: rst,
-                    args: opts.args
-                });
-            } else {
-                inquirer.prompt([{
-                    name: 'app',
-                    type: 'list',
-                    choices: [{
-                        name: 'Frontend', value: 'frontend'
-                    }, {
-                        name: 'Service', value: 'service'
-                    }],
-                    message: 'Please select application'
-                }], function(answers) {
-                    rst.app = answers.app;
-                    defer.resolve({rst: rst, args: opts.args});
-
-                });
-            }
-            return defer.promise;
-        },
-        getBranch: function(opts) {
-            var defer = Q.defer(), rst = opts.rst,
-                list = ['trunk', 'release', 'current'],
-                isDefined = list.some(function(key) {
-                    return typeof opts.args[key] !== 'undefined';
-                });
-            // TODO
-            if (isDefined) {
-                list.forEach(function(key) {
-                    if (opts.args[key]) {
-                        rst.branch = key;
-                    }
-                });
-                defer.resolve({rst: rst, args: opts.args});
-            } else {
-                inquirer.prompt([{
-                    name: 'branch',
-                    type: 'list',
-                    choices: ['trunk', 'current', 'release'],
-                    message: 'Please select branch'
-                }], function(answers) {
-                    rst.branch = answers.branch;
-                    defer.resolve({
-                        rst: rst,
-                        args: opts.args
-                    });
-                });
-            }
-            return defer.promise;
-        },
-        getTarget: function(opts) {
-            var defer = Q.defer(),
-                list = ['full' ,'part', 'development', 'legacy', 'serviceclient', 'module'],
-                isDefined = list.some(function(key) {
-                    return typeof opts.args[key] !== 'undefined';
-                }),
-                rst = opts.rst;
-
-            // TODO
-            if (isDefined) {
-                list.forEach(function(key) {
-                    if (opts.args[key]) {
-                        rst.target = key;
-                    }
-                });
-                defer.resolve({
-                    rst: rst,
-                    args: opts.args
-                });
-            }
-            else {
-                inquirer.prompt([{
-                    name: 'target',
-                    type: 'list',
-                    choices: list,
-                    message: 'Please select a target'
-                }], function(answers) {
-                    rst.target = answers.target;
-                    defer.resolve({
-                        rst: rst,
-                        args: opts.args
-                    });
-                });
-            }
-            return defer.promise;
-        }
-    },
-
     print: function(type, action) {
         var colorMap = {
                 info: 'blue',
@@ -175,7 +76,7 @@ var util = {
             data = config[parts[0]],
             actions = parts.slice(1),
             actionMaps = {
-                capitilize: function(v) {
+                capitalize: function(v) {
                     return v.charAt(0).toUpperCase() + v.substring(1);
                 }
             };
@@ -188,10 +89,3 @@ var util = {
 };
 
 module.exports = util;
-//util.parseOptions.getApp({rst: {}, args: {}})
-//    .then(util.parseOptions.getBranch)
-//    .then(util.parseOptions.getTarget)
-//    .then(function(data) {
-//        console.log(data);
-//    }
-//);
