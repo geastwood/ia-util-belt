@@ -174,7 +174,7 @@ program.command('buildconfig')
     .option('-r --release', 'use release')
     .option('-c --current', 'use current')
     .action(function(options) {
-        var util = require(__dirname + '/src/util'),
+        var util = require('./src/util'),
             globals = util.parseGlobal(options),
             paths = {
                 component: IA(globals).path.getComponentBuildConfig(),
@@ -221,7 +221,7 @@ program.command('module <cmd>')
             util.print('error', 'wrong input', 'Valid options are "%s".', valids.join('|'));
             return;
         }
-        module = require(__dirname + '/src/module');
+        module = require('./src/module');
         module()[cmd]();
     });
 
