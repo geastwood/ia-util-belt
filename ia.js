@@ -134,7 +134,7 @@ program.command('watch')
 
 program
     .command('devmode <cmd>')
-    .description('[on|off|is] switch dev mode')
+    .description('[on|off|is|toggle] switch dev mode')
     .option('-t --trunk',   'use trunk')
     .option('-r --release', 'use release')
     .option('-c --current', 'use current')

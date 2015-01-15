@@ -34,6 +34,9 @@ module.exports = function(path) {
             // on, off
             return this.load().then(function(data) {
                 var mode, debug, defer = Q.defer();
+                if (action === 'toggle') {
+                    action = data.mode && data.debug ? 'off' : 'on';
+                }
                 if (action === 'on') {
                     mode = 1;
                     debug = 1;

@@ -53,7 +53,7 @@ trigger the build process. If there is a change within the build process, the bu
 | **config**        | n/a  |  n/a    | n/a |
 | **build**         | n/a | `-t --trunk`, `-c --current`, `-r --release`, `-f --frontend`, `-s --service`,`-p --part`, `-d --development`, `-l --legacy`, `-v --serviceclient`, `-m --module` | `ia build -ftd` |
 | **watch**         | n/a  |`-t --trunk`, `-c --current`, `-r --release` | `ia watch -t` // watch for `trunk/frontend/application/javascripts` |
-| **devmode**       | `ls`, `on`, `off`  |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|
+| **devmode**       | `ls`, `on`, `off`, `toggle` |`-t --trunk`, `-c --current`, `-r --release` | `ia devmode -t is` // check the devmode of `trunk`|
 | **apache**        | `start`, `stop`, `restart` (support all apache commands, here lists the often-used ones)|n/a| `ia apache restart` // restart apache2 service|
 | **module**        | `create` | n/a | `ia module create` // create empty frontend module|
 | **buildconfig**   | n/a | `-g --grep <string>`, `-d --delete`, `-m --module`, `-t --trunk'`, `-r --release`, `-c --current` | `ia buildconfig -tgd google` // prompt to delete module contains name *google* in build config file|
