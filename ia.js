@@ -30,7 +30,7 @@ program
 
         function runscript() {
             var scriptrunner;
-            scriptrunner = require(__dirname + '/src/runscript');
+            scriptrunner = require('./src/runscript');
             scriptrunner().run(options);
         }
 
@@ -123,8 +123,8 @@ program.command('watch')
     .option('-r --release',         'use release')
     .option('-c --current',         'use current')
     .action(function(options) {
-        var util = require(__dirname + '/src/util'),
-            watcher = require(__dirname + '/src/watch');
+        var util = require('./src/util'),
+            watcher = require('./src/watch');
 
         watcher().watch(util.parseGlobal(options));
     })
