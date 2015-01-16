@@ -7,10 +7,10 @@
 * [x] handle prompt error
 * [x] util.print padding
 * [x] auto complete [link-1](http://wikimatze.de/writing-zsh-completion-for-padrino/), [link-2](http://www.linux-mag.com/id/1106/)
-* [ ] implement with Q
-* [ ] replace `prompt` with `inquirer`
+* [x] replace `prompt` with `inquirer`
+* [x] implement with Q
+* [ ] reorganize code to be able to write test
 * [ ] optimize prompt flow
-* [ ] add support for pre-prod2
 * [ ] ia info
 * [ ] add some essensial tests
 * [ ] add support for ext reflection

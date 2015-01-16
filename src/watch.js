@@ -1,6 +1,6 @@
 var spawn   = require('child_process').spawn;
-var IA      = require(__dirname + '/ia');
-var util    = require(__dirname + '/util');
+var IA      = require('./ia');
+var util    = require('./util');
 var api;
 
 api = module.exports = function() {
