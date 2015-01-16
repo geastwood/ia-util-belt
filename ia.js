@@ -19,8 +19,7 @@ var globalHelp = function() {
                 /*****************/
                 /* CLI INTERFACE */
                 /*****************/
-program
-    .command('runscript')
+program.command('runscript')
     .description('run a user specified script')
     .option('-f --file <file>', 'Specify the bash file to run, e.g. debug.sh')
     .option('-s --silence', 'run in silent, no promot')
@@ -29,9 +28,9 @@ program
         var opts = {};
 
         function runscript() {
-            var scriptrunner;
-            scriptrunner = require('./src/runscript');
-            scriptrunner().run(options);
+            var scriptRunner;
+            scriptRunner = require('./src/runscript');
+            scriptRunner().run(options);
         }
 
         if (options.silence) {
@@ -62,8 +61,8 @@ program
         console.log(' ');
         globalHelp();
     });
-program
-    .command('config')
+
+program.command('config')
     .description('config this cli')
     .action(function () {
         require('./src/user_config')();
@@ -83,7 +82,10 @@ program.command('build')
     .option('-v --serviceclient',   'serviceclient')
     .option('-m --module',          'module')
     .action(function(options) {
-        require('./src/build').build(options);
+        var build = require('./src/build');
+        prompt.getBuildOptions(options).then(function(opts) {
+            build(opts);
+        });
     })
     .on('--help', function() {
         console.log(chalk.green.bold('  Details'));
@@ -123,17 +125,17 @@ program.command('watch')
     .option('-r --release',         'use release')
     .option('-c --current',         'use current')
     .action(function(options) {
-        var util = require('./src/util'),
-            watcher = require('./src/watch');
+        var watcher = require('./src/watch');
 
-        watcher().watch(util.parseGlobal(options));
+        prompt.getBranch(options).then(function(answers) {
+            watcher().watch(answers.rst);
+        });
     })
     .on('--help', function() {
         globalHelp();
     });
 
-program
-    .command('devmode <cmd>')
+program.command('devmode <cmd>')
     .description('[on|off|is|toggle] switch dev mode')
     .option('-t --trunk',   'use trunk')
     .option('-r --release', 'use release')
@@ -174,16 +176,15 @@ program.command('buildconfig')
     .option('-r --release', 'use release')
     .option('-c --current', 'use current')
     .action(function(options) {
-        var util = require('./src/util'),
-            globals = util.parseGlobal(options),
-            paths = {
-                component: IA(globals).path.getComponentBuildConfig(),
-                module: IA(globals).path.getModuleBuildConfig()
-            },
-            buildConfig = require('./src/buildconfig'),
-            command = typeof options['delete'] === 'undefined' ? 'print' : 'remove';
+        var buildConfig = require('./src/buildconfig'),
+            command = typeof options['delete'] === 'undefined' ? 'print' : 'remove',
+            paths = {};
+        prompt.getBranch(options).then(function(answers) {
+            paths.component = IA(answers.rst).path.getComponentBuildConfig();
+            paths.module = IA(answers.rst).path.getModuleBuildConfig();
+            buildConfig(paths[(answers.args.module ? 'module': 'component')])[command](answers.args.grep);
+        });
 
-        buildConfig(paths[(options.module ? 'module': 'component')])[command](options.grep);
     })
     .on('--help', function() {
         globalHelp();
@@ -191,6 +192,7 @@ program.command('buildconfig')
 
 var apacheOptions = ['start', 'stop', 'graceful-stop', 'restart', 'reload',
     'force-reload', 'start-htcacheclean', 'stop-htcacheclean', 'status'];
+
 program.command('apache <cmd>')
     .description('apache commands')
     .action(function(cmd) {

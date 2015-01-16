@@ -9,6 +9,23 @@ var util        = require('./util');
 var api;
 
 /**
+ * path resolver
+ * @private
+ * @util
+ */
+var resolver = {
+    getDefinition: function() {
+        return IA().path.getLibBasePath('templates', 'module', 'definitions');
+    },
+    getLocalModule: function() {
+        return IA().path.getLibBasePath('templates', 'module');
+    },
+    getModuleFolder: function(name) {
+        return path.join(IA({app: 'frontend', branch: 'trunk'}).path.getBasePath('application', 'modules'), name);
+    }
+};
+
+/**
  * get Module Name in async mode
  * @returns {promise|*|Q.promise}
  */
@@ -35,7 +52,7 @@ var getModuleName = function() {
  * create module
  *
  * @param {String} name
- * @returns {*}
+ * @returns {Promise}
  */
 var createModule = function(name) {
     var defer = Q.defer();
@@ -60,28 +77,8 @@ var createModule = function(name) {
     });
 };
 
-                            /*****************/
-                            /* path resolver */
-                            /*****************/
-/**
- * @private
- * @util
- */
-var resolver = {
-    getDefinition: function() {
-        return IA().path.getLibBasePath('templates', 'module', 'definitions');
-    },
-    getLocalModule: function() {
-        return IA().path.getLibBasePath('templates', 'module');
-    },
-    getModuleFolder: function(name) {
-        return path.join(IA({app: 'frontend', branch: 'trunk'}).path.getBasePath('application', 'modules'), name);
-    }
-};
-
 /**
  * Process definition
- *
  */
 var processDefinition = function(name, moduleName) {
     var definition = require(path.join(resolver.getDefinition(), name)),
@@ -172,6 +169,7 @@ var actionFactory = function(options) {
 
 /**
  * @public
+ * @type {Function}
  */
 api = module.exports = function() {
     return {

@@ -3,6 +3,7 @@ var homeFolder      = process.env.HOME;
 var fs              = require('fs');
 var path            = require('path');
 var userConfig;
+
 var getUserConfigFolder = function() {
     var parts = [homeFolder, '.ia'];
     [].forEach.call(arguments, function(arg) {
@@ -80,13 +81,6 @@ var api = function(opts) {
             getUser: function() {
                 userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.username;
-            },
-            getPassword: function() {
-                userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
-                return userConfig.password;
-            },
-            getSvnCommandFlags: function() {
-                return ['--username', this.getUser(), '--password', "'" + this.getPassword() + "'", '--no-auth-cache'].join(' ');
             },
             getUserConfigFolder: getUserConfigFolder,
             getScriptFile: function(file) {

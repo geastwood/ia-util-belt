@@ -8,7 +8,10 @@ api = module.exports = function() {
         // watch the `application/javascripts/application` folder for changes
         // and restart the build
         watch: function(opts) {
-            var watchPath = IA(opts).path.getAppJsFolder(), ant, child;
+            var watchPath = IA(opts).path.getAppJsFolder(),
+                ant,
+                child;
+
             if (process.env.SHELL.indexOf('zsh') >= 0) {
                 child = spawn('fswatch', [watchPath]); // this is for mac version
             } else {
