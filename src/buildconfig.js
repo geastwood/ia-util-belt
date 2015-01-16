@@ -1,7 +1,6 @@
 var fs          = require('fs');
 var chalk       = require('chalk');
 var util        = require(__dirname + '/util');
-var prompt      = require('prompt');
 var Q           = require('q');
 var _           = require('lodash');
 var inquirer    = require('inquirer');

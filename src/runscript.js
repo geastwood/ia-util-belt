@@ -49,7 +49,7 @@ api = module.exports = function() {
                 args: options.args,
                 packageDir: path.resolve(__dirname, '..'),
                 core: {
-                    prompt: require('prompt'),
+                    prompt: require('./prompt'),
                     IA: IA,
                     util: util
                 }

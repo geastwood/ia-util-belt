@@ -9,20 +9,8 @@ api = module.exports = function(options) {
         run: function() {
             var logFile, appLogFile, targetPath;
 
-            options.core.prompt.get([{
-                name: 'branch',
-                description: ('Which branch?').green,
-                required: true,
-                'default': 'current',
-                pattern: /(trunk|current|release)/
-            }],
-            function(err, inputs) {
-                if (err) {
-                    console.log('Error: cancelled by user.');
-                    return;
-                }
-
-                targetPath = options.core.IA().path.calculateAppPath(inputs.branch, 'service');
+            options.core.prompt.getBranch({rst: {}, args: {}}).then(function(opts) {
+                targetPath = options.core.IA().path.calculateAppPath(opts.rst.branch, 'service');
                 logFile = path.join(targetPath, 'log');
                 appLogFile = path.join(logFile, 'application.log');
 
@@ -33,7 +21,6 @@ api = module.exports = function(options) {
                     options.core.util.print('success', 'updated', 'chmod 0777 of "%s"', logFile);
                     exec('touch ' + appLogFile + ' && chmod 0777 ' + appLogFile, function() {});
                 });
-
             });
 
         }

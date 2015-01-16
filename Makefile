@@ -33,6 +33,10 @@ base:
 	@echo 'Installing dependency at '$(TICKETDIR)
 	@cd $(TICKETDIR); npm install
 
+script:
+	@echo 'Copy scripts to user folder'
+	@cp -r scripts/* ~/.ia/scripts
+
 clean:
 	@echo 'Remove old packages and link'
 	@rm -Rf $(PACKAGEDIR)

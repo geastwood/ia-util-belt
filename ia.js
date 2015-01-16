@@ -142,7 +142,7 @@ program
         var devmode = require('./src/devmode'), iniFile;
 
         prompt.getBranch(options).then(function(opts) {
-            iniFile = IA(opts).path.getAppIni();
+            iniFile = IA(opts.rst).path.getAppIni();
             return devmode(iniFile)[(cmd === 'is') ? 'load' : 'update'](cmd);
         }).then(function(status) {
             util.print('info', 'status', '%s "%s" at %s', 'Development mode is',
