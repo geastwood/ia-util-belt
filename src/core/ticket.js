@@ -114,13 +114,11 @@ var recordSession = function session(data, fn) {
         name: 'command',
         type: 'input',
         message: 'Please give command',
+        validate: function(v) {
+            return data.isCommandValid(v);
+        },
         when: function(answers) {
             return answers.templateAction === 'command';
-        },
-        validate: function(v) {
-            // return data.cmd(v).validate();
-            // TODO validate
-            return true;
         }
     }], function(answers) {
         if (answers.templateAction === 'edit') {
