@@ -15,13 +15,13 @@ var api;
  */
 var resolver = {
     getDefinition: function() {
-        return IA().path.getLibBasePath('templates', 'module', 'definitions');
+        return IA().path.getLibBase('templates', 'module', 'definitions');
     },
     getLocalModule: function() {
-        return IA().path.getLibBasePath('templates', 'module');
+        return IA().path.getLibBase('templates', 'module');
     },
     getModuleFolder: function(name) {
-        return path.join(IA({app: 'frontend', branch: 'trunk'}).path.getBasePath('application', 'modules'), name);
+        return path.join(IA({app: 'frontend', branch: 'trunk'}).path.getBase('application', 'modules'), name);
     }
 };
 

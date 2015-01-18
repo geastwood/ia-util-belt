@@ -4,12 +4,15 @@ var fs              = require('fs');
 var path            = require('path');
 var userConfig;
 
-var getUserConfigFolder = function() {
-    var parts = [homeFolder, '.ia'];
-    [].forEach.call(arguments, function(arg) {
-        parts.push(arg);
-    });
-    return path.join.apply(null, parts);
+var getUserConfigFolder = function(homeFolder) {
+
+    return function() {
+        var args = [].reduce.call(arguments, function(rst, arg) {
+            rst.push(arg);
+            return rst;
+        }, [homeFolder, '.ia']);
+        return path.join.apply(null, args);
+    };
 };
 
 var api = function(opts) {
@@ -23,7 +26,7 @@ var api = function(opts) {
 
     return {
         path: {
-            getRootPath: function() {
+            getRoot: function() {
                 var userConfig;
                 if (fs.existsSync(path.join(homeFolder, '/.ia/user.config.json'))) {
                     userConfig = require(homeFolder + '/.ia/user.config.json');
@@ -36,9 +39,9 @@ var api = function(opts) {
                 }
                 return path.join(configs.workingCopies.baseUrl);
             },
-            getBasePath: function() {
+            getBase: function() {
                 var parts = [
-                    this.getRootPath(),
+                    this.getRoot(),
                     configs.workingCopies.repos[branch][app],
                     configs.workingCopies[app + 'Folder']
                 ];
@@ -52,29 +55,28 @@ var api = function(opts) {
                 return path.join(this.getRootPath(), folderName, configs.workingCopies[app + 'Folder']);
             },
             getBuildXml: function() {
-                return this.getBasePath('build.xml');
+                return this.getBase('build.xml');
             },
             getAppIni: function() {
-                return this.getBasePath('application', 'configs', 'application.ini');
+                return this.getBase('application', 'configs', 'application.ini');
             },
             getComponentBuildConfig: function() {
-                return this.getBasePath('buildconfig', 'build.jsb2');
+                return this.getBase('buildconfig', 'build.jsb2');
             },
             getModuleBuildConfig: function() {
-                return this.getBasePath('buildconfig', 'build_modules.jsb2');
+                return this.getBase('buildconfig', 'build_modules.jsb2');
             },
             getAppJsFolder: function() {
-                return this.getBasePath('application', 'javascripts', 'application');
+                return this.getBase('application', 'javascripts', 'application');
             },
             getLegacyConfig: function() {
-                return this.getBasePath('legacy', 'config', 'user');
+                return this.getBase('legacy', 'config', 'user');
             },
-            getLibBasePath: function() {
-                var base = path.join(__dirname, '/../'), parts = [base];
-                [].forEach.call(arguments, function(arg) {
-                    parts.push(arg);
-                });
-                return path.join.apply(null, parts);
+            getLibBase: function() {
+                return path.join.apply(null, [].reduce.call(arguments, function(rst, arg) {
+                    rst.push(arg);
+                    return rst;
+                }, [path.join(__dirname, '/../')]));
             }
         },
         util: {
@@ -82,7 +84,7 @@ var api = function(opts) {
                 userConfig = userConfig || require(homeFolder + '/.ia/user.config.json');
                 return userConfig.username;
             },
-            getUserConfigFolder: getUserConfigFolder,
+            getUserConfigFolder: getUserConfigFolder(process.env.HOME),
             getScriptFile: function(file) {
                 if (!file) {
                     throw 'file must supply';
