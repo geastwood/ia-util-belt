@@ -9,6 +9,7 @@
 * [x] auto complete [link-1](http://wikimatze.de/writing-zsh-completion-for-padrino/), [link-2](http://www.linux-mag.com/id/1106/)
 * [x] replace `prompt` with `inquirer`
 * [x] implement with Q
+* [ ] handle ticket template rest
 * [ ] reorganize code to be able to write test
 * [ ] optimize prompt flow
 * [ ] ia info
@@ -19,3 +20,5 @@
 === MODULE ===
 
 * [x] module name validation
+* [ ] be able to bind a module, so that generator will be activated
+* [ ] create model controller, view, module etc.

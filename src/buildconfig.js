@@ -75,6 +75,8 @@ var buildconfig = function(path) {
                         return test.test(file.text);
                     }));
                 }, []);
+            }).catch(function(err) {
+                util.print('error', 'error', err);
             });
         },
         getMatched: function(pattern) {
