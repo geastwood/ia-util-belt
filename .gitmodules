@@ -1,4 +1,4 @@
 [submodule "lib/ticket-template-core"]
 	path = lib/ticket-template-core
-	url = http://git-1.rz1.intelliad.com/fliu/ia-fr-ticket-template-core.git
+	url = https://github.com/geastwood/ticket-template-core.git
     branch = master
