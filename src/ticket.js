@@ -22,7 +22,7 @@ module.exports = {
                 if (_.isEmpty(v)) {
                     return 'Ticket number is required.';
                 }
-                if (!/[A-Za-z]{2,2}-\d{4,4}/.test(v)) {
+                if (!/[A-Za-z]{2,2}-\d{2,4}/.test(v)) {
                     return 'Ticket number invalid, e.g. FR-5442 is valid.';
                 }
                 return true;
